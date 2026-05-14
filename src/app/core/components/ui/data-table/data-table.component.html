@@ -1,0 +1,60 @@
+<table mat-table [dataSource]="data">
+
+  <ng-container
+    *ngFor="let col of config.columns"
+    [matColumnDef]="col.key"
+  >
+
+    <!-- HEADER -->
+    <th mat-header-cell *matHeaderCellDef>
+      {{ col.label }}
+    </th>
+
+    <!-- CELL -->
+    <td mat-cell *matCellDef="let element">
+
+      <!-- ACTION COLUMN -->
+      <ng-container *ngIf="col.isAction">
+        <button
+          *ngFor="let act of col.actions"
+          mat-icon-button
+          (click)="onAction(act, element)"
+        >
+          <mat-icon *ngIf="act.type === 'edit'">edit</mat-icon>
+          <mat-icon *ngIf="act.type === 'delete'">delete</mat-icon>
+        </button>
+      </ng-container>
+
+      <!-- BOOLEAN / ICON COLUMN -->
+      <ng-container *ngIf="!col.isAction && col.key === 'isCompleted'">
+        <mat-icon [color]="element[col.key] ? 'primary' : 'warn'">
+          {{ element[col.key] ? 'check_circle' : 'cancel' }}
+        </mat-icon>
+      </ng-container>
+
+      <!-- CHIP COLUMN -->
+      <ng-container *ngIf="!col.isAction && col.type === 'chips'">
+        <mat-chip-set>
+          <mat-chip *ngFor="let item of element[col.key]">
+            {{ item?.description ?? item }}
+          </mat-chip>
+        </mat-chip-set>
+      </ng-container>
+
+      <!-- NORMAL / FORMATTER COLUMN -->
+      <ng-container *ngIf="!col.isAction && col.key !== 'isCompleted' && col.type !== 'chips'">
+        {{
+          col.formatter
+            ? col.formatter(element[col.key], element)
+            : element[col.key]
+        }}
+      </ng-container>
+
+    </td>
+
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="columnKeys"></tr>
+  <tr mat-row *matRowDef="let row; columns: columnKeys"></tr>
+
+</table>

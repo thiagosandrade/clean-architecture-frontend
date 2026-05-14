@@ -1,0 +1,48 @@
+<mat-toolbar>
+
+  <span>Todo App</span>
+
+  <span class="spacer"></span>
+
+  <!-- MENU -->
+  <button mat-icon-button [matMenuTriggerFor]="menu">
+    <mat-icon>menu</mat-icon>
+  </button>
+
+  <mat-menu #menu="matMenu">
+
+    <!-- NAVIGATION -->
+    <button mat-menu-item (click)="goToTodos()">
+      <mat-icon>checklist</mat-icon>
+      Todos
+    </button>
+
+    <button mat-menu-item (click)="goToUsers()">
+      <mat-icon>people</mat-icon>
+      Users
+    </button>
+
+    <button mat-menu-item (click)="goToUser()">
+      <mat-icon>person</mat-icon>
+      User Details
+    </button>
+
+    <mat-divider></mat-divider>
+
+    <!-- THEME -->
+    <button mat-menu-item (click)="toggleTheme()">
+      <mat-icon>dark_mode</mat-icon>
+      Toggle Theme
+    </button>
+
+    <mat-divider></mat-divider>
+
+    <!-- LOGOUT -->
+    <button mat-menu-item (click)="logout()">
+      <mat-icon>logout</mat-icon>
+      Logout
+    </button>
+
+  </mat-menu>
+
+</mat-toolbar>

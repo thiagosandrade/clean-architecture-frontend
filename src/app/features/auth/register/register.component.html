@@ -1,0 +1,65 @@
+<mat-card class="card">
+  <h2>Register</h2>
+
+  <form [formGroup]="form" (ngSubmit)="submit()">
+
+    <mat-form-field appearance="outline" class="full">
+      <mat-label>FirstName</mat-label>
+      <input matInput formControlName="firstName">
+
+      <mat-error *ngIf="f.firstName.hasError('required')">
+        First name is required
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full">
+      <mat-label>LastName</mat-label>
+      <input matInput formControlName="lastName">
+
+      <mat-error *ngIf="f.lastName.hasError('required')">
+        Last name is required
+      </mat-error>
+    </mat-form-field>
+    
+    <mat-form-field appearance="outline" class="full">
+      <mat-label>Email</mat-label>
+      <input matInput formControlName="email">
+
+      <mat-error *ngIf="f.email.hasError('required')">
+        Email is required
+      </mat-error>
+
+      <mat-error *ngIf="f.email.hasError('email')">
+        Invalid email
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full">
+      <mat-label>Password</mat-label>
+      <input matInput type="password" formControlName="password">
+
+      <mat-error *ngIf="f.password.hasError('minlength')">
+        Min 6 characters
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full">
+      <mat-label>Confirm Password</mat-label>
+      <input matInput type="password" formControlName="confirmPassword">
+
+      <mat-error *ngIf="form.hasError('mismatch')">
+        Passwords do not match
+      </mat-error>
+    </mat-form-field>
+
+    <button
+      mat-raised-button
+      color="primary"
+      class="full"
+      [disabled]="form.invalid"
+    >
+      Register
+    </button>
+
+  </form>
+</mat-card>
