@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from '../../../../environments/environment';
 import { Todo } from '../models/todo.model';
 
@@ -10,10 +10,27 @@ export class TodoService {
 
   constructor(private http: HttpClient) {}
 
-  getAll() {
-    let userId = localStorage.getItem('id');
-    return this.http.get<Todo[]>(`${this.base}?userId=${userId}`);
-  }
+  getAll(
+  page: number = 1,
+  size: number = 10,
+  propertyName: string = 'createdAt',
+  descending: boolean = true
+) {
+
+  const userId = localStorage.getItem('id');
+
+  const params = new HttpParams()
+    .set('userId', userId ?? '')
+    .set('page', page)
+    .set('size', size)
+    .set('propertyName', propertyName)
+    .set('descending', descending);
+
+  return this.http.get<any>(
+    this.base,
+    { params }
+  );
+}
 
   create(title: string) {
     return this.http.post<Todo>(this.base, { title });

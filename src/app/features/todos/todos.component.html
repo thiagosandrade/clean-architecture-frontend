@@ -1,5 +1,11 @@
 <app-data-table
   [data]="todos"
+  [pagination]="true"
   [config]="tableConfig"
+  [total]="total"
+  [pageSize]="size"
+  [pageIndex]="page - 1"
+  (pageChange)="onPageChange($event)"
+  (sortChange)="onSortChange($event)"
   (action)="handleAction($event)">
 </app-data-table>
