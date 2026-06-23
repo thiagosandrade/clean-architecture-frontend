@@ -7,8 +7,7 @@ export interface User {
   permissions: Permission[];
 }
 
-export interface Permission
-{
+export interface Permission {
   id: number;
   userId: string;
   description: string;

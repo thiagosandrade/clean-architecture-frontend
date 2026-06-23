@@ -1,9 +1,6 @@
-export type TableColumnType =
-  | 'text'
-  | 'boolean'
-  | 'chips';
+export type TableColumnType = 'boolean' | 'chips' | 'text' | 'priority';
 
-export interface TableAction<T> {
+export interface TableAction {
   label: string;
   type: 'edit' | 'delete' | string;
 }
@@ -14,13 +11,10 @@ export interface TableColumn<T> {
 
   type?: TableColumnType;
 
-  formatter?: (
-    value: any,
-    row?: T
-  ) => string;
+  formatter?: (value: unknown, row?: T) => string;
 
   isAction?: boolean;
-  actions?: TableAction<T>[];
+  actions?: TableAction[];
 }
 
 export interface TableConfig<T> {

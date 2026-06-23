@@ -7,16 +7,11 @@ import { LoadingSpinnerComponent } from './core/components/ui/loading-spinner/lo
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [
-    RouterOutlet,
-    LoadingSpinnerComponent,
-    ToolbarComponent
-  ],
+  imports: [RouterOutlet, LoadingSpinnerComponent, ToolbarComponent],
   templateUrl: './app.html',
-  styleUrls: ['./app.scss']
+  styleUrls: ['./app.scss'],
 })
 export class AppComponent implements OnInit {
-
   constructor(private theme: ThemeService) {}
 
   ngOnInit() {

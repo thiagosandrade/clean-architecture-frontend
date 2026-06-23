@@ -10,22 +10,15 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-toolbar',
   standalone: true,
-  imports: [
-    MatToolbarModule,
-    MatButtonModule,
-    MatMenuModule,
-    MatIconModule,
-    MatDividerModule
-  ],
+  imports: [MatToolbarModule, MatButtonModule, MatMenuModule, MatIconModule, MatDividerModule],
   templateUrl: './toolbar.component.html',
-  styleUrls: ['./toolbar.component.scss']
+  styleUrls: ['./toolbar.component.scss'],
 })
 export class ToolbarComponent {
-
   constructor(
-  private theme: ThemeService,
-  private router: Router
-) {}
+    private theme: ThemeService,
+    private router: Router,
+  ) {}
 
   goToUser() {
     this.router.navigate(['/user']);

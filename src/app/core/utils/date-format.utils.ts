@@ -1,12 +1,8 @@
-export function formatDateTime(value: string | null | undefined): string {
-  if (!value) return '';
+export function formatDateTime(value: unknown): string {
 
-  const date = new Date(value);
+  if (typeof value !== 'string' || !value) {
+    return '';
+  }
 
-  const pad = (n: number) => n.toString().padStart(2, '0');
-
-  return (
-    `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())} ` +
-    `${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`
-  );
+  return new Date(value).toLocaleString();
 }

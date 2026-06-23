@@ -1,11 +1,51 @@
-<app-data-table
-  [data]="todos"
-  [pagination]="true"
-  [config]="tableConfig"
-  [total]="total"
-  [pageSize]="size"
-  [pageIndex]="page - 1"
-  (pageChange)="onPageChange($event)"
-  (sortChange)="onSortChange($event)"
-  (action)="handleAction($event)">
-</app-data-table>
+<div class="todos-page">
+  <div class="page-header">
+    <div class="title-section">
+      <h1>Todos</h1>
+      <span>Manage your tasks</span>
+    </div>
+  </div>
+
+  <div class="actions-bar">
+    <div class="search-container">
+      <mat-form-field class="search-field" appearance="outline" subscriptSizing="dynamic">
+        <mat-label>Search Todos</mat-label>
+
+        <input matInput [formControl]="searchControl" />
+      </mat-form-field>
+
+      <button mat-icon-button matTooltip="Search" (click)="search()">
+        <mat-icon>search</mat-icon>
+      </button>
+
+      <button mat-icon-button matTooltip="Clear" *ngIf="searchText" (click)="clearSearch()">
+        <mat-icon>close</mat-icon>
+      </button>
+
+      <span class="spacer"></span>
+
+      <button mat-flat-button color="primary" (click)="createTodo()">
+        <mat-icon>add</mat-icon>
+
+        New Todo
+      </button>
+    </div>
+  </div>
+
+  <mat-card class="table-card">
+    <mat-card-content>
+      <app-data-table
+        [data]="todos"
+        [config]="tableConfig"
+        [pagination]="true"
+        [total]="total"
+        [pageSize]="size"
+        [pageIndex]="page"
+        [resetSort]="resetTableSort"
+        (pageChange)="onPageChange($event)"
+        (sortChange)="onSortChange($event)"
+        (action)="handleAction($event)"
+      ></app-data-table>
+    </mat-card-content>
+  </mat-card>
+</div>

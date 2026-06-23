@@ -10,17 +10,11 @@ import { formatDateTime } from '../../core/utils/date-format.utils';
 @Component({
   selector: 'app-user',
   standalone: true,
-  imports: [
-    CommonModule,
-    MatCardModule,
-    MatIconModule,
-    MatDividerModule
-  ],
+  imports: [CommonModule, MatCardModule, MatIconModule, MatDividerModule],
   templateUrl: './user.component.html',
-  styleUrls: ['./user.component.scss']
+  styleUrls: ['./user.component.scss'],
 })
 export class UserComponent implements OnInit {
-
   user?: User;
   formatDateTime = formatDateTime;
 
@@ -35,8 +29,8 @@ export class UserComponent implements OnInit {
     }
 
     this.userService.getById(userId).subscribe({
-      next: (res) => this.user = res,
-      error: (err) => console.error('Failed to load user', err)
+      next: (res) => (this.user = res),
+      error: (err) => console.error('Failed to load user', err),
     });
   }
 }

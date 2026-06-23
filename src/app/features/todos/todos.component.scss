@@ -1,1 +1,68 @@
-div { padding: 8px; }
+.actions-bar {
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.search-container {
+  display: flex;
+
+  align-items: center;
+
+  flex: 1;
+
+  gap: 8px;
+}
+
+.search-field {
+  flex: 1;
+
+  margin: 0;
+
+  height: 48px;
+}
+
+/* remove material extra spacing */
+.search-field .mat-mdc-form-field-subscript-wrapper {
+  display: none;
+}
+
+.search-field .mat-mdc-form-field-flex {
+  height: 48px;
+
+  align-items: center;
+}
+
+.search-field .mat-mdc-text-field-wrapper {
+  height: 48px;
+
+  padding: 0 12px;
+}
+
+.actions-bar button[mat-icon-button] {
+  height: 48px;
+
+  width: 48px;
+
+  padding: 0;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+}
+
+.actions-bar button[mat-flat-button] {
+  height: 48px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+}

@@ -2,50 +2,28 @@
   <h2>Login</h2>
 
   <form [formGroup]="form" (ngSubmit)="submit()">
-
     <mat-form-field appearance="outline" class="full">
       <mat-label>Email</mat-label>
-      <input matInput formControlName="email">
+      <input matInput formControlName="email" />
 
-      <mat-error *ngIf="f.email.hasError('required')">
-        Email is required
-      </mat-error>
+      <mat-error *ngIf="f.email.hasError('required')">Email is required</mat-error>
 
-      <mat-error *ngIf="f.email.hasError('email')">
-        Invalid email format
-      </mat-error>
+      <mat-error *ngIf="f.email.hasError('email')">Invalid email format</mat-error>
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="full">
       <mat-label>Password</mat-label>
-      <input matInput type="password" formControlName="password">
+      <input matInput type="password" formControlName="password" />
 
-      <mat-error *ngIf="f.password.hasError('required')">
-        Password is required
-      </mat-error>
+      <mat-error *ngIf="f.password.hasError('required')">Password is required</mat-error>
 
-      <mat-error *ngIf="f.password.hasError('minlength')">
-        Minimum 6 characters
-      </mat-error>
+      <mat-error *ngIf="f.password.hasError('minlength')">Minimum 6 characters</mat-error>
     </mat-form-field>
 
-    <button
-      mat-raised-button
-      color="primary"
-      class="full"
-      [disabled]="form.invalid"
-    >
-      Login
-    </button>
+    <button mat-raised-button color="primary" class="full" [disabled]="form.invalid">Login</button>
 
-    <button
-      mat-raised-button
-      color="secondary"
-      class="full"
-      (click)="navigateToRegister()"
-    >
+    <button mat-raised-button color="secondary" class="full" (click)="navigateToRegister()">
       Register
     </button>
-
   </form>
 </mat-card>

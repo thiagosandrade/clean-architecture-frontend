@@ -10,10 +10,9 @@ import { ReactiveFormsModule } from '@angular/forms';
   standalone: true,
   imports: [CommonModule, MatFormFieldModule, MatInputModule, ReactiveFormsModule],
   templateUrl: './form-field.component.html',
-  styleUrls: ['./form-field.component.scss']
+  styleUrls: ['./form-field.component.scss'],
 })
 export class FormFieldComponent {
-
   @Input() label = '';
   @Input() type = 'text';
   @Input() control!: AbstractControl;

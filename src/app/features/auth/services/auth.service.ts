@@ -5,7 +5,6 @@ import { LoginRequest, AuthResponse } from '../models/auth.models';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-
   private base = `${environment.apiUrl}/users`;
 
   constructor(private http: HttpClient) {}

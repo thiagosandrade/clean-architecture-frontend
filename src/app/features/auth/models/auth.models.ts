@@ -9,4 +9,7 @@ export interface AuthResponse {
   id: string;
   email: string;
   token: string;
+  password: string;
+  firstName: string;
+  lastName: string;
 }

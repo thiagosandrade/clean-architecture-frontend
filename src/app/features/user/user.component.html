@@ -1,15 +1,11 @@
 <div class="user-page">
-
   <mat-card class="user-card" *ngIf="user">
-
     <mat-card-header>
       <div mat-card-avatar>
         <mat-icon>account_circle</mat-icon>
       </div>
 
-      <mat-card-title>
-        {{ user.firstName }} {{ user.lastName }}
-      </mat-card-title>
+      <mat-card-title>{{ user.firstName }} {{ user.lastName }}</mat-card-title>
 
       <mat-card-subtitle>
         {{ user.email }}
@@ -19,36 +15,30 @@
     <mat-divider></mat-divider>
 
     <mat-card-content>
-
       <div class="info-row">
         <mat-icon>badge</mat-icon>
         <span class="mat-body-2">First Name: {{ user.firstName }}</span>
-        </div>
+      </div>
 
-        <div class="info-row">
+      <div class="info-row">
         <mat-icon>badge</mat-icon>
         <span class="mat-body-2">Last Name: {{ user.lastName }}</span>
-        </div>
+      </div>
 
-        <div class="info-row">
+      <div class="info-row">
         <mat-icon>alternate_email</mat-icon>
         <span class="mat-body-2">Email: {{ user.email }}</span>
-        </div>
+      </div>
 
-        <div class="info-row">
+      <div class="info-row">
         <mat-icon>calendar_today</mat-icon>
-        <span class="mat-body-2">
-            Created On: {{ formatDateTime(user.createdOn) }}
-        </span>
-        </div>
+        <span class="mat-body-2">Created On: {{ formatDateTime(user.createdOn) }}</span>
+      </div>
 
-        <div class="info-row">
+      <div class="info-row">
         <mat-icon>fingerprint</mat-icon>
         <span class="mat-body-2">ID: {{ user.id }}</span>
-        </div>
-
+      </div>
     </mat-card-content>
-
   </mat-card>
-
 </div>

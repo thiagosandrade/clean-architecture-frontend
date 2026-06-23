@@ -11,20 +11,18 @@ export const USER_TABLE_CONFIG: TableConfig<User> = {
     {
       key: 'permissions',
       label: 'Permissions',
-      type: 'chips'
+      type: 'chips',
     },
     {
-          key: 'createdOn',
-          label: 'Created On',
-          formatter: formatDateTime
-        },
+      key: 'createdOn',
+      label: 'Created On',
+      formatter: formatDateTime,
+    },
     {
       key: 'actions',
       label: 'Actions',
       isAction: true,
-      actions: [
-        { label: 'Delete', type: 'delete' }
-      ]
-    }
-  ]
+      actions: [{ label: 'Delete', type: 'delete' }],
+    },
+  ],
 };

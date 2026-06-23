@@ -1,48 +1,51 @@
-<mat-toolbar>
-
+<mat-toolbar class="toolbar">
   <span>Todo App</span>
 
   <span class="spacer"></span>
 
-  <!-- MENU -->
-  <button mat-icon-button [matMenuTriggerFor]="menu">
+  <button mat-icon-button [matMenuTriggerFor]="menu" class="menu">
     <mat-icon>menu</mat-icon>
   </button>
 
   <mat-menu #menu="matMenu">
-
     <!-- NAVIGATION -->
+
     <button mat-menu-item (click)="goToTodos()">
-      <mat-icon>checklist</mat-icon>
-      Todos
+      <mat-icon class="menu-icon todos-icon">checklist</mat-icon>
+
+      <span>Todos</span>
     </button>
 
     <button mat-menu-item (click)="goToUsers()">
-      <mat-icon>people</mat-icon>
-      Users
+      <mat-icon class="menu-icon users-icon">people</mat-icon>
+
+      <span>Users</span>
     </button>
 
     <button mat-menu-item (click)="goToUser()">
-      <mat-icon>person</mat-icon>
-      User Details
+      <mat-icon class="menu-icon user-icon">person</mat-icon>
+
+      <span>User Details</span>
     </button>
 
     <mat-divider></mat-divider>
 
     <!-- THEME -->
+
     <button mat-menu-item (click)="toggleTheme()">
-      <mat-icon>dark_mode</mat-icon>
-      Toggle Theme
+      <mat-icon class="menu-icon theme-icon">dark_mode</mat-icon>
+
+      <span>Toggle Theme</span>
     </button>
 
     <mat-divider></mat-divider>
 
     <!-- LOGOUT -->
+
     <button mat-menu-item (click)="logout()">
-      <mat-icon>logout</mat-icon>
-      Logout
+      <mat-icon class="menu-icon logout-icon">logout</mat-icon>
+
+      <span>Logout</span>
     </button>
-
   </mat-menu>
-
 </mat-toolbar>

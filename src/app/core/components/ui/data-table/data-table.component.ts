@@ -1,15 +1,17 @@
 import { MatChip, MatChipSet } from '@angular/material/chips';
 
-import {
-  TableAction,
-  TableConfig
-} from './table-config.model';
+import { TableAction, TableConfig } from './table-config.model';
+
 import { CommonModule } from '@angular/common';
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ViewChild, OnChanges } from '@angular/core';
+
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
-import { MatSortModule, Sort } from '@angular/material/sort';
+
+import { MatSort, MatSortModule, Sort } from '@angular/material/sort';
+
 import { MatTableModule } from '@angular/material/table';
 
 @Component({
@@ -23,12 +25,13 @@ import { MatTableModule } from '@angular/material/table';
     MatButtonModule,
     MatIconModule,
     MatChipSet,
-    MatChip
+    MatChip,
   ],
   templateUrl: './data-table.component.html',
-  styleUrls: ['./data-table.component.scss']
+  styleUrls: ['./data-table.component.scss'],
 })
-export class DataTableComponent<T> {
+export class DataTableComponent<T> implements OnChanges {
+  @ViewChild(MatSort) sort!: MatSort;
 
   @Input() data: T[] = [];
 
@@ -36,37 +39,48 @@ export class DataTableComponent<T> {
 
   @Input() total = 0;
 
-  // when false, paginator is hidden
   @Input() pagination = true;
-  
+
   @Input() pageSize = 10;
 
   @Input() pageIndex = 0;
 
+  @Input() resetSort = false;
+
   @Output() action = new EventEmitter<{
-    action: string,
-    row: T
+    action: string;
+    row: T;
   }>();
 
-  @Output() pageChange =
-    new EventEmitter<PageEvent>();
+  @Output() pageChange = new EventEmitter<PageEvent>();
 
-  @Output() sortChange =
-    new EventEmitter<Sort>();
+  @Output() sortChange = new EventEmitter<Sort>();
 
   get columnKeys(): string[] {
-    return this.config.columns.map(
-      c => c.key as string
-    );
+    return this.config.columns.map((c) => c.key as string);
   }
 
-  onAction(
-    action: TableAction<T>,
-    row: T
-  ) {
+  onAction(action: TableAction, row: T) {
     this.action.emit({
       action: action.type,
-      row
+      row,
     });
+  }
+
+  onSortChange(sort: Sort) {
+    this.sortChange.emit(sort);
+  }
+
+  ngOnChanges() {
+    if (this.resetSort && this.sort) {
+      this.sort.sort({
+        id: '',
+        start: 'asc',
+        disableClear: false,
+      });
+
+      this.sort.active = '';
+      this.sort.direction = '';
+    }
   }
 }

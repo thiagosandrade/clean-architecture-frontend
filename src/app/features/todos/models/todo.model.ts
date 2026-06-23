@@ -1,5 +1,5 @@
 export interface Todo {
-  id: number;
+  id: string;
   userId: number;
   description: string;
   dueDate: string;
@@ -7,4 +7,10 @@ export interface Todo {
   isCompleted: boolean;
   createdAt: string;
   completedAt: string | null;
+  priority: number;
+}
+
+export interface TodoResponse {
+  items: Todo[];
+  total: number;
 }

@@ -1,127 +1,62 @@
-<table
-  mat-table
-  [dataSource]="data"
-  matSort
-  (matSortChange)="sortChange.emit($event)"
->
-
-  <ng-container
-    *ngFor="let col of config.columns"
-    [matColumnDef]="col.key"
-  >
-
+<table mat-table [dataSource]="data" matSort (matSortChange)="sortChange.emit($event)">
+  <ng-container *ngFor="let col of config.columns" [matColumnDef]="col.key">
     <!-- HEADER -->
-    <th
-      mat-header-cell
-      *matHeaderCellDef
-      mat-sort-header
-    >
+    <th mat-header-cell *matHeaderCellDef [mat-sort-header]="col.key" [disabled]="col.isAction">
       {{ col.label }}
     </th>
 
     <!-- CELL -->
     <td mat-cell *matCellDef="let element">
-
       <!-- ACTION COLUMN -->
       <ng-container *ngIf="col.isAction">
-
-        <button
-          *ngFor="let act of col.actions"
-          mat-icon-button
-          (click)="onAction(act, element)"
-        >
-
-          <mat-icon *ngIf="act.type === 'edit'">
-            edit
+        <button *ngFor="let act of col.actions" mat-icon-button (click)="onAction(act, element)">
+          <mat-icon
+            [class.edit-icon]="act.type === 'edit'"
+            [class.delete-icon]="act.type === 'delete'"
+          >
+            {{ act.type === 'edit' ? 'edit' : 'delete' }}
           </mat-icon>
-
-          <mat-icon *ngIf="act.type === 'delete'">
-            delete
-          </mat-icon>
-
         </button>
-
       </ng-container>
 
       <!-- BOOLEAN COLUMN -->
-      <ng-container
-        *ngIf="
-          !col.isAction &&
-          col.type === 'boolean'
-        "
-      >
-
-        <mat-icon
-          [color]="element[col.key] ? 'primary' : 'warn'"
-        >
-          {{
-            element[col.key]
-              ? 'check_circle'
-              : 'cancel'
-          }}
+      <ng-container *ngIf="!col.isAction && col.type === 'boolean'">
+        <mat-icon [ngClass]="element[col.key] ? 'completed-icon' : 'pending-icon'">
+          {{ element[col.key] ? 'check_circle' : 'cancel' }}
         </mat-icon>
-
       </ng-container>
 
       <!-- CHIP COLUMN -->
-      <ng-container
-        *ngIf="
-          !col.isAction &&
-          col.type === 'chips'
-        "
-      >
-
+      <ng-container *ngIf="!col.isAction && col.type === 'chips'">
         <mat-chip-set>
-
-          <mat-chip
-            *ngFor="let item of element[col.key]"
-          >
+          <mat-chip *ngFor="let item of element[col.key]">
             {{ item?.description ?? item }}
           </mat-chip>
-
         </mat-chip-set>
+      </ng-container>
 
+      <ng-container *ngIf="!col.isAction && col.type === 'priority'">
+        <mat-chip>
+          {{ col.formatter ? col.formatter(element[col.key], element) : element[col.key] }}
+        </mat-chip>
       </ng-container>
 
       <!-- NORMAL COLUMN -->
       <ng-container
         *ngIf="
-          !col.isAction &&
-          col.type !== 'boolean' &&
-          col.type !== 'chips'
+          !col.isAction && col.type !== 'boolean' && col.type !== 'chips' && col.type !== 'priority'
         "
       >
-
-        {{
-          col.formatter
-            ? col.formatter(
-                element[col.key],
-                element
-              )
-            : element[col.key]
-        }}
-
+        {{ col.formatter ? col.formatter(element[col.key], element) : element[col.key] }}
       </ng-container>
-
     </td>
-
   </ng-container>
 
   <!-- HEADER ROW -->
-  <tr
-    mat-header-row
-    *matHeaderRowDef="columnKeys"
-  ></tr>
+  <tr mat-header-row *matHeaderRowDef="columnKeys"></tr>
 
   <!-- DATA ROW -->
-  <tr
-    mat-row
-    *matRowDef="
-      let row;
-      columns: columnKeys
-    "
-  ></tr>
-
+  <tr mat-row *matRowDef="let row; columns: columnKeys"></tr>
 </table>
 
 <!-- PAGINATOR -->
@@ -132,5 +67,5 @@
   [pageIndex]="pageIndex"
   [pageSizeOptions]="[5, 10, 20]"
   (page)="pageChange.emit($event)"
-  showFirstLastButtons>
-</mat-paginator>
+  showFirstLastButtons
+></mat-paginator>
