@@ -12,9 +12,11 @@ html {
         tertiary: mat.$blue-palette,
       ),
       typography: Roboto,
-      density: 0,
+      density: -2,
     )
   );
+
+  font-size: 14px;
 }
 
 $light-theme: mat.define-theme(

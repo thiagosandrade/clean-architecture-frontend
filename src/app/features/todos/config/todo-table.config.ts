@@ -5,7 +5,7 @@ import { formatPriority } from '../../../core/utils/priority-format.utils';
 
 export const TODO_TABLE_CONFIG: TableConfig<Todo> = {
   columns: [
-    { key: 'id', label: 'ID' },
+    // { key: 'id', label: 'ID' },
     { key: 'description', label: 'Description' },
 
     {
@@ -23,6 +23,12 @@ export const TODO_TABLE_CONFIG: TableConfig<Todo> = {
     {
       key: 'labels',
       label: 'Labels',
+      type: 'chips',
+    },
+
+    {
+      key: 'categories',
+      label: 'Categories',
       type: 'chips',
     },
 

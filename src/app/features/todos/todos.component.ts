@@ -17,6 +17,7 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
 import { MatInputModule } from '@angular/material/input';
 import { DataTableComponent } from '../../core/components/ui/data-table/data-table.component';
+import { ParseTodoDialogComponent } from './parse-todo-dialog/parse-todo-dialog';
 
 @Component({
   standalone: true,
@@ -53,7 +54,7 @@ export class TodosComponent implements OnInit {
     private service: TodoService,
     private snack: SnackbarService,
     private dialog: MatDialog,
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.searchControl.valueChanges
@@ -72,12 +73,12 @@ export class TodosComponent implements OnInit {
   load() {
     const request = this.searchText?.trim()
       ? this.service.searchTodos(
-          this.searchText,
-          this.page,
-          this.size,
-          this.hasUserSorted ? this.sortProperty : '',
-          this.descending,
-        )
+        this.searchText,
+        this.page,
+        this.size,
+        this.hasUserSorted ? this.sortProperty : '',
+        this.descending,
+      )
       : this.service.getAll(this.page, this.size, this.sortProperty, this.descending);
 
     request.subscribe((response) => {
@@ -203,5 +204,72 @@ export class TodosComponent implements OnInit {
           break;
         }
     }
+  }
+
+  parseTodo() {
+
+    const dialogRef =
+      this.dialog.open(ParseTodoDialogComponent, {
+        width: '1300px',
+        maxWidth: '95vw'
+      });
+
+
+    dialogRef.afterClosed()
+      .subscribe(result => {
+
+
+        if (!result) {
+          return;
+        }
+
+
+        this.service.create({
+
+          userId:
+            localStorage.getItem('userId')!,
+
+
+          description:
+            result.description,
+
+
+          dueDate:
+            result.dueDate,
+
+
+          labels:
+            result.labels,
+
+
+          priority:
+            this.mapPriority(result.priority)
+
+        })
+          .subscribe(() => {
+
+            this.snack.success(
+              'Todo created'
+            );
+
+            this.load();
+
+          });
+      });
+  }
+
+  mapPriority(priority: string) {
+
+    const map: any = {
+
+      Normal: 0,
+      Low: 1,
+      Medium: 2,
+      High: 3,
+      Top: 4
+
+    };
+    return map[priority] ?? 0;
+
   }
 }

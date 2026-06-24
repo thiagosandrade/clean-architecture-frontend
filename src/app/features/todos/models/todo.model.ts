@@ -4,6 +4,7 @@ export interface Todo {
   description: string;
   dueDate: string;
   labels: string[];
+  categories: string[];
   isCompleted: boolean;
   createdAt: string;
   completedAt: string | null;

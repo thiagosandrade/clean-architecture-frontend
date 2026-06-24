@@ -4,12 +4,13 @@ import { environment } from '../../../../environments/environment';
 import { UpdateTodoRequest } from '../models/update-todo-request.model';
 import { CreateTodoRequest } from '../models/create-todo-request.model';
 import { TodoResponse } from '../models/todo.model';
+import { ParsedTodo } from '../models/parsed-todo-response.model';
 
 @Injectable({ providedIn: 'root' })
 export class TodoService {
   private base = `${environment.apiUrl}/todos`;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   getAll(
     page: number = 1,
@@ -70,5 +71,17 @@ export class TodoService {
   update(id: string, request: UpdateTodoRequest) {
     request.userId = localStorage.getItem('id') ?? '';
     return this.http.put(`${this.base}/${id}`, request);
+  }
+
+  parseTodo(description: string) {
+    
+    return this.http.post<ParsedTodo>(
+      `${this.base}/parse`,
+      {
+        userId: localStorage.getItem('id') ?? '',
+        description
+      }
+    );
+
   }
 }
