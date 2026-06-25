@@ -41,20 +41,27 @@
     </div>
   </div>
 
-  <mat-card class="table-card">
+  <mat-card class="table-card" [class.loading]="loadingService.loading$ | async">
+
+    @if (loadingService.loading$ | async) {
+
+      <div class="table-spinner">
+
+        <mat-spinner diameter="24"></mat-spinner>
+
+      </div>
+
+    }
+
     <mat-card-content>
-      <app-data-table
-        [data]="todos"
-        [config]="tableConfig"
-        [pagination]="true"
-        [total]="total"
-        [pageSize]="size"
-        [pageIndex]="page - 1"
-        [resetSort]="resetTableSort"
-        (pageChange)="onPageChange($event)"
-        (sortChange)="onSortChange($event)"
-        (action)="handleAction($event)"
-      ></app-data-table>
+      <div class="table-wrapper">
+
+        <app-data-table [data]="todos" [config]="tableConfig" [pagination]="true" [total]="total" [pageSize]="size"
+          [pageIndex]="page - 1" [resetSort]="resetTableSort" (pageChange)="onPageChange($event)"
+          (sortChange)="onSortChange($event)" (action)="handleAction($event)">
+        </app-data-table>
+
+      </div>
     </mat-card-content>
   </mat-card>
 </div>

@@ -6,6 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
 import { ThemeService } from '../../../services/theme.service';
 import { Router } from '@angular/router';
+import { AuthService } from '../../../../features/auth/services/auth.service';
 
 @Component({
   selector: 'app-toolbar',
@@ -18,6 +19,7 @@ export class ToolbarComponent {
   constructor(
     private theme: ThemeService,
     private router: Router,
+    private authService: AuthService
   ) {}
 
   goToUser() {
@@ -37,7 +39,7 @@ export class ToolbarComponent {
   }
 
   logout() {
-    console.log('logout clicked');
-    // later: clear token + redirect
+    this.authService.logout();
+    this.router.navigate(['/login']);
   }
 }

@@ -53,8 +53,7 @@
       mat-flat-button
       color="primary"
       (click)="save()"
-      [disabled]="form.invalid"
-    >
+      [disabled]="form.invalid || isSaving">
       Save
     </button>
   </mat-dialog-actions>

@@ -1,17 +1,20 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { ToolbarComponent } from './core/components/layout/toolbar/toolbar.component';
 import { ThemeService } from './core/services/theme.service';
-import { LoadingSpinnerComponent } from './core/components/ui/loading-spinner/loading-spinner.component';
-
+import { LoadingService } from './core/services/loading.service';
+import { MatProgressBarModule }  from '@angular/material/progress-bar';
+import { AsyncPipe } from '@angular/common';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, LoadingSpinnerComponent, ToolbarComponent],
+  imports: [RouterOutlet, ToolbarComponent, MatProgressBarModule, AsyncPipe],
   templateUrl: './app.html',
   styleUrls: ['./app.scss'],
 })
 export class AppComponent implements OnInit {
+  loadingService = inject(LoadingService);
+  
   constructor(private theme: ThemeService) {}
 
   ngOnInit() {

@@ -34,6 +34,7 @@ import { enumToOptions } from '../../core/utils/enum.utils';
 export class TodoDialogComponent {
   form;
   priorityOptions = enumToOptions(Priority);
+  isSaving: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -53,9 +54,11 @@ export class TodoDialogComponent {
   }
 
   save() {
-    if (this.form.invalid) {
+    if (this.form.invalid || this.isSaving) {
       return;
     }
+
+    this.isSaving = true;
 
     const value = this.form.getRawValue();
 
@@ -70,6 +73,8 @@ export class TodoDialogComponent {
       priority: value.priority ?? 0,
       isCompleted: value.isCompleted,
     });
+
+    this.isSaving = true;
   }
 
   private toDateInput(date: string) {

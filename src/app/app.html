@@ -1,6 +1,11 @@
 <app-toolbar></app-toolbar>
 
-<app-loading-spinner></app-loading-spinner>
+@if(loadingService.loading$ | async)
+{
+  <mat-progress-bar
+    mode="indeterminate">
+  </mat-progress-bar>
+}
 
 <div class="content">
   <router-outlet></router-outlet>

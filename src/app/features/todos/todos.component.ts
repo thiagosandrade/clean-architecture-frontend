@@ -18,6 +18,8 @@ import { debounceTime, distinctUntilChanged } from 'rxjs';
 import { MatInputModule } from '@angular/material/input';
 import { DataTableComponent } from '../../core/components/ui/data-table/data-table.component';
 import { ParseTodoDialogComponent } from './parse-todo-dialog/parse-todo-dialog';
+import { LoadingService } from '../../core/services/loading.service';
+import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 
 @Component({
   standalone: true,
@@ -33,7 +35,8 @@ import { ParseTodoDialogComponent } from './parse-todo-dialog/parse-todo-dialog'
     ReactiveFormsModule,
     MatInputModule,
     DataTableComponent,
-  ],
+    MatProgressSpinnerModule
+],
   templateUrl: './todos.component.html',
   styleUrls: ['./todos.component.scss'],
 })
@@ -54,6 +57,7 @@ export class TodosComponent implements OnInit {
     private service: TodoService,
     private snack: SnackbarService,
     private dialog: MatDialog,
+    public loadingService: LoadingService
   ) { }
 
   ngOnInit() {
