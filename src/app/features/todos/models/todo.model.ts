@@ -1,4 +1,4 @@
-export interface Todo {
+export interface TodoItem {
   id: string;
   userId: number;
   description: string;
@@ -9,9 +9,20 @@ export interface Todo {
   createdAt: string;
   completedAt: string | null;
   priority: number;
+  subItems: TodoSubItem[];
+}
+
+export interface TodoSubItem {
+  id: string;
+  todoItemId: string;
+  description: string;
+  isCompleted: boolean;
+  createdAt: string;
+  completedAt: string | null;
+  order: number;
 }
 
 export interface TodoResponse {
-  items: Todo[];
+  items: TodoItem[];
   total: number;
 }

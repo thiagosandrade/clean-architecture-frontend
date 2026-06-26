@@ -1,9 +1,9 @@
 import { TableConfig } from '../../../core/components/ui/data-table/table-config.model';
-import { Todo } from '../models/todo.model';
+import { TodoItem } from '../models/todo.model';
 import { formatDateTime } from '../../../core/utils/date-format.utils';
 import { formatPriority } from '../../../core/utils/priority-format.utils';
 
-export const TODO_TABLE_CONFIG: TableConfig<Todo> = {
+export const TODO_TABLE_CONFIG: TableConfig<TodoItem> = {
   columns: [
     // { key: 'id', label: 'ID' },
     { key: 'description', label: 'Description' },
@@ -56,6 +56,7 @@ export const TODO_TABLE_CONFIG: TableConfig<Todo> = {
       label: 'Actions',
       isAction: true,
       actions: [
+        { label: 'View', type: 'view' },
         { label: 'Edit', type: 'edit' },
         { label: 'Delete', type: 'delete' },
       ],

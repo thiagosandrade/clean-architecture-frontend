@@ -3,7 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from '../../../../environments/environment';
 import { UpdateTodoRequest } from '../models/update-todo-request.model';
 import { CreateTodoRequest } from '../models/create-todo-request.model';
-import { TodoResponse } from '../models/todo.model';
+import { TodoItem, TodoResponse } from '../models/todo.model';
 import { ParsedTodo } from '../models/parsed-todo-response.model';
 
 @Injectable({ providedIn: 'root' })
@@ -74,7 +74,7 @@ export class TodoService {
   }
 
   parseTodo(description: string) {
-    
+
     return this.http.post<ParsedTodo>(
       `${this.base}/parse`,
       {
@@ -82,6 +82,22 @@ export class TodoService {
         description
       }
     );
+  }
+
+  breakdown(id: string) {
+
+    return this.http.put(
+      `${this.base}/${id}/breakdown`,
+      {
+        userId: localStorage.getItem('id') ?? '',
+      });
+
+  }
+
+  getById(id: string) {
+
+    return this.http.get<TodoItem>(
+      `${this.base}/${id}`);
 
   }
 }

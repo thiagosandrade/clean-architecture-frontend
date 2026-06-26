@@ -1,0 +1,179 @@
+<h2 mat-dialog-title>
+
+    Todo Details
+
+</h2>
+
+<mat-dialog-content>
+
+    @if(loading)
+    {
+
+    <div class="loading">
+
+        <mat-spinner diameter="40"></mat-spinner>
+
+    </div>
+
+    }
+    @else if(todo)
+    {
+
+    <div class="details">
+
+        <div class="row">
+
+            <label>Description</label>
+
+            <span>{{ todo.description }}</span>
+
+        </div>
+
+        <div class="row">
+
+            <label>Priority</label>
+
+            <span>{{ todo.priority }}</span>
+
+        </div>
+
+        <div class="row">
+
+            <label>Due Date</label>
+
+            <span>{{ todo.dueDate | date:'mediumDate' }}</span>
+
+        </div>
+
+        <div class="row">
+
+            <label>Status</label>
+
+            <span>
+
+                {{ todo.isCompleted ? 'Completed' : 'Pending' }}
+
+            </span>
+
+        </div>
+
+        <div class="row">
+
+            <label>Labels</label>
+
+            <span>
+
+                {{ todo.labels.join(', ') }}
+
+            </span>
+
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <h3>
+
+            Subtasks
+
+        </h3>
+
+        @if(todo.subItems.length)
+        {
+
+        <table class="subtasks">
+
+            <thead>
+
+                <tr>
+
+                    <th>Order</th>
+
+                    <th>Completed</th>
+
+                    <th>Description</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                @for(subtask of todo.subItems; track subtask.id)
+                {
+
+                <tr>
+
+                    <td>
+
+                        {{ subtask.order }}
+
+                    </td>
+
+                    <td class="status-cell">
+
+                        <mat-icon [class.completed]="subtask.isCompleted" [class.pending]="!subtask.isCompleted">
+
+                            {{ subtask.isCompleted ? 'check_circle' : 'radio_button_unchecked' }}
+
+                        </mat-icon>
+
+                    </td>
+
+                    <td>
+
+                        {{ subtask.description }}
+
+                    </td>
+
+                </tr>
+
+                }
+
+            </tbody>
+
+        </table>
+
+        }
+        @else
+        {
+
+        <div class="empty">
+
+            No subtasks generated yet.
+
+        </div>
+
+        }
+
+    </div>
+
+    }
+
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+
+    <button mat-button (click)="close()">
+
+        Close
+
+    </button>
+
+    <button mat-flat-button color="primary" (click)="breakDown()" [disabled]="breakingDown || hasSubtasks()">
+
+        @if(breakingDown)
+        {
+
+        <mat-spinner diameter="18"></mat-spinner>
+
+        }
+        @else
+        {
+
+        Break Down
+
+        }
+
+    </button>
+
+</mat-dialog-actions>

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { TodoService } from './services/todo.service';
-import { Todo } from './models/todo.model';
+import { TodoItem } from './models/todo.model';
 import { TODO_TABLE_CONFIG } from './config/todo-table.config';
 import { CommonModule } from '@angular/common';
 import { SnackbarService } from '../../core/services/snackbar.service';
@@ -20,6 +20,7 @@ import { DataTableComponent } from '../../core/components/ui/data-table/data-tab
 import { ParseTodoDialogComponent } from './parse-todo-dialog/parse-todo-dialog';
 import { LoadingService } from '../../core/services/loading.service';
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
+import { TodoDetailsDialogComponent } from './todo-details-dialog/todo-details-dialog';
 
 @Component({
   standalone: true,
@@ -41,7 +42,7 @@ import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
   styleUrls: ['./todos.component.scss'],
 })
 export class TodosComponent implements OnInit {
-  todos: Todo[] = [];
+  todos: TodoItem[] = [];
   tableConfig = TODO_TABLE_CONFIG;
   page = 1;
   size = 10;
@@ -174,7 +175,7 @@ export class TodosComponent implements OnInit {
     });
   }
 
-  handleAction(event: { action: string; row: Todo }) {
+  handleAction(event: { action: string; row: TodoItem }) {
     switch (event.action) {
       case 'delete':
         this.service.delete(event.row.id).subscribe(() => {
@@ -183,15 +184,33 @@ export class TodosComponent implements OnInit {
         });
         break;
 
+      case 'view':
+        {
+          this.dialog.open(TodoDetailsDialogComponent,
+            {
+              width: '900px',
+              maxWidth: '95vw',
+              height: 'auto',
+              maxHeight: '90vh',
+              data: {
+                id: event.row.id
+              }
+            });
+
+            break;
+        }
+        
+        
       case 'edit':
         {
-          const dialogRef = this.dialog.open(TodoDialogComponent, {
-            width: '700px',
-            data: {
-              isEdit: true,
-              todo: event.row,
-            },
-          });
+          const dialogRef = this.dialog.open(TodoDialogComponent, 
+            {
+              width: '700px',
+              data: {
+                isEdit: true,
+                todo: event.row,
+              },
+            });
 
           dialogRef.afterClosed().subscribe((result) => {
             if (!result) {

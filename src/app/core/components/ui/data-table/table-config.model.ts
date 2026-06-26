@@ -2,7 +2,7 @@ export type TableColumnType = 'boolean' | 'chips' | 'text' | 'priority';
 
 export interface TableAction {
   label: string;
-  type: 'edit' | 'delete' | string;
+  type: 'view' | 'edit' | 'delete' | string;
 }
 
 export interface TableColumn<T> {

@@ -7,16 +7,23 @@
 
     <!-- CELL -->
     <td mat-cell *matCellDef="let element">
+      
       <!-- ACTION COLUMN -->
       <ng-container *ngIf="col.isAction">
-        <button *ngFor="let act of col.actions" mat-icon-button (click)="onAction(act, element)">
-          <mat-icon
-            [class.edit-icon]="act.type === 'edit'"
-            [class.delete-icon]="act.type === 'delete'"
-          >
-            {{ act.type === 'edit' ? 'edit' : 'delete' }}
-          </mat-icon>
-        </button>
+        <div class="actions-cell">
+          <button *ngFor="let act of col.actions" mat-icon-button (click)="onAction(act, element)">
+            <mat-icon [class.edit-icon]="act.type === 'edit'" [class.delete-icon]="act.type === 'delete'"
+              [class.view-icon]="act.type === 'view'">
+              {{
+              act.type === 'edit'
+              ? 'edit'
+              : act.type === 'delete'
+              ? 'delete'
+              : 'visibility'
+              }}
+            </mat-icon>
+          </button>
+        </div>
       </ng-container>
 
       <!-- BOOLEAN COLUMN -->
@@ -42,11 +49,9 @@
       </ng-container>
 
       <!-- NORMAL COLUMN -->
-      <ng-container
-        *ngIf="
+      <ng-container *ngIf="
           !col.isAction && col.type !== 'boolean' && col.type !== 'chips' && col.type !== 'priority'
-        "
-      >
+        ">
         {{ col.formatter ? col.formatter(element[col.key], element) : element[col.key] }}
       </ng-container>
     </td>
@@ -60,12 +65,5 @@
 </table>
 
 <!-- PAGINATOR -->
-<mat-paginator
-  *ngIf="pagination"
-  [length]="total"
-  [pageSize]="pageSize"
-  [pageIndex]="pageIndex"
-  [pageSizeOptions]="[5, 10, 20]"
-  (page)="pageChange.emit($event)"
-  showFirstLastButtons
-></mat-paginator>
+<mat-paginator *ngIf="pagination" [length]="total" [pageSize]="pageSize" [pageIndex]="pageIndex"
+  [pageSizeOptions]="[5, 10, 20]" (page)="pageChange.emit($event)" showFirstLastButtons></mat-paginator>
