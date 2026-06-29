@@ -205,7 +205,8 @@ export class TodosComponent implements OnInit {
         {
           const dialogRef = this.dialog.open(TodoDialogComponent, 
             {
-              width: '700px',
+              width: '550px',
+              maxWidth: '90vw',
               data: {
                 isEdit: true,
                 todo: event.row,

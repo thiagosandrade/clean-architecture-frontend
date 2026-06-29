@@ -1,4 +1,4 @@
-export type TableColumnType = 'boolean' | 'chips' | 'text' | 'priority';
+export type TableColumnType = 'boolean' | 'chips' | 'text' | 'priority' | 'date' ;
 
 export interface TableAction {
   label: string;

@@ -1,6 +1,6 @@
 import { TableConfig } from '../../../core/components/ui/data-table/table-config.model';
 import { TodoItem } from '../models/todo.model';
-import { formatDateTime } from '../../../core/utils/date-format.utils';
+import { formatDateOnly, formatDateTime } from '../../../core/utils/date-format.utils';
 import { formatPriority } from '../../../core/utils/priority-format.utils';
 
 export const TODO_TABLE_CONFIG: TableConfig<TodoItem> = {
@@ -17,7 +17,8 @@ export const TODO_TABLE_CONFIG: TableConfig<TodoItem> = {
     {
       key: 'dueDate',
       label: 'Due Date',
-      formatter: formatDateTime,
+      type: 'date',
+      formatter: formatDateOnly,
     },
 
     {
@@ -35,12 +36,14 @@ export const TODO_TABLE_CONFIG: TableConfig<TodoItem> = {
     {
       key: 'createdAt',
       label: 'Created At',
+      type: 'date',
       formatter: formatDateTime,
     },
 
     {
       key: 'completedAt',
       label: 'Completed At',
+      type: 'date',   
       formatter: formatDateTime,
     },
 

@@ -48,9 +48,16 @@
         </mat-chip>
       </ng-container>
 
+      <!-- DATE COLUMN -->
+      <ng-container *ngIf="!col.isAction && col.type === 'date'">
+        <span class="nowrap">
+          {{ col.formatter ? col.formatter(element[col.key], element) : element[col.key] }}
+        </span>
+      </ng-container>
+
       <!-- NORMAL COLUMN -->
       <ng-container *ngIf="
-          !col.isAction && col.type !== 'boolean' && col.type !== 'chips' && col.type !== 'priority'
+          !col.isAction && col.type !== 'boolean' && col.type !== 'chips' && col.type !== 'priority' && col.type !== 'date'
         ">
         {{ col.formatter ? col.formatter(element[col.key], element) : element[col.key] }}
       </ng-container>

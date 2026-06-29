@@ -2,25 +2,61 @@
   {{ data.isEdit ? 'Edit Todo' : 'Create Todo' }}
 </h2>
 
+
 <form [formGroup]="form">
-  <mat-dialog-content>
-    <mat-form-field appearance="outline">
-      <mat-label>Description</mat-label>
 
-      <textarea matInput rows="4" formControlName="description"></textarea>
-    </mat-form-field>
+  <mat-dialog-content class="dialog-content">
+
 
     <mat-form-field appearance="outline">
-      <mat-label>Due Date</mat-label>
 
-      <input matInput type="datetime-local" formControlName="dueDate" />
+      <mat-label>
+        Description
+      </mat-label>
+
+      <textarea
+        matInput
+        rows="3"
+        formControlName="description">
+      </textarea>
+
     </mat-form-field>
+
 
     <mat-form-field appearance="outline">
-      <mat-label>Labels</mat-label>
 
-      <input matInput formControlName="labels" />
+      <mat-label>
+        Due Date
+      </mat-label>
+
+      <input
+        matInput
+        [matDatepicker]="picker"
+        formControlName="dueDate">
+
+      <mat-datepicker-toggle
+        matIconSuffix
+        [for]="picker">
+      </mat-datepicker-toggle>
+
+      <mat-datepicker #picker>
+      </mat-datepicker>
+
     </mat-form-field>
+
+
+    <mat-form-field appearance="outline">
+
+      <mat-label>
+        Labels
+      </mat-label>
+
+      <input
+        matInput
+        formControlName="labels" />
+
+    </mat-form-field>
+
 
     <mat-form-field appearance="outline">
 
@@ -42,11 +78,29 @@
 
     </mat-form-field>
 
-    <mat-checkbox formControlName="isCompleted">Completed</mat-checkbox>
+
+    <mat-checkbox formControlName="isCompleted">
+
+      Completed
+
+    </mat-checkbox>
+
+
   </mat-dialog-content>
 
+
   <mat-dialog-actions align="end">
-    <button type="button" mat-button mat-dialog-close>Cancel</button>
+
+
+    <button
+      type="button"
+      mat-button
+      mat-dialog-close>
+
+      Cancel
+
+    </button>
+
 
     <button
       type="button"
@@ -54,7 +108,12 @@
       color="primary"
       (click)="save()"
       [disabled]="form.invalid || isSaving">
+
       Save
+
     </button>
+
+
   </mat-dialog-actions>
+
 </form>

@@ -100,4 +100,15 @@ export class TodoService {
       `${this.base}/${id}`);
 
   }
+
+  saveSubItems(id: string, subItems: TodoItem['subItems']) {
+
+    return this.http.put(
+      `${this.base}/${id}/subitems`,
+      {
+        userId: localStorage.getItem('id') ?? '',
+        todoSubItems: subItems
+      });
+
+  }
 }

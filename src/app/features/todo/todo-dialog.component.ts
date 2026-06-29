@@ -9,6 +9,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 
 import { TodoDialogData } from '../todos/models/todo-dialog-data';
 import { MatSelectModule } from "@angular/material/select";
@@ -26,7 +27,8 @@ import { enumToOptions } from '../../core/utils/enum.utils';
     MatFormFieldModule,
     MatInputModule,
     MatCheckboxModule,
-    MatSelectModule
+    MatSelectModule,
+    MatDatepickerModule
 ],
   templateUrl: './todo-dialog.component.html',
   styleUrls: ['./todo-dialog.component.scss'],
@@ -46,7 +48,7 @@ export class TodoDialogComponent {
 
     this.form = this.fb.group({
       description: [todo?.description ?? '', Validators.required],
-      dueDate: [todo?.dueDate ? this.toDateInput(todo.dueDate) : ''],
+      dueDate: [todo?.dueDate ? new Date(todo.dueDate) : null],
       labels: [todo?.labels.join(', ') ?? ''],
       priority: [todo?.priority ?? Priority.Normal],
       isCompleted: [todo?.isCompleted ?? false],
@@ -64,7 +66,7 @@ export class TodoDialogComponent {
 
     this.dialogRef.close({
       description: value.description,
-      dueDate: new Date(value.dueDate!).toISOString(),
+      dueDate: value.dueDate ? value.dueDate.toISOString() : null,
       labels:
         value.labels
           ?.split(',')
@@ -74,10 +76,6 @@ export class TodoDialogComponent {
       isCompleted: value.isCompleted,
     });
 
-    this.isSaving = true;
-  }
-
-  private toDateInput(date: string) {
-    return date?.substring(0, 16);
+    this.isSaving = false;
   }
 }

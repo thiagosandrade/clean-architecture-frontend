@@ -1,3 +1,7 @@
+/* =========================
+   Dialog Layout
+========================= */
+
 .details {
 
   min-width: 750px;
@@ -10,13 +14,37 @@
 
 }
 
+
+mat-dialog-content {
+
+  max-height: none;
+
+  padding: 24px 40px !important;
+
+}
+
+
+mat-dialog-actions {
+
+  padding: 16px 24px;
+
+}
+
+
+/* =========================
+   Todo Information Rows
+========================= */
+
 .row {
 
   display: flex;
 
+  align-items: center;
+
   gap: 24px;
 
 }
+
 
 .row label {
 
@@ -26,11 +54,17 @@
 
 }
 
+
 .row span {
 
   flex: 1;
 
 }
+
+
+/* =========================
+   Loading / Empty States
+========================= */
 
 .loading {
 
@@ -44,6 +78,7 @@
 
 }
 
+
 .empty {
 
   color: gray;
@@ -52,53 +87,175 @@
 
 }
 
+
+/* =========================
+   Subtasks Table
+========================= */
+
 .subtasks {
 
   width: 100%;
 
   border-collapse: collapse;
 
+  table-layout: fixed;
+
 }
+
 
 .subtasks th {
 
+  padding: 6px 8px;
+
+  font-weight: 600;
+
   text-align: left;
 
-  padding: 10px;
-
-  border-bottom: 1px solid #ddd;
-
 }
+
 
 .subtasks td {
 
-  padding: 10px;
+  padding: 4px 8px;
 
-  border-bottom: 1px solid #eee;
-
-}
-
-
-
-.status-cell {
-
-  width: 70px;
-
-  text-align: center;
+  vertical-align: middle;
 
 }
 
 
-.status-cell mat-icon {
+.subtasks tbody tr {
 
-  font-size: 22px;
+  height: 34px;
 
-  width: 22px;
-
-  height: 22px;
+  border-bottom: 1px solid var(--mat-sys-outline-variant);
 
 }
 
+
+/* =========================
+   Subtasks Columns
+========================= */
+
+.order-column {
+
+  width: 60px;
+
+  text-align: center !important;
+
+}
+
+
+.status-column {
+
+  width: 90px;
+
+  text-align: center !important;
+
+}
+
+
+.description-column {
+
+  width: auto;
+
+  text-align: center !important;
+
+}
+
+
+/* =========================
+   Reorder Controls
+========================= */
+
+.order-cell {
+
+  display: flex;
+
+  flex-direction: row;
+
+  align-items: center;
+
+  justify-content: center;
+
+}
+
+
+.order-cell button {
+
+  width: 24px;
+
+  height: 24px;
+
+  padding: 0;
+
+}
+
+
+.order-cell mat-icon {
+
+  width: 18px;
+
+  height: 18px;
+
+  font-size: 18px;
+
+}
+
+
+/* =========================
+   Checkbox Alignment
+========================= */
+
+.checkbox-wrapper {
+
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
+
+  width: 100%;
+
+}
+
+
+/* =========================
+   Description Editing
+========================= */
+
+.description-input {
+
+  width: 100%;
+
+  box-sizing: border-box;
+
+  padding: 4px 8px;
+
+  min-height: 32px;
+
+  font: inherit;
+
+  border: 1px solid var(--mat-sys-outline-variant);
+
+  border-radius: 4px;
+
+  background: transparent;
+
+}
+
+
+.description-input:focus {
+
+  outline: none;
+
+  border-color: var(--mat-sys-primary);
+
+}
+
+
+/* =========================
+   Status Colors
+========================= */
 
 .completed {
 
@@ -113,18 +270,42 @@
 
 }
 
-mat-dialog-content {
+/* =========================
+   Subtasks Header
+========================= */
 
-  max-height: none;
+.subtasks-header {
 
-  padding-top: 24px !important;
-  padding-bottom: 24px !important;
-  padding-left: 40px !important;
-  padding-right: 40px !important;
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  margin-bottom: 8px;
+
 }
 
-mat-dialog-actions {
 
-  padding: 16px 24px;
+.action-column {
+
+  width: 50px;
+
+  text-align: center;
+
+}
+
+.description-input.invalid {
+
+  border-color: #d32f2f;
+
+  background: rgba(211, 47, 47, 0.05);
+
+}
+
+
+.description-input.invalid:focus {
+
+  border-color: #d32f2f;
 
 }

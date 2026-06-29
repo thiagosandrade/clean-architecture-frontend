@@ -17,7 +17,7 @@ export interface TodoSubItem {
   todoItemId: string;
   description: string;
   isCompleted: boolean;
-  createdAt: string;
+  createdAt: string | null;
   completedAt: string | null;
   order: number;
 }

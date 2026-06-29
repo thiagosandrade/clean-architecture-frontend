@@ -1,5 +1,5 @@
 import { TableConfig } from '../../../core/components/ui/data-table/table-config.model';
-import { formatDateTime } from '../../../core/utils/date-format.utils';
+import { formatDateOnly, formatDateTime } from '../../../core/utils/date-format.utils';
 import { User } from '../models/user.model';
 
 export const USER_TABLE_CONFIG: TableConfig<User> = {
@@ -15,8 +15,9 @@ export const USER_TABLE_CONFIG: TableConfig<User> = {
     },
     {
       key: 'createdOn',
-      label: 'Created On',
-      formatter: formatDateTime,
+      label: 'Created At',
+      type: 'date',
+      formatter: formatDateOnly,
     },
     {
       key: 'actions',

@@ -5,37 +5,25 @@
 html {
   height: 100%;
 
-  @include mat.theme(
-    (
-      color: (
-        primary: mat.$azure-palette,
+  @include mat.theme((color: (primary: mat.$azure-palette,
         tertiary: mat.$blue-palette,
       ),
       typography: Roboto,
       density: -2,
-    )
-  );
+    ));
 
   font-size: 14px;
 }
 
-$light-theme: mat.define-theme(
-  (
-    color: (
-      theme-type: light,
-      primary: mat.$blue-palette,
-    ),
-  )
-);
+$light-theme: mat.define-theme((color: (theme-type: light,
+        primary: mat.$blue-palette,
+      ),
+    ));
 
-$dark-theme: mat.define-theme(
-  (
-    color: (
-      theme-type: dark,
-      primary: mat.$blue-palette,
-    ),
-  )
-);
+$dark-theme: mat.define-theme((color: (theme-type: dark,
+        primary: mat.$blue-palette,
+      ),
+    ));
 
 :root {
   @include mat.all-component-themes($light-theme);
@@ -85,14 +73,44 @@ body {
 
 /* Snackbar */
 
-.snackbar-success {
-  background: #4caf50;
+.mat-mdc-snack-bar-container.app-snackbar {
 
-  color: white;
+  .mdc-snackbar__surface {
+    border-radius: 12px !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, .18);
+  }
+
+  .mdc-snackbar__label {
+    color: white !important;
+    font-weight: 500;
+  }
+
+  .mat-mdc-snack-bar-action {
+    color: white !important;
+  }
+
 }
 
-.snackbar-error {
-  background: #f44336;
+.mat-mdc-snack-bar-container.snackbar-success {
 
-  color: white;
+  .mdc-snackbar__surface {
+    background-color: #2e7d32 !important;
+  }
+
+}
+
+.mat-mdc-snack-bar-container.snackbar-error {
+
+  .mdc-snackbar__surface {
+    background-color: #c62828 !important;
+  }
+
+}
+
+.mat-mdc-snack-bar-container.snackbar-info {
+
+  .mdc-snackbar__surface {
+    background-color: #1565c0 !important;
+  }
+
 }
