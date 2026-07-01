@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { TodoService } from './services/todo.service';
 import { TodoItem } from './models/todo.model';
 import { TODO_TABLE_CONFIG } from './config/todo-table.config';
@@ -37,7 +37,7 @@ import { TodoDetailsDialogComponent } from './todo-details-dialog/todo-details-d
     MatInputModule,
     DataTableComponent,
     MatProgressSpinnerModule
-],
+  ],
   templateUrl: './todos.component.html',
   styleUrls: ['./todos.component.scss'],
 })
@@ -58,7 +58,8 @@ export class TodosComponent implements OnInit {
     private service: TodoService,
     private snack: SnackbarService,
     private dialog: MatDialog,
-    public loadingService: LoadingService
+    public loadingService: LoadingService,
+    private cdr: ChangeDetectorRef
   ) { }
 
   ngOnInit() {
@@ -76,6 +77,7 @@ export class TodosComponent implements OnInit {
   }
 
   load() {
+
     const request = this.searchText?.trim()
       ? this.service.searchTodos(
         this.searchText,
@@ -84,12 +86,23 @@ export class TodosComponent implements OnInit {
         this.hasUserSorted ? this.sortProperty : '',
         this.descending,
       )
-      : this.service.getAll(this.page, this.size, this.sortProperty, this.descending);
+      : this.service.getAll(
+        this.page,
+        this.size,
+        this.sortProperty,
+        this.descending
+      );
+
 
     request.subscribe((response) => {
+
       this.todos = response.items;
       this.total = response.total;
+
+      this.cdr.detectChanges();
+
     });
+
   }
 
   search() {
@@ -147,32 +160,27 @@ export class TodosComponent implements OnInit {
   }
 
   createTodo() {
-    const dialogRef = this.dialog.open(TodoDialogComponent, {
-      width: '700px',
-      data: {
-        isEdit: false,
-      },
-    });
 
-    dialogRef.afterClosed().subscribe((result) => {
-      if (!result) {
-        return;
-      }
+    const dialogRef =
+      this.dialog.open(
+        TodoDialogComponent,
+        {
+          width: '700px',
+          data: {
+            isEdit: false
+          }
+        }
+      );
 
-      this.service
-        .create({
-          userId: localStorage.getItem('userId')!,
-          description: result.description,
-          dueDate: result.dueDate,
-          labels: result.labels,
-          priority: result.priority,
-        })
-        .subscribe(() => {
-          this.snack.success('Todo created');
 
+    dialogRef.afterClosed()
+      .subscribe(refresh => {
+
+        if (refresh) {
           this.load();
-        });
-    });
+        }
+
+      });
   }
 
   handleAction(event: { action: string; row: TodoItem }) {
@@ -197,13 +205,13 @@ export class TodosComponent implements OnInit {
               }
             });
 
-            break;
+          break;
         }
-        
-        
+
+
       case 'edit':
         {
-          const dialogRef = this.dialog.open(TodoDialogComponent, 
+          const dialogRef = this.dialog.open(TodoDialogComponent,
             {
               width: '550px',
               maxWidth: '90vw',
@@ -213,17 +221,12 @@ export class TodosComponent implements OnInit {
               },
             });
 
-          dialogRef.afterClosed().subscribe((result) => {
-            if (!result) {
-              return;
-            }
+          dialogRef.afterClosed()
+            .subscribe(refresh => {
 
-            this.service.update(event.row.id, result).subscribe(() => {
-              this.snack.success('Todo updated');
+                this.load();
 
-              this.load();
             });
-          });
 
           break;
         }
@@ -242,32 +245,16 @@ export class TodosComponent implements OnInit {
     dialogRef.afterClosed()
       .subscribe(result => {
 
-
         if (!result) {
           return;
         }
 
-
         this.service.create({
-
-          userId:
-            localStorage.getItem('userId')!,
-
-
-          description:
-            result.description,
-
-
-          dueDate:
-            result.dueDate,
-
-
-          labels:
-            result.labels,
-
-
-          priority:
-            this.mapPriority(result.priority)
+          userId: localStorage.getItem('userId')!,
+          description: result.description,
+          dueDate: result.dueDate,
+          labels: result.labels,
+          priority: this.mapPriority(result.priority)
 
         })
           .subscribe(() => {

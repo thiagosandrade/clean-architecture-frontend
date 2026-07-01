@@ -1,25 +1,20 @@
 <h2 mat-dialog-title>
-
     Todo Details
-
 </h2>
+
 
 <mat-dialog-content>
 
-    @if(loading)
-    {
 
-    <div class="loading">
+    <div *ngIf="loading" class="loading">
 
         <mat-spinner diameter="40"></mat-spinner>
 
     </div>
 
-    }
-    @else if(todo)
-    {
 
-    <div class="details">
+    <div *ngIf="!loading && todo" class="details">
+
 
         <div class="row">
 
@@ -29,6 +24,7 @@
 
         </div>
 
+
         <div class="row">
 
             <label>Priority</label>
@@ -37,39 +33,42 @@
 
         </div>
 
+
         <div class="row">
 
             <label>Due Date</label>
 
-            <span>{{ todo.dueDate | date:DATE_FORMATS.DISPLAY_WITH_TIME }}</span>
+            <span>
+                {{ todo.dueDate | date:DATE_FORMATS.DISPLAY }}
+            </span>
 
         </div>
+
 
         <div class="row">
 
             <label>Status</label>
 
             <span>
-
                 {{ todo.isCompleted ? 'Completed' : 'Pending' }}
-
             </span>
 
         </div>
+
 
         <div class="row">
 
             <label>Labels</label>
 
             <span>
-
                 {{ todo.labels.join(', ') }}
-
             </span>
 
         </div>
 
+
         <mat-divider></mat-divider>
+
 
         <div class="subtasks-header">
 
@@ -78,10 +77,7 @@
             </h3>
 
 
-            <button
-                mat-stroked-button
-                color="primary"
-                (click)="addSubtask()">
+            <button mat-stroked-button color="primary" (click)="addSubtask()">
 
                 <mat-icon>
                     add
@@ -93,33 +89,43 @@
 
         </div>
 
-        @if(todo.subItems.length)
-        {
 
-        <table class="subtasks">
+        <table *ngIf="todo.subItems.length" class="subtasks">
+
 
             <thead>
+
                 <tr>
-                    <th class="order-column">Order</th>
-                    <th class="status-column">Completed</th>
-                    <th class="description-column">Description</th>
+
+                    <th class="order-column">
+                        Order
+                    </th>
+
+                    <th class="status-column">
+                        Completed
+                    </th>
+
+                    <th class="description-column">
+                        Description
+                    </th>
+
                     <th class="action-column"></th>
+
                 </tr>
+
             </thead>
+
 
             <tbody>
 
-                @for(subtask of todo.subItems; track $index; let i = $index)
-                {
 
-                <tr>
+                <tr *ngFor="let subtask of todo.subItems; let i = index">
+
 
                     <td class="order-column order-cell">
 
-                        <button
-                            mat-icon-button
-                            (click)="moveUp(i)"
-                            [disabled]="i === 0">
+
+                        <button mat-icon-button (click)="moveUp(i)" [disabled]="i === 0">
 
                             <mat-icon>
                                 keyboard_arrow_up
@@ -127,10 +133,8 @@
 
                         </button>
 
-                        <button
-                            mat-icon-button
-                            (click)="moveDown(i)"
-                            [disabled]="i === todo.subItems.length - 1">
+
+                        <button mat-icon-button (click)="moveDown(i)" [disabled]="i === todo.subItems.length - 1">
 
                             <mat-icon>
                                 keyboard_arrow_down
@@ -138,34 +142,37 @@
 
                         </button>
 
+
                     </td>
+
 
                     <td class="status-column">
 
-                        <div class="checkbox-wrapper">
-                            <mat-checkbox [checked]="subtask.isCompleted" (change)="toggleCompleted(subtask)">
-                            </mat-checkbox>
-                        </div>
+
+                        <mat-checkbox [checked]="subtask.isCompleted" (change)="toggleCompleted(subtask)">
+                        </mat-checkbox>
+
 
                     </td>
+
 
                     <td class="description-column">
 
-                        <input
-                            class="description-input"
-                            [class.invalid]="!subtask.description.trim()"
-                            placeholder="Enter subtask..."
-                            [value]="subtask.description"
-                            (input)="updateDescription(subtask, $any($event.target).value)" />
+
+                        <input class="description-input" [class.invalid]="!subtask.description.trim()"
+                            placeholder="Enter subtask..." [value]="subtask.description" (input)="updateDescription(
+                                subtask,
+                                $any($event.target).value
+                            )" />
+
 
                     </td>
 
+
                     <td class="action-column">
 
-                        <button
-                            mat-icon-button
-                            color="warn"
-                            (click)="removeSubtask(i)">
+
+                        <button mat-icon-button color="warn" (click)="removeSubtask(i)">
 
                             <mat-icon>
                                 delete
@@ -173,71 +180,58 @@
 
                         </button>
 
+
                     </td>
+
 
                 </tr>
 
-                }
 
             </tbody>
 
+
         </table>
 
-        }
-        @else
-        {
 
-        <div class="empty">
+
+        <div *ngIf="!todo.subItems.length" class="empty">
 
             No subtasks generated yet.
 
         </div>
 
-        }
 
     </div>
 
-    }
 
 </mat-dialog-content>
 
+
 <mat-dialog-actions align="end">
+
 
     <button mat-flat-button color="primary" (click)="breakDown()" [disabled]="breakingDown || hasSubtasks()">
 
-        @if(breakingDown)
-        {
+        <mat-spinner *ngIf="breakingDown" diameter="18">
+        </mat-spinner>
 
-        <mat-spinner diameter="18"></mat-spinner>
 
-        }
-        @else
-        {
+        <span *ngIf="!breakingDown">
+            Breakdown Tasks
+        </span>
 
-        Breakdown Tasks
-
-        }
 
     </button>
 
-    <button
-        mat-flat-button
-        color="accent"
-        (click)="save()"
+    <button mat-flat-button color="accent" (click)="save()"
         [disabled]="!hasChanges() || saving || hasInvalidSubtasks()">
 
-        @if(saving)
-        {
+        <mat-spinner *ngIf="saving" diameter="18">
+        </mat-spinner>
 
-        <mat-spinner diameter="18"></mat-spinner>
-
-        }
-        @else
-        {
-
-        Save
-
-        }
+        <span *ngIf="!saving">
+            Save
+        </span>
 
     </button>
 
@@ -246,5 +240,6 @@
         Close
 
     </button>
+
 
 </mat-dialog-actions>

@@ -1,0 +1,32 @@
+<div class="summary">
+
+    @if(tasks.length)
+    {
+
+    <div class="cards">
+
+        @for(task of tasks; track task.id)
+        {
+
+        <app-task-summary-card
+            [task]="task"
+            (view)="view.emit($event)">
+        </app-task-summary-card>
+
+        }
+
+    </div>
+
+    }
+    @else
+    {
+
+    <div class="empty">
+
+        Nothing scheduled for today 🎉
+
+    </div>
+
+    }
+
+</div>

@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, Inject } from '@angular/core';
 
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
@@ -15,6 +15,8 @@ import { TodoDialogData } from '../todos/models/todo-dialog-data';
 import { MatSelectModule } from "@angular/material/select";
 import { Priority } from '../../core/enums/priority.enum';
 import { enumToOptions } from '../../core/utils/enum.utils';
+import { TodoService } from '../todos/services/todo.service';
+import { SnackbarService } from '../../core/services/snackbar.service';
 
 @Component({
   selector: 'app-todo-dialog',
@@ -29,18 +31,23 @@ import { enumToOptions } from '../../core/utils/enum.utils';
     MatCheckboxModule,
     MatSelectModule,
     MatDatepickerModule
-],
+  ],
   templateUrl: './todo-dialog.component.html',
   styleUrls: ['./todo-dialog.component.scss'],
 })
 export class TodoDialogComponent {
+  private cdr = inject(ChangeDetectorRef);
+
   form;
   priorityOptions = enumToOptions(Priority);
   isSaving: boolean = false;
+  needsRefresh = false;
 
   constructor(
     private fb: FormBuilder,
     private dialogRef: MatDialogRef<TodoDialogComponent>,
+    private service: TodoService,
+    private snack: SnackbarService,
     @Inject(MAT_DIALOG_DATA)
     public data: TodoDialogData,
   ) {
@@ -56,7 +63,8 @@ export class TodoDialogComponent {
   }
 
   save() {
-    if (this.form.invalid || this.isSaving) {
+
+    if(this.form.invalid || this.isSaving){
       return;
     }
 
@@ -64,18 +72,87 @@ export class TodoDialogComponent {
 
     const value = this.form.getRawValue();
 
-    this.dialogRef.close({
-      description: value.description,
-      dueDate: value.dueDate ? value.dueDate.toISOString() : null,
-      labels:
-        value.labels
-          ?.split(',')
-          .map((x) => x.trim())
-          .filter(Boolean) ?? [],
-      priority: value.priority ?? 0,
-      isCompleted: value.isCompleted,
-    });
+    const request = {
 
-    this.isSaving = false;
+      userId: localStorage.getItem('userId') ?? '',
+      description: value.description ?? '',
+      dueDate: value.dueDate ? value.dueDate.toISOString() : null,
+      labels: value.labels
+          ?.split(',')
+          .map(x => x.trim())
+          .filter(Boolean)
+          ?? [],
+
+      priority: value.priority ?? Priority.Normal,
+      isCompleted: value.isCompleted ?? false
+    };
+
+    if(this.data.isEdit && this.data.todo){
+
+      this.service
+        .update(
+          this.data.todo.id,
+          request
+        )
+        .subscribe(()=>{
+
+          setTimeout(() => {
+
+            this.isSaving = false;
+            this.needsRefresh = true;
+            this.cdr.detectChanges();
+
+          });
+
+          this.snack.success(
+            'Todo updated'
+          );
+
+        },()=>{
+
+            setTimeout(() => {
+
+            this.isSaving = false;
+            this.cdr.detectChanges();
+
+          });
+
+        });
+    }
+    else {
+
+      this.service
+        .create(request)
+        .subscribe(()=>{
+
+          setTimeout(() => {
+
+            this.isSaving = false;
+            this.needsRefresh = true;
+            this.cdr.detectChanges();
+
+          });
+
+          this.snack.success(
+            'Todo created'
+          );
+
+        },()=>{
+
+            setTimeout(() => {
+
+            this.isSaving = false;
+            this.cdr.detectChanges();
+
+          });
+
+        });
+    }
+  }
+
+  close() {
+
+    this.dialogRef.close(this.needsRefresh);
+
   }
 }

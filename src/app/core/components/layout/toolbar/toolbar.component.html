@@ -10,6 +10,12 @@
   <mat-menu #menu="matMenu">
     <!-- NAVIGATION -->
 
+    <button mat-menu-item (click)="goToHome()">
+      <mat-icon class="menu-icon home-icon">home</mat-icon>
+
+      <span>Home</span>
+    </button>
+
     <button mat-menu-item (click)="goToTodos()">
       <mat-icon class="menu-icon todos-icon">checklist</mat-icon>
 

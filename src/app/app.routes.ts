@@ -7,15 +7,19 @@ export const routes: Routes = [
     title: 'Todo App - Login',
     path: 'login',
     canActivate: [guestGuard],
-    loadComponent: () =>
-      import('./features/auth/login/login.component').then((m) => m.LoginComponent),
+    loadComponent: () => import('./features/auth/login/login.component').then((m) => m.LoginComponent),
   },
   {
     title: 'Todo App - Register',
     path: 'register',
     canActivate: [guestGuard],
-    loadComponent: () =>
-      import('./features/auth/register/register.component').then((m) => m.RegisterComponent),
+    loadComponent: () => import('./features/auth/register/register.component').then((m) => m.RegisterComponent),
+  },
+  {
+    title: 'Todo App - Home',
+    path: 'home',
+    canActivate: [authGuard],
+    loadComponent: () => import('./features/home/home.component').then(m => m.HomeComponent),
   },
   {
     title: 'Todo App - User',
@@ -36,13 +40,13 @@ export const routes: Routes = [
     loadComponent: () => import('./features/todos/todos.component').then((m) => m.TodosComponent),
   },
   {
-    title: 'Todo App - Login',
+    title: 'Todo App',
     path: '',
     redirectTo: 'login',
     pathMatch: 'full',
   },
   {
-    title: 'Todo App - Login',
+    title: 'Todo App',
     path: '**',
     redirectTo: 'login'
   }

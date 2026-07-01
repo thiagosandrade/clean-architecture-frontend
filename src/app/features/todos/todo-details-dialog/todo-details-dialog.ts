@@ -12,7 +12,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatDividerModule } from '@angular/material/divider';
 
 import { TodoService } from '../services/todo.service';
-import { TodoItem, TodoSubItem } from '../models/todo.model';
+import { TodoItem } from '../models/todo.model';
 import { MatIcon } from "@angular/material/icon";
 import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatInputModule } from "@angular/material/input";
@@ -31,7 +31,7 @@ import { DATE_FORMATS } from '../../../core/constants/date.constants';
     MatIcon,
     MatCheckboxModule,
     MatInputModule
-],
+  ],
   templateUrl: './todo-details-dialog.html',
   styleUrls: ['./todo-details-dialog.scss']
 })
@@ -42,26 +42,37 @@ export class TodoDetailsDialogComponent implements OnInit {
   private dialogRef =
     inject(MatDialogRef<TodoDetailsDialogComponent>);
 
-  private cdr = inject(ChangeDetectorRef);
+  private cdr =
+    inject(ChangeDetectorRef);
 
   todo?: TodoItem;
 
   loading = true;
   saving = false;
   breakingDown = false;
+  hasChangesToRefresh = false;
+  canSave = false;
 
   originalSubItems: TodoItem['subItems'] = [];
 
   DATE_FORMATS = DATE_FORMATS;
-  
+
   constructor(
     @Inject(MAT_DIALOG_DATA)
     public data: { id: string }
   ) { }
 
-  ngOnInit(): void {
+  ngOnInit() {
 
     this.load();
+
+  }
+
+  private updateState(): void {
+
+    this.canSave =
+      this.hasChanges() &&
+      !this.hasInvalidSubtasks();
 
   }
 
@@ -74,13 +85,9 @@ export class TodoDetailsDialogComponent implements OnInit {
       .subscribe(todo => {
 
         this.todo = todo;
-
         this.originalSubItems = structuredClone(todo.subItems);
-
         this.loading = false;
-
         this.cdr.detectChanges();
-
       });
 
   }
@@ -91,7 +98,7 @@ export class TodoDetailsDialogComponent implements OnInit {
 
   }
 
-  moveUp(index: number) { 
+  moveUp(index: number) {
 
     if (!this.todo || index === 0) {
       return;
@@ -103,7 +110,7 @@ export class TodoDetailsDialogComponent implements OnInit {
       [items[index - 1], items[index]];
 
     this.recalculateOrder();
-
+    this.updateState();
   }
 
   moveDown(index: number) {
@@ -121,15 +128,14 @@ export class TodoDetailsDialogComponent implements OnInit {
     [items[index], items[index + 1]] = [items[index + 1], items[index]];
 
     this.recalculateOrder();
+    this.updateState();
 
   }
 
   private recalculateOrder() {
 
     this.todo!.subItems.forEach((x, i) => {
-
       x.order = i + 1;
-
     });
 
   }
@@ -137,12 +143,14 @@ export class TodoDetailsDialogComponent implements OnInit {
   toggleCompleted(subtask: TodoItem['subItems'][number]) {
 
     subtask.isCompleted = !subtask.isCompleted;
+    this.updateState();
 
   }
 
   updateDescription(subtask: TodoItem['subItems'][number], value: string) {
 
     subtask.description = value;
+    this.updateState();
 
   }
 
@@ -154,20 +162,37 @@ export class TodoDetailsDialogComponent implements OnInit {
 
     this.saving = true;
 
+
     this.service
       .saveSubItems(
         this.todo.id,
         this.todo.subItems
       )
-      .subscribe(() => {
+      .subscribe({
 
-        this.load();
+        next: () => {
 
-        this.saving = false;
 
-      }, () => {
+          this.originalSubItems = structuredClone(this.todo!.subItems);
+          this.hasChangesToRefresh = true;
 
-        this.saving = false;
+          setTimeout(() => {
+
+            this.saving = false;
+            this.cdr.detectChanges();
+
+          });
+        },
+        error: () => {
+
+          setTimeout(() => {
+
+            this.saving = false;
+            this.cdr.detectChanges();
+
+          });
+
+        }
 
       });
 
@@ -202,7 +227,7 @@ export class TodoDetailsDialogComponent implements OnInit {
     this.todo.subItems.splice(index, 1);
 
     this.recalculateOrder();
-
+    this.updateState();
   }
 
   hasInvalidSubtasks(): boolean {
@@ -212,7 +237,7 @@ export class TodoDetailsDialogComponent implements OnInit {
     );
 
   }
-  
+
   breakDown() {
 
     if (!this.todo) {
@@ -227,6 +252,7 @@ export class TodoDetailsDialogComponent implements OnInit {
 
         this.load();
 
+        this.hasChangesToRefresh = true;
         this.breakingDown = false;
 
       });
@@ -235,7 +261,7 @@ export class TodoDetailsDialogComponent implements OnInit {
 
   close() {
 
-    this.dialogRef.close();
+    this.dialogRef.close(this.hasChangesToRefresh);
 
   }
 
