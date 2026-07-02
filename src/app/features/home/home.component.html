@@ -10,7 +10,7 @@
             What would you like to accomplish today?
         </p>
 
-        
+
         <mat-card class="assistant-card">
 
 
@@ -62,47 +62,55 @@
 
         @if(loading)
         {
-            <mat-spinner></mat-spinner>
+        <mat-spinner></mat-spinner>
         }
-
-
-        @if(tasks.length)
+        @else
         {
+            @if(assistantMessage)
+            {
+            <mat-card class="assistant-card">
 
-        <div class="results">
+                <mat-icon>
+                    smart_toy
+                </mat-icon>
 
-            <h2>
-                Today's Tasks
-            </h2>
+                <span>
+                    {{ assistantMessage }}
+                </span>
 
+            </mat-card>
+            }
 
             @if(tasks.length)
             {
-                @if(assistantMessage)
-                {
-                    <mat-card class="assistant-card">
+            <div class="results">
 
-                        <mat-icon>
+                <h2>
+                    Assistant Results
+                </h2>
 
-                            smart_toy
+                <app-overview [tasks]="tasks">
+                </app-overview>
 
-                        </mat-icon>
+                <app-task-summary [tasks]="tasks" (view)="openTodo($event)">
+                </app-task-summary>
 
-                        <span>
-
-                            {{ assistantMessage }}
-
-                        </span>
-
-                    </mat-card>
-                }
-
-                <app-overview [tasks]="tasks"></app-overview>
-                <app-task-summary [tasks]="tasks" (view)="openTodo($event)"></app-task-summary>
+            </div>
             }
+            @else if(question && !loading && hasSearched)
+            {
+            <mat-card class="empty-results">
 
-        </div>
+                <mat-icon>
+                    search_off
+                </mat-icon>
 
+                <span>
+                    {{ emptyMessage }}
+                </span>
+
+            </mat-card>
+            }
         }
 
 

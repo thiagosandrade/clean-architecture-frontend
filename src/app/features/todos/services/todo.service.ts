@@ -17,15 +17,35 @@ export class TodoService {
     size: number = 10,
     propertyName: string = 'createdAt',
     descending: boolean = true,
+    priority?: number,
+    dueDateFrom?: string,
+    dueDateTo?: string,
+    isCompleted?: boolean
   ) {
     const userId = localStorage.getItem('id');
 
-    const params = new HttpParams()
+    let params = new HttpParams()
       .set('userId', userId ?? '')
       .set('page', page)
       .set('size', size)
       .set('propertyName', propertyName)
       .set('descending', descending);
+
+    if (priority !== undefined) {
+      params = params.set('priority', priority);
+    }
+
+    if (dueDateFrom !== undefined) {
+      params = params.set('dueDateFrom', dueDateFrom);
+    }
+
+    if (dueDateTo !== undefined) {
+      params = params.set('dueDateTo', dueDateTo);
+    }
+
+    if (isCompleted !== undefined) {
+      params = params.set('isCompleted', isCompleted);
+    }
 
     return this.http.get<TodoResponse>(this.base, { params });
   }

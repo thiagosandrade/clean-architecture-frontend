@@ -156,3 +156,23 @@ button {
   border-radius: 20px;
 
 }
+
+.empty-results {
+  margin-top: 1rem;
+  padding: 1rem 1.5rem;
+
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+
+  border-left: 4px solid var(--mat-sys-primary);
+
+  mat-icon {
+    color: var(--mat-sys-primary);
+  }
+
+  span {
+    font-size: 0.95rem;
+    color: rgba(0, 0, 0, 0.75);
+  }
+}
