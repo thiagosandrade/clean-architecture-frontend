@@ -1,22 +1,24 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { FormsModule } from '@angular/forms';
-import { TodoService } from '../todos/services/todo.service';
-import { TodoItem } from '../todos/models/todo.model';
+import { TodoItem, TodoResponse } from '../todos/models/todo.model';
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
+import { Observable } from 'rxjs';
 
 import { TaskSummaryComponent } from './components/task-summary/task-summary.component';
 import { MatDialog } from '@angular/material/dialog';
 import { TodoDetailsDialogComponent } from '../todos/todo-details-dialog/todo-details-dialog';
 import { OverviewComponent } from "./components/overview/overview.component";
 import { AssistantService } from './services/assistant.service';
+import { AssistantIntent } from '../../core/enums/assistant-intent.enum';
+import { IntentClassifierService } from './services/intent-classifier.service';
 
 interface HomeQuery {
-  type: 'today' | 'this week' | 'search' | 'high priority' | 'next work' | 'overdue' ;
+  type: 'today' | 'this week' | 'search' | 'high priority' | 'next work' | 'overdue';
   prompt?: string;
 }
 
@@ -45,6 +47,7 @@ export class HomeComponent {
   assistantMessage = '';
   emptyMessage = '';
   hasSearched = false;
+  resultsTitle = '';
 
   currentQuery: HomeQuery = {
     type: 'today'
@@ -59,240 +62,248 @@ export class HomeComponent {
     'Plan my day'
   ];
 
+  // raw backend results
   tasks: TodoItem[] = [];
+
+  // UI projections
+  relatedTasks: TodoItem[] = [];
+  otherTasks: TodoItem[] = [];
+
   loading: boolean = false;
 
-  constructor(private assistantService: AssistantService) { }
+  constructor(
+    private assistantService: AssistantService,
+    private classifierService: IntentClassifierService
+  ) { }
 
+  // =========================
+  // ENTRY POINT
+  // =========================
   ask() {
 
-    const text = this.question.toLowerCase();
     this.hasSearched = false;
     this.emptyMessage = '';
     this.assistantMessage = '';
+    this.relatedTasks = [];
+    this.otherTasks = [];
+
+    const result = this.classifierService.classify(this.question);
+
+    switch (result.intent) {
+
+      case AssistantIntent.Today:
+        this.loadTodayTasks();
+        break;
+
+      case AssistantIntent.ThisWeek:
+        this.getThisWeekTasks();
+        break;
+
+      case AssistantIntent.HighPriority:
+        this.getHighPriorityTasks();
+        break;
+
+      case AssistantIntent.NextWork:
+        this.getNextWorkTasks();
+        break;
+
+      case AssistantIntent.Overdue:
+        this.getOverdueTasks();
+        break;
+
+      case AssistantIntent.SemanticSearch:
+        this.searchTasks(result.query!);
+        break;
+
+      case AssistantIntent.PlanDay:
+        break;
+    }
+  }
+
+  // =========================
+  // SEMANTIC SEARCH
+  // =========================
+  searchTasks(query: string) {
+
+    this.resultsTitle = `Results for "${query}"`;
+
+    this.loading = true;
 
     this.currentQuery = {
       type: 'search',
-      prompt: this.question
+      prompt: query
     };
 
-    if (text.includes('today')) {
-      this.loadTodayTasks();
-    }
-    else if (text.includes('high priority')) {
-      this.getHighPriorityTasks();
-    }
-    else if (text.includes('show overdue tasks')) {
-      this.getOverdueTasks();
-    }
-    else if (text.includes('what should i work on next')) {
-      this.getNextWorkTasks();
-    }
-    else if (text.includes('this week')) {
-      this.getThisWeekTasks();
-    }
+    this.assistantService.search(query)
+      .subscribe({
+        next: response => {
+
+          this.tasks = response.items;
+
+          this.splitSemanticResults();
+          this.buildSemanticMessage(query);
+
+          this.loading = false;
+          this.hasSearched = true;
+        },
+        error: () => {
+          this.loading = false;
+          this.hasSearched = true;
+        }
+      });
   }
 
+  private splitSemanticResults(): void {
 
-  select(text: string) {
+    this.relatedTasks = [];
+    this.otherTasks = [];
 
-    this.question = text;
+    if (!this.tasks.length) return;
 
+    const bestSimilarity = this.tasks[0].similarity;
+
+    const relativeThreshold = bestSimilarity * 0.85;
+    const minThreshold = 0.55;
+
+    const threshold = Math.max(relativeThreshold, minThreshold);
+
+    this.relatedTasks = this.tasks.filter(x => x.similarity >= threshold);
+    this.otherTasks = this.tasks.filter(x => x.similarity < threshold);
   }
 
+  private buildSemanticMessage(query: string): void {
+
+    if (!this.relatedTasks.length) {
+      this.emptyMessage = `I couldn't find any tasks related to "${query}".`;
+      this.assistantMessage = '';
+      return;
+    }
+
+    const bestSimilarity = this.relatedTasks[0]?.similarity ?? 0;
+
+    const count = this.relatedTasks.length;
+
+    if (bestSimilarity >= 0.90) {
+      this.assistantMessage = `I found ${count} highly relevant task${count === 1 ? '' : 's'} related to "${query}".`;
+    }
+    else if (bestSimilarity >= 0.80) {
+      this.assistantMessage = `I found ${count} relevant task${count === 1 ? '' : 's'} related to "${query}".`;
+    }
+    else if (bestSimilarity >= 0.70) {
+      this.assistantMessage = `I found ${count} possibly related task${count === 1 ? '' : 's'} for "${query}".`;
+    }
+    else {
+      this.assistantMessage = `Here are the closest matches I could find for "${query}".`;
+    }
+
+    this.emptyMessage = '';
+  }
+
+  // =========================
+  // FILTERED QUERIES
+  // =========================
   loadTodayTasks() {
 
-    this.loading = true;
+    this.resultsTitle = 'Tasks Due Today';
 
-    this.currentQuery = {
-      type: 'today'
-    };
-
-    this.assistantService.getTasksForToday()
-      .subscribe({
-
-        next: (response) => {
-
-          this.tasks = response.items;
-
-          if (this.tasks.length === 0) {
-              this.emptyMessage = `You don't have any ${this.question.toLowerCase().replace('show ', '')}.`;
-          }
-          else {
-              this.emptyMessage = '';
-              this.assistantMessage = `You have ${this.tasks.length} task${this.tasks.length === 1 ? '' : 's'} due today.`;
-          }
-
-          this.loading = false;
-          this.hasSearched = true;
-        },
-
-        error: () => {
-
-          this.loading = false;
-          this.hasSearched = true;
-
-        }
-
-      });
-
-  }
-
-  getHighPriorityTasks() {
-
-    this.loading = true;
-
-    this.currentQuery = {
-      type: 'high priority'
-    };
-
-    this.assistantService.getHighPriorityTasks()
-      .subscribe({
-
-        next: (response) => {
-
-          this.tasks = response.items;
-          if (this.tasks.length === 0) {
-              this.emptyMessage =
-                  `You don't have any ${this.question.toLowerCase().replace('show ', '')}.`;
-          }
-          else {
-              this.emptyMessage = '';
-              this.assistantMessage = `You have ${this.tasks.length} task${this.tasks.length === 1 ? '' : 's'} with high priority.`;
-          }
-          
-
-          this.loading = false;
-          this.hasSearched = true;
-
-        },
-
-        error: () => {
-
-          this.loading = false;
-          this.hasSearched = true;
-
-        }
-
-      });
-
-  }
-
-  getNextWorkTasks() {
-
-    this.loading = true;
-
-    this.currentQuery = {
-      type: 'next work'
-    };
-
-    this.assistantService.getNextWorkTasks()
-      .subscribe({
-
-        next: (response) => {
-
-          this.tasks = response.items;
-          if (this.tasks.length === 0) {
-              this.emptyMessage = `You don't have any ${this.question.toLowerCase().replace('show ', '')} tasks.`;
-          }
-          else {
-              this.emptyMessage = '';
-              this.assistantMessage = `You have ${this.tasks.length} task${this.tasks.length === 1 ? '' : 's'} ordered by priority so you can start working on them.`;
-          }
-          
-
-          this.loading = false;
-          this.hasSearched = true;
-
-        },
-
-        error: () => {
-
-          this.loading = false;
-          this.hasSearched = true;
-
-        }
-
-      });
-
-  }
-
-  getOverdueTasks() {
-
-    this.loading = true;
-
-    this.currentQuery = {
-      type: 'overdue'
-    };
-
-    this.assistantService.getOverdueTasks()
-      .subscribe({
-
-        next: (response) => {
-
-          this.tasks = response.items;
-          if (this.tasks.length === 0) {
-              this.emptyMessage = `You don't have any ${this.question.toLowerCase().replace('show ', '')} tasks.`;
-          }
-          else {
-              this.emptyMessage = '';
-              this.assistantMessage = `You have ${this.tasks.length} task${this.tasks.length === 1 ? '' : 's'} overdue tasks.`;
-          }
-          
-
-          this.loading = false;
-          this.hasSearched = true;
-
-        },
-
-        error: () => {
-
-          this.loading = false;
-          this.hasSearched = true;
-
-        }
-
-      });
-
+    this.executeQuery(
+      this.assistantService.getTasksForToday(),
+      'today',
+      count => `You have ${count} task${count === 1 ? '' : 's'} due today.`
+    );
   }
 
   getThisWeekTasks() {
 
+    this.resultsTitle = 'Tasks Due This Week';
+
+    this.executeQuery(
+      this.assistantService.getTasksForThisWeek(),
+      'this week',
+      count => `You have ${count} task${count === 1 ? '' : 's'} for this week.`
+    );
+  }
+
+  getOverdueTasks() {
+
+    this.resultsTitle = 'Overdue Tasks';
+
+    this.executeQuery(
+      this.assistantService.getOverdueTasks(),
+      'overdue',
+      count => `You have ${count} overdue task${count === 1 ? '' : 's'}.`
+    );
+  }
+
+  getNextWorkTasks() {
+
+    this.resultsTitle = 'Recommended Tasks';
+
+    this.executeQuery(
+      this.assistantService.getNextWorkTasks(),
+      'next work',
+      count => `You have ${count} task${count === 1 ? '' : 's'} ready to work on.`
+    );
+  }
+
+  getHighPriorityTasks() {
+
+    this.resultsTitle = 'High Priority Tasks';
+
+    this.executeQuery(
+      this.assistantService.getHighPriorityTasks(),
+      'high priority',
+      count => `You have ${count} high priority task${count === 1 ? '' : 's'}.`
+    );
+  }
+
+  // =========================
+  // SHARED EXECUTION
+  // =========================
+  executeQuery(
+    request: Observable<TodoResponse>,
+    queryType: HomeQuery['type'],
+    successMessage: (count: number) => string
+  ): void {
+
     this.loading = true;
 
-    this.currentQuery = {
-      type: 'this week'
-    };
+    this.currentQuery = { type: queryType };
 
-    this.assistantService.getTasksForThisWeek()
-      .subscribe({
+    request.subscribe({
+      next: response => {
 
-        next: (response) => {
+        this.tasks = response.items;
 
-          this.tasks = response.items;
-          if (this.tasks.length === 0) {
-              this.emptyMessage = `You don't have any ${this.question.toLowerCase().replace('show ', '')} tasks.`;
-          }
-          else {
-              this.emptyMessage = '';
-              this.assistantMessage = `You have ${this.tasks.length} task${this.tasks.length === 1 ? '' : 's'} for this week.`;
-          }
-          
+        // IMPORTANT: filtered view still uses semantic structure
+        this.relatedTasks = this.tasks;
+        this.otherTasks = [];
 
-          this.loading = false;
-          this.hasSearched = true;
+        const count = this.tasks.length;
 
-        },
-
-        error: () => {
-
-          this.loading = false;
-          this.hasSearched = true;
-
+        if (!count) {
+          this.emptyMessage = `No tasks found for "${this.resultsTitle}".`;
+          this.assistantMessage = '';
+        } else {
+          this.emptyMessage = '';
+          this.assistantMessage = successMessage(count);
         }
 
-      });
+        this.loading = false;
+        this.hasSearched = true;
+      },
+      error: () => {
+        this.loading = false;
+        this.hasSearched = true;
+      }
+    });
+  }
 
+  // =========================
+  // UI HELPERS
+  // =========================
+  select(text: string) {
+    this.question = text;
   }
 
   refreshCurrentView() {
@@ -300,50 +311,32 @@ export class HomeComponent {
     switch (this.currentQuery.type) {
 
       case 'today':
-
         this.loadTodayTasks();
-
         break;
 
       case 'high priority':
-
         this.getHighPriorityTasks();
-
         break;
 
       case 'next work':
-
         this.getNextWorkTasks();
-
         break;
 
       case 'search':
-
-        // TODO:
-        // Later this will call the AI endpoint again.
-        // For now you could just call loadTodayTasks()
-        // or do nothing.
-
+        if (this.currentQuery.prompt) {
+          this.searchTasks(this.currentQuery.prompt);
+        }
         break;
-
     }
-
   }
 
   get greeting(): string {
 
     const hour = new Date().getHours();
 
-    if (hour < 12) {
-      return 'Good morning';
-    }
-
-    if (hour < 18) {
-      return 'Good afternoon';
-    }
-
+    if (hour < 12) return 'Good morning';
+    if (hour < 18) return 'Good afternoon';
     return 'Good evening';
-
   }
 
   openTodo(todo: TodoItem): void {
@@ -362,13 +355,9 @@ export class HomeComponent {
     );
 
     dialogRef.afterClosed().subscribe(refresh => {
-
       if (refresh) {
         this.refreshCurrentView();
       }
-
     });
   }
-
-
 }

@@ -54,21 +54,30 @@ export class TodoService {
     searchText: string,
     page: number,
     size: number,
-    propertyName: string = 'createdAt',
-    descending: boolean = true,
+    propertyName?: string,
+    descending?: boolean,
   ) {
     const userId = localStorage.getItem('id') ?? '';
 
-    return this.http.get<TodoResponse>(`${this.base}/search`, {
-      params: {
-        userId: userId!,
-        searchText: searchText,
-        page,
-        size,
-        propertyName,
-        descending,
-      },
-    });
+    const params: any = {
+      userId,
+      searchText,
+      page,
+      size,
+    };
+
+    if (propertyName) {
+      params.propertyName = propertyName;
+    }
+
+    if (descending !== undefined) {
+      params.descending = descending;
+    }
+
+    return this.http.get<TodoResponse>(
+      `${this.base}/search`,
+      { params }
+    );
   }
 
   create(request: CreateTodoRequest) {

@@ -9,6 +9,7 @@ export interface TodoItem {
   createdAt: string;
   completedAt: string | null;
   priority: number;
+  similarity: number;
   subItems: TodoSubItem[];
 }
 

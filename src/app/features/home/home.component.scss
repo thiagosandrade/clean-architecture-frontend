@@ -3,30 +3,30 @@
   min-height: calc(100vh - 64px);
 
   display: flex;
-
   justify-content: center;
-
   align-items: flex-start;
 
-  padding-top: 120px;
+  padding: 24px;
 
 }
 
-
 .hero {
+
+  width: 100%;
 
   display: flex;
   flex-direction: column;
+
   gap: 16px;
-  margin-bottom: 36px;
 
 }
 
 .hero h1 {
 
-  margin: 0;
   font-size: 34px;
   font-weight: 600;
+
+  margin: 0;
 
 }
 
@@ -38,25 +38,64 @@
 
 }
 
-.assistant-card {
+/* =========================
+   INPUT AREA
+========================= */
 
-  margin: 28px 0;
+.input-card {
 
-  padding: 20px;
+  margin-top: 24px;
+
+  padding: 16px 20px;
 
   display: flex;
-
   align-items: center;
-
-  gap: 16px;
+  gap: 12px;
 
   background: #f5f7fb;
 
+  border-radius: 12px;
+
 }
 
-.assistant-card mat-icon {
+/* fix form field inside card */
+.input-card mat-form-field {
 
-  color: var(--mat-sys-primary);
+  flex: 1;
+  width: 100%;
+  margin: 0;
+
+}
+
+/* fix material height issues */
+.mat-mdc-text-field-wrapper {
+  height: 44px !important;
+}
+
+.mat-mdc-form-field-flex {
+  height: 44px !important;
+  align-items: center !important;
+}
+
+/* hide extra spacing under input */
+.mat-mdc-form-field-subscript-wrapper {
+  display: none;
+}
+
+/* input text */
+input {
+  font-size: 15px;
+}
+
+/* button fix */
+.ask-button {
+
+  height: 44px;
+  white-space: nowrap;
+
+  display: flex;
+  align-items: center;
+  gap: 6px;
 
 }
 
@@ -64,84 +103,13 @@
   color: inherit !important;
 }
 
-
-.assistant-card mat-form-field {
-
-  flex: 1;
-
-  width: 100%;
-
-  margin: 0;
-
-}
-
-
-.assistant-card .mat-mdc-text-field-wrapper {
-
-  height: 44px;
-
-}
-
-
-.assistant-card .mat-mdc-form-field-flex {
-
-  height: 44px;
-
-  align-items: center;
-
-}
-
-
-/* textbox */
-
-mat-form-field {
-
-  flex: 1;
-
-  margin: 0;
-
-}
-
-
-.mat-mdc-form-field-subscript-wrapper {
-
-  display: none;
-
-}
-
-
-.mat-mdc-text-field-wrapper {
-
-  height: 44px;
-
-}
-
-
-input {
-
-  font-size: 15px;
-
-}
-
-
-/* button */
-
-button {
-
-  height: 44px;
-
-  padding-left: 24px;
-
-  padding-right: 24px;
-
-}
-
-/* suggestions */
+/* =========================
+   SUGGESTIONS
+========================= */
 
 .suggestions {
 
   display: flex;
-
   flex-wrap: wrap;
 
   gap: 12px;
@@ -150,29 +118,96 @@ button {
 
 }
 
-
 .suggestions button {
 
   border-radius: 20px;
 
 }
 
-.empty-results {
-  margin-top: 1rem;
-  padding: 1rem 1.5rem;
+/* =========================
+   ASSISTANT MESSAGE
+========================= */
+
+.assistant-message-card {
+
+  margin-top: 20px;
+
+  padding: 16px 20px;
 
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 12px;
+
+  background: #eef4ff;
+
+  border-radius: 12px;
+
+}
+
+.assistant-message-card mat-icon {
+  color: var(--mat-sys-primary);
+}
+
+/* =========================
+   RESULTS SECTION
+========================= */
+
+.results {
+
+  margin-top: 32px;
+
+  width: 100%;
+
+}
+
+/* MAIN TITLE */
+.results-title {
+
+  margin: 0 0 24px;
+
+  font-size: 28px;
+  font-weight: 700;
+
+}
+
+/* SUBTITLE */
+.results-subtitle {
+
+  margin: 28px 0 12px;
+
+  font-size: 18px;
+  font-weight: 600;
+
+  color: #333;
+
+}
+
+/* =========================
+   EMPTY STATE
+========================= */
+
+.empty-results {
+
+  margin-top: 20px;
+  padding: 16px 20px;
+
+  display: flex;
+  align-items: center;
+  gap: 12px;
 
   border-left: 4px solid var(--mat-sys-primary);
 
-  mat-icon {
-    color: var(--mat-sys-primary);
-  }
+  background: #fafafa;
 
-  span {
-    font-size: 0.95rem;
-    color: rgba(0, 0, 0, 0.75);
-  }
+  border-radius: 8px;
+
+}
+
+.empty-results mat-icon {
+  color: var(--mat-sys-primary);
+}
+
+.empty-results span {
+  font-size: 0.95rem;
+  color: rgba(0, 0, 0, 0.75);
 }

@@ -129,4 +129,14 @@ export class AssistantService {
 
     }
 
+    search(query: string) {
+
+        return this.todoService.searchTodos(
+            query,
+            1,
+            20
+        );
+
+    }
+
 }
