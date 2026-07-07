@@ -97,7 +97,8 @@
 
           <app-task-summary
             [tasks]="relatedTasks"
-            (view)="openTodo($event)">
+            [matchType]="'related'"
+            (view)="openTodo($event, 'related', relatedTasks)">
           </app-task-summary>
         }
 
@@ -110,7 +111,8 @@
 
           <app-task-summary
             [tasks]="otherTasks"
-            (view)="openTodo($event)">
+            [matchType]="'possible'"
+            (view)="openTodo($event, 'possible', otherTasks)">
           </app-task-summary>
         }
 

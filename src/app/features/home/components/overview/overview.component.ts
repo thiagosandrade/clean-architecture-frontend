@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { TodoItem } from '../../../todos/models/todo.model';
+import { TodoItem } from '../../../todo/models/todo.model';
 import { Priority } from '../../../../core/enums/priority.enum';
 import { MatCardModule } from "@angular/material/card";
 

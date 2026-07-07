@@ -10,7 +10,15 @@ import { environment } from '../../../../environments/environment';
 export class UserService {
   private base = `${environment.apiUrl}/users`;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
+
+  getAll() {
+    return this.http.get<User[]>(this.base);
+  }
+
+  delete(id: string): Observable<void> {
+    return this.http.delete<void>(`${this.base}/${id}`);
+  }
 
   getById(id: string): Observable<User> {
     return this.http.get<User>(`${this.base}/${id}`);

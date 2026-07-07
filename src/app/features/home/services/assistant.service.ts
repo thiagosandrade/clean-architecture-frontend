@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
-import { TodoService } from "../../todos/services/todo.service";
 import { Priority } from "../../../core/enums/priority.enum";
+import { TodoService } from "../../todo/services/todo.service";
 
 @Injectable({
     providedIn: 'root'

@@ -1,0 +1,189 @@
+<div *ngIf="isLoading()" class="loading">
+
+    <mat-spinner diameter="40"></mat-spinner>
+
+</div>
+
+<div *ngIf="!isLoading() && todo" class="details">
+    <h3>Subtask Details</h3>
+
+    <div class="row">
+
+        <label>Description</label>
+
+        <span>{{ todo.description }}</span>
+
+    </div>
+
+    <div class="row">
+
+        <label>Priority</label>
+
+        <span>{{ todo.priority }}</span>
+
+    </div>
+
+    <div class="row">
+
+        <label>Due Date</label>
+
+        <span>
+            {{ todo.dueDate | date: DATE_FORMATS.DISPLAY }}
+        </span>
+
+    </div>
+
+    <div class="row">
+
+        <label>Status</label>
+
+        <span>
+            {{ todo.isCompleted ? 'Completed' : 'Pending' }}
+        </span>
+
+    </div>
+
+    <div class="row">
+
+        <label>Labels</label>
+
+        <span>
+            {{ todo.labels.join(', ') }}
+        </span>
+
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <div class="subtasks-header">
+
+        <h3>
+            Subtasks
+        </h3>
+
+        <button mat-stroked-button color="primary" (click)="addSubtask()">
+
+            <mat-icon>add</mat-icon>
+
+            Add Subtask
+
+        </button>
+
+    </div>
+
+    <table *ngIf="todo.subItems.length" class="subtasks">
+
+        <thead>
+
+            <tr>
+
+                <th class="order-column">
+                    Order
+                </th>
+
+                <th class="status-column">
+                    Completed
+                </th>
+
+                <th class="description-column">
+                    Description
+                </th>
+
+                <th class="action-column"></th>
+
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+            <tr *ngFor="let subtask of todo.subItems; let i = index">
+
+                <td class="order-column order-cell">
+
+                    <button mat-icon-button (click)="moveUp(i)" [disabled]="i === 0">
+
+                        <mat-icon>
+                            keyboard_arrow_up
+                        </mat-icon>
+
+                    </button>
+
+                    <button mat-icon-button (click)="moveDown(i)" [disabled]="i === todo.subItems.length - 1">
+
+                        <mat-icon>
+                            keyboard_arrow_down
+                        </mat-icon>
+
+                    </button>
+
+                </td>
+
+                <td class="status-column">
+
+                    <mat-checkbox [checked]="subtask.isCompleted" (change)="toggleCompleted(subtask)">
+                    </mat-checkbox>
+
+                </td>
+
+                <td class="description-column">
+
+                    <input class="description-input" [class.invalid]="!subtask.description.trim()"
+                        placeholder="Enter subtask..." [value]="subtask.description"
+                        (input)="updateDescription(subtask, $any($event.target).value)" />
+
+                </td>
+
+                <td class="action-column">
+
+                    <button mat-icon-button color="warn" (click)="removeSubtask(i)">
+
+                        <mat-icon>
+                            delete
+                        </mat-icon>
+
+                    </button>
+
+                </td>
+
+            </tr>
+
+        </tbody>
+
+    </table>
+
+    <div *ngIf="!todo.subItems.length" class="empty">
+
+        No subtasks generated yet.
+
+    </div>
+
+    <div class="actions">
+
+        <button mat-flat-button color="primary" (click)="breakDown()" [disabled]="isBreakingDown() || hasSubtasks()">
+
+            <mat-spinner *ngIf="isBreakingDown()" diameter="18">
+            </mat-spinner>
+
+            <span *ngIf="!isBreakingDown()">
+
+                Breakdown Tasks
+
+            </span>
+
+        </button>
+
+        <button mat-flat-button color="accent" (click)="save()"
+            [disabled]="!hasChanges() || isSaving() || hasInvalidSubtasks()">
+
+            <mat-spinner *ngIf="isSaving()" diameter="18">
+            </mat-spinner>
+
+            <span *ngIf="!isSaving()">
+
+                Save
+
+            </span>
+        </button>
+    </div>
+</div>

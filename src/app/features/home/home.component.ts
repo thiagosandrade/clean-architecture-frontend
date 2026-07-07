@@ -5,17 +5,18 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { FormsModule } from '@angular/forms';
-import { TodoItem, TodoResponse } from '../todos/models/todo.model';
+import { TodoItem, TodoResponse } from '../todo/models/todo.model';
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { Observable } from 'rxjs';
 
 import { TaskSummaryComponent } from './components/task-summary/task-summary.component';
 import { MatDialog } from '@angular/material/dialog';
-import { TodoDetailsDialogComponent } from '../todos/todo-details-dialog/todo-details-dialog';
 import { OverviewComponent } from "./components/overview/overview.component";
 import { AssistantService } from './services/assistant.service';
 import { AssistantIntent } from '../../core/enums/assistant-intent.enum';
 import { IntentClassifierService } from './services/intent-classifier.service';
+import { TodoWorkspaceDialogComponent } from '../todo/components/todo-workspace-dialog/todo-workspace-dialog';
+import { TodoWorkspaceMatchType } from '../todo/models/todo-workspace-data';
 
 interface HomeQuery {
   type: 'today' | 'this week' | 'search' | 'high priority' | 'next work' | 'overdue';
@@ -339,17 +340,21 @@ export class HomeComponent {
     return 'Good evening';
   }
 
-  openTodo(todo: TodoItem): void {
+  openTodo(todo: TodoItem, matchType: TodoWorkspaceMatchType = 'normal', navigation: TodoItem[] = []): void {
 
     const dialogRef = this.dialog.open(
-      TodoDetailsDialogComponent,
+      TodoWorkspaceDialogComponent,
       {
-        width: '900px',
-        maxWidth: '95vw',
+        width: '90vw',
+        maxWidth: '1400px',
         height: 'auto',
         maxHeight: '90vh',
         data: {
-          id: todo.id
+          todo: todo,
+          isEdit: true,
+          origin: 'search',
+          matchType: matchType,
+          navigation: navigation
         }
       }
     );

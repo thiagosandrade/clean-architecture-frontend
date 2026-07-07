@@ -7,7 +7,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 
-import { TodoItem } from '../../../todos/models/todo.model';
+import { TodoItem } from '../../../todo/models/todo.model';
 import { Priority } from '../../../../core/enums/priority.enum';
 
 @Component({

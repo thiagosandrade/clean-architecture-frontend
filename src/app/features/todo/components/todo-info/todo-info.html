@@ -1,0 +1,99 @@
+<h3>Task Details</h3>
+
+<div class="wrapper">
+
+    <form [formGroup]="form">
+
+        <div class="content">
+
+            <mat-form-field appearance="outline">
+
+                <mat-label>
+                    Description
+                </mat-label>
+
+                <textarea matInput rows="3" formControlName="description">
+                </textarea>
+
+            </mat-form-field>
+
+
+            <mat-form-field appearance="outline">
+
+                <mat-label>
+                    Due Date
+                </mat-label>
+
+                <input matInput [matDatepicker]="picker" formControlName="dueDate">
+
+                <mat-datepicker-toggle matIconSuffix [for]="picker">
+                </mat-datepicker-toggle>
+
+                <mat-datepicker #picker>
+                </mat-datepicker>
+
+            </mat-form-field>
+
+
+            <mat-form-field appearance="outline">
+
+                <mat-label>
+                    Labels
+                </mat-label>
+
+                <input matInput formControlName="labels">
+
+            </mat-form-field>
+
+
+            <mat-form-field appearance="outline">
+
+                <mat-label>
+                    Priority
+                </mat-label>
+
+                <mat-select formControlName="priority">
+
+                    @for(option of priorityOptions; track option.value)
+                    {
+                    <mat-option [value]="option.value">
+
+                        {{ option.label }}
+
+                    </mat-option>
+                    }
+
+                </mat-select>
+
+            </mat-form-field>
+
+
+            <mat-checkbox formControlName="isCompleted">
+
+                Completed
+
+            </mat-checkbox>
+
+
+        </div>
+
+
+        <div class="actions">
+
+            <button mat-flat-button color="primary" (click)="save()"
+                [disabled]="form.invalid || isSaving() || !form.dirty">
+
+
+                <mat-spinner *ngIf="isSaving()" diameter="18">
+                </mat-spinner>
+
+                <span *ngIf="!isSaving()">
+
+                    Save
+
+                </span>
+
+            </button>
+        </div>
+    </form>
+</div>
