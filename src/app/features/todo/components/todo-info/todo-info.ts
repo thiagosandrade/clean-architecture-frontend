@@ -1,5 +1,4 @@
 import {
-  ChangeDetectorRef,
   Component,
   EventEmitter,
   Input,
@@ -8,10 +7,11 @@ import {
   Output,
   SimpleChanges,
   inject,
-  signal
+  signal,
 } from '@angular/core';
 
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+
 import { CommonModule } from '@angular/common';
 
 import { MatButtonModule } from '@angular/material/button';
@@ -22,14 +22,16 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatSelectModule } from '@angular/material/select';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
-import { TodoDialogData } from '../../models/todo-dialog-data';
+import { firstValueFrom } from 'rxjs';
+
 import { Priority } from '../../../../core/enums/priority.enum';
 import { WorkspaceStatus } from '../../../../core/enums/workspace-status.enum';
+import { MachineState } from '../../../../core/enums/machine-state.enum';
 
 import { enumToOptions } from '../../../../core/utils/enum.utils';
 import { SnackbarService } from '../../../../core/services/snackbar.service';
 import { TodoService } from '../../services/todo.service';
-import { MachineState } from '../../../../core/enums/machine-state.enum';
+import { TodoItem } from '../../models/todo.model';
 
 @Component({
   selector: 'app-todo-info',
@@ -43,20 +45,20 @@ import { MachineState } from '../../../../core/enums/machine-state.enum';
     MatCheckboxModule,
     MatSelectModule,
     MatDatepickerModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
   ],
   templateUrl: './todo-info.html',
-  styleUrls: ['./todo-info.scss']
+  styleUrls: ['./todo-info.scss'],
 })
 export class TodoInfoComponent implements OnInit, OnChanges {
+  private fb = inject(FormBuilder);
 
-  private readonly fb = inject(FormBuilder);
-  private readonly service = inject(TodoService);
-  private readonly snack = inject(SnackbarService);
-  private readonly cdr = inject(ChangeDetectorRef);
+  private service = inject(TodoService);
+
+  private snack = inject(SnackbarService);
 
   @Input({ required: true })
-  data!: TodoDialogData;
+  todo!: TodoItem;
 
   @Output()
   refreshRequested = new EventEmitter<void>();
@@ -73,20 +75,24 @@ export class TodoInfoComponent implements OnInit, OnChanges {
 
   form = this.fb.group({
     description: ['', Validators.required],
+
     dueDate: [null as Date | null],
+
     labels: [''],
+
     priority: [Priority.Normal],
-    isCompleted: [false]
+
+    isCompleted: [false],
   });
 
   ngOnInit(): void {
-
-    this.form.controls.description.valueChanges.subscribe(value => {
-      this.descriptionChanged.emit(value ?? '');
+    this.form.controls.description.valueChanges.subscribe((value) => {
+      if (this.state() !== MachineState.Loading) {
+        this.descriptionChanged.emit(value ?? '');
+      }
     });
 
     this.form.valueChanges.subscribe(() => {
-
       if (this.state() !== MachineState.Saving && this.form.dirty) {
         this.setState(MachineState.Dirty);
       }
@@ -94,29 +100,36 @@ export class TodoInfoComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-
-    if (!changes['data'] || !this.data?.todo) {
+    if (!changes['todo'] || !this.todo) {
       return;
     }
 
-    const todo = this.data.todo;
+    this.setState(MachineState.Loading);
 
-    this.form.patchValue({
-      description: todo.description,
-      dueDate: todo.dueDate ? new Date(todo.dueDate) : null,
-      labels: todo.labels?.join(', ') ?? '',
-      priority: todo.priority,
-      isCompleted: todo.isCompleted
-    });
+    this.form.patchValue(
+      {
+        description: this.todo.description,
+
+        dueDate: this.todo.dueDate ? new Date(this.todo.dueDate) : null,
+
+        labels: this.todo.labels?.join(', ') ?? '',
+
+        priority: this.todo.priority,
+
+        isCompleted: this.todo.isCompleted,
+      },
+
+      {
+        emitEvent: false,
+      },
+    );
 
     this.form.markAsPristine();
 
     this.setState(MachineState.Ready);
-
   }
 
-  save(): void {
-
+  async save(): Promise<void> {
     if (this.form.invalid || this.state() === MachineState.Saving) {
       return;
     }
@@ -126,107 +139,69 @@ export class TodoInfoComponent implements OnInit, OnChanges {
     const value = this.form.getRawValue();
 
     const request = {
-
       userId: localStorage.getItem('userId') ?? '',
+
       description: value.description ?? '',
-      dueDate: value.dueDate
-        ? value.dueDate.toISOString()
-        : null,
+
+      dueDate: value.dueDate ? value.dueDate.toISOString() : null,
 
       labels:
         value.labels
           ?.split(',')
-          .map(x => x.trim())
+          .map((x) => x.trim())
           .filter(Boolean) ?? [],
 
       priority: value.priority ?? Priority.Normal,
-      isCompleted: value.isCompleted ?? false
 
+      isCompleted: value.isCompleted ?? false,
     };
 
-    const operation =
-      this.data.isEdit && this.data.todo
-        ? this.service.update(this.data.todo.id, request)
-        : this.service.create(request);
+    try {
+      await firstValueFrom(this.service.update(this.todo.id, request));
 
-    operation.subscribe({
+      this.form.markAsPristine();
 
-      next: () => {
+      this.setState(MachineState.Saved);
 
-        this.form.markAsPristine();
-        this.refreshRequested.emit();
-        this.descriptionChanged.emit(
-          value.description ?? ''
-        );
+      this.snack.success('Todo updated');
 
-        this.snack.success(
-          this.data.isEdit
-            ? 'Todo updated'
-            : 'Todo created'
-        );
-        this.finishSaving();
-      },
-
-      error: () => {
-        this.setState(MachineState .Dirty);
-        this.cdr.detectChanges();
-      }
-
-    });
-
-  }
-
-  onDescriptionChanged(value: string): void {
-
-    this.form.patchValue(
-      {
-        description: value
-      },
-      {
-        emitEvent: false
-      });
-
-    this.descriptionChanged.emit(value);
-
+    } catch {
+      this.setState(MachineState.Dirty);
+    }
   }
 
   isSaving(): boolean {
-
     return this.state() === MachineState.Saving;
-
-  }
-
-  private finishSaving(): void {
-
-    this.setState(MachineState.Saved);
-
-    this.cdr.detectChanges();
-
   }
 
   private setState(state: MachineState): void {
-
     this.state.set(state);
 
     switch (state) {
+      case MachineState.Loading:
+        this.statusChanged.emit('none');
+
+        break;
 
       case MachineState.Ready:
         this.statusChanged.emit('none');
+
         break;
 
-      case MachineState .Dirty:
+      case MachineState.Dirty:
         this.statusChanged.emit('dirty');
+
         break;
 
       case MachineState.Saving:
         this.statusChanged.emit('saving');
+
         break;
 
       case MachineState.Saved:
         this.statusChanged.emit('saved');
+
         break;
     }
-
   }
-
 }

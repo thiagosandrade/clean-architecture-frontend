@@ -5,5 +5,5 @@ export enum MachineState {
   BreakingDown,
   Ready,
   Dirty,
-  Saved
+  Saved,
 }

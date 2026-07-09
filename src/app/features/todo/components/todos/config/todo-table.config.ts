@@ -1,7 +1,7 @@
-import { TableConfig } from "../../../../../core/components/ui/data-table/table-config.model";
-import { formatDateOnly, formatDateTime } from "../../../../../core/utils/date-format.utils";
-import { formatPriority } from "../../../../../core/utils/priority-format.utils";
-import { TodoItem } from "../../../models/todo.model";
+import { TableConfig } from '../../../../../core/components/ui/data-table/table-config.model';
+import { formatDateOnly, formatDateTime } from '../../../../../core/utils/date-format.utils';
+import { formatPriority } from '../../../../../core/utils/priority-format.utils';
+import { TodoItem } from '../../../models/todo.model';
 
 export const TODO_TABLE_CONFIG: TableConfig<TodoItem> = {
   columns: [
@@ -43,7 +43,7 @@ export const TODO_TABLE_CONFIG: TableConfig<TodoItem> = {
     {
       key: 'completedAt',
       label: 'Completed At',
-      type: 'date',   
+      type: 'date',
       formatter: formatDateTime,
     },
 

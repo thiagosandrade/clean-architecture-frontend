@@ -10,7 +10,7 @@ import { environment } from '../../../../environments/environment';
 export class TodoService {
   private base = `${environment.apiUrl}/todos`;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   getAll(
     page: number = 1,
@@ -20,7 +20,7 @@ export class TodoService {
     priority?: number,
     dueDateFrom?: string,
     dueDateTo?: string,
-    isCompleted?: boolean
+    isCompleted?: boolean,
   ) {
     const userId = localStorage.getItem('id');
 
@@ -74,10 +74,7 @@ export class TodoService {
       params.descending = descending;
     }
 
-    return this.http.get<TodoResponse>(
-      `${this.base}/search`,
-      { params }
-    );
+    return this.http.get<TodoResponse>(`${this.base}/search`, { params });
   }
 
   create(request: CreateTodoRequest) {
@@ -103,41 +100,26 @@ export class TodoService {
   }
 
   parseTodo(description: string) {
-
-    return this.http.post<ParsedTodo>(
-      `${this.base}/parse`,
-      {
-        userId: localStorage.getItem('id') ?? '',
-        description
-      }
-    );
+    return this.http.post<ParsedTodo>(`${this.base}/parse`, {
+      userId: localStorage.getItem('id') ?? '',
+      description,
+    });
   }
 
   breakdown(id: string) {
-
-    return this.http.put(
-      `${this.base}/${id}/breakdown`,
-      {
-        userId: localStorage.getItem('id') ?? '',
-      });
-
+    return this.http.put(`${this.base}/${id}/breakdown`, {
+      userId: localStorage.getItem('id') ?? '',
+    });
   }
 
   getById(id: string) {
-
-    return this.http.get<TodoItem>(
-      `${this.base}/${id}`);
-
+    return this.http.get<TodoItem>(`${this.base}/${id}`);
   }
 
   saveSubItems(id: string, subItems: TodoItem['subItems']) {
-
-    return this.http.put(
-      `${this.base}/${id}/subitems`,
-      {
-        userId: localStorage.getItem('id') ?? '',
-        todoSubItems: subItems
-      });
-
+    return this.http.put(`${this.base}/${id}/subitems`, {
+      userId: localStorage.getItem('id') ?? '',
+      todoSubItems: subItems,
+    });
   }
 }

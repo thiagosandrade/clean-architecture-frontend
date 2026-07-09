@@ -1,84 +1,41 @@
 <mat-card class="task-card">
-
   <div class="header">
-
     <div class="header-content">
-
       <h3>
-
         {{ task.description }}
-
       </h3>
 
       <mat-chip [class]="priorityClass">
-
         {{ priorityLabel }}
-
       </mat-chip>
-
     </div>
 
     <mat-icon class="status" [class.completed]="task.isCompleted">
-
-      {{
-      task.isCompleted
-      ? 'check_circle'
-      : 'radio_button_unchecked'
-      }}
-
+      {{ task.isCompleted ? 'check_circle' : 'radio_button_unchecked' }}
     </mat-icon>
-
   </div>
 
   <div class="info">
+    <mat-icon>schedule</mat-icon>
 
-    <mat-icon>
-
-      schedule
-
-    </mat-icon>
-
-    {{ task.dueDate | date:'medium' }}
-
+    {{ task.dueDate | date: 'medium' }}
   </div>
 
-  <div class="progress-text">
+  <div class="progress-text">{{ completedSubtasks }} / {{ totalSubtasks }} subtasks completed</div>
 
-    {{completedSubtasks}} / {{totalSubtasks}} subtasks completed
+  <mat-progress-bar mode="determinate" [value]="progress"></mat-progress-bar>
 
-  </div>
-
-  <mat-progress-bar mode="determinate" [value]="progress">
-  </mat-progress-bar>
-
-  @if(task.labels.length)
-  {
-
-  <div class="labels">
-
-    @for(label of task.labels; track label)
-    {
-
-    <mat-chip>
-
-      {{label}}
-
-    </mat-chip>
-
-    }
-
-  </div>
-
+  @if (task.labels.length) {
+    <div class="labels">
+      @for (label of task.labels; track label) {
+        <mat-chip>
+          {{ label }}
+        </mat-chip>
+      }
+    </div>
   }
 
   <div class="footer">
-
-    <button mat-flat-button color="primary" (click)="view.emit(task)">
-
-      View Details
-
-    </button>
-
+    <button mat-flat-button color="primary" (click)="view.emit(task)">View Details</button>
   </div>
-
 </mat-card>

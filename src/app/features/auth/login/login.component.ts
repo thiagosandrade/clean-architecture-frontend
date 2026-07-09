@@ -8,14 +8,21 @@ import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthResponse } from '../models/auth.models';
 import { LoadingService } from '../../../core/services/loading.service';
-import { LoadingSpinnerComponent } from "../../../core/components/ui/loading-spinner/loading-spinner.component";
+import { LoadingSpinnerComponent } from '../../../core/components/ui/loading-spinner/loading-spinner.component';
 
 @Component({
   standalone: true,
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
-  imports: [CommonModule, ReactiveFormsModule, MatInputModule, MatButtonModule, MatCardModule, LoadingSpinnerComponent],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    MatInputModule,
+    MatButtonModule,
+    MatCardModule,
+    LoadingSpinnerComponent,
+  ],
 })
 export class LoginComponent {
   form;
@@ -25,7 +32,7 @@ export class LoginComponent {
     private fb: FormBuilder,
     private auth: AuthService,
     private router: Router,
-    private loadingService: LoadingService
+    private loadingService: LoadingService,
   ) {
     this.form = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -39,15 +46,18 @@ export class LoginComponent {
     this.isLoggingIn = true;
     this.loadingService.show();
 
-    this.auth.login(this.form.value as AuthResponse).subscribe((res) => {
-      this.loadingService.hide();
-      this.isLoggingIn = false;
-      this.auth.saveUserInfo(res.token, res.id, res.email);
-      this.router.navigate(['/home']);
-    }, () => {
-      this.loadingService.hide();
-      this.isLoggingIn = false;
-    });
+    this.auth.login(this.form.value as AuthResponse).subscribe(
+      (res) => {
+        this.loadingService.hide();
+        this.isLoggingIn = false;
+        this.auth.saveUserInfo(res.token, res.id, res.email);
+        this.router.navigate(['/home']);
+      },
+      () => {
+        this.loadingService.hide();
+        this.isLoggingIn = false;
+      },
+    );
   }
 
   navigateToRegister() {

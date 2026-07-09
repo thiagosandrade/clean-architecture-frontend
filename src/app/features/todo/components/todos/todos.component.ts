@@ -13,7 +13,7 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
 import { MatInputModule } from '@angular/material/input';
 import { ParseTodoDialogComponent } from '../parse-todo-dialog/parse-todo-dialog';
-import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { DataTableComponent } from '../../../../core/components/ui/data-table/data-table.component';
 import { LoadingService } from '../../../../core/services/loading.service';
 import { SnackbarService } from '../../../../core/services/snackbar.service';
@@ -36,7 +36,7 @@ import { TodoInfoDialogComponent } from '../todo-info-dialog/todo-info-dialog.co
     ReactiveFormsModule,
     MatInputModule,
     DataTableComponent,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
   ],
   templateUrl: './todos.component.html',
   styleUrls: ['./todos.component.scss'],
@@ -59,8 +59,8 @@ export class TodosComponent implements OnInit {
     private snack: SnackbarService,
     private dialog: MatDialog,
     public loadingService: LoadingService,
-    private cdr: ChangeDetectorRef
-  ) { }
+    private cdr: ChangeDetectorRef,
+  ) {}
 
   ngOnInit() {
     this.searchControl.valueChanges
@@ -77,32 +77,22 @@ export class TodosComponent implements OnInit {
   }
 
   load() {
-
     const request = this.searchText?.trim()
       ? this.service.searchTodos(
-        this.searchText,
-        this.page,
-        this.size,
-        this.hasUserSorted ? this.sortProperty : '',
-        this.descending,
-      )
-      : this.service.getAll(
-        this.page,
-        this.size,
-        this.sortProperty,
-        this.descending
-      );
-
+          this.searchText,
+          this.page,
+          this.size,
+          this.hasUserSorted ? this.sortProperty : '',
+          this.descending,
+        )
+      : this.service.getAll(this.page, this.size, this.sortProperty, this.descending);
 
     request.subscribe((response) => {
-
       this.todos = response.items;
       this.total = response.total;
 
       this.cdr.detectChanges();
-
     });
-
   }
 
   search() {
@@ -160,27 +150,18 @@ export class TodosComponent implements OnInit {
   }
 
   createTodo() {
+    const dialogRef = this.dialog.open(TodoInfoDialogComponent, {
+      width: '700px',
+      data: {
+        isEdit: false,
+      },
+    });
 
-    const dialogRef =
-      this.dialog.open(
-        TodoInfoDialogComponent,
-        {
-          width: '700px',
-          data: {
-            isEdit: false
-          }
-        }
-      );
-
-
-    dialogRef.afterClosed()
-      .subscribe(refresh => {
-
-        if (refresh) {
-          this.load();
-        }
-
-      });
+    dialogRef.afterClosed().subscribe((refresh) => {
+      if (refresh) {
+        this.load();
+      }
+    });
   }
 
   handleAction(event: { action: string; row: TodoItem }) {
@@ -192,95 +173,74 @@ export class TodosComponent implements OnInit {
         });
         break;
 
-      case 'view':
-        {
-          this.dialog.open(TodoDetailsDialogComponent,
-            {
-              width: '900px',
-              maxWidth: '95vw',
-              height: 'auto',
-              maxHeight: '90vh',
-              data: {
-                id: event.row.id
-              }
-            });
+      case 'view': {
+        this.dialog.open(TodoDetailsDialogComponent, {
+          width: '900px',
+          maxWidth: '95vw',
+          height: 'auto',
+          maxHeight: '90vh',
+          data: {
+            id: event.row.id,
+          },
+        });
 
-          break;
-        }
+        break;
+      }
 
+      case 'edit': {
+        const dialogRef = this.dialog.open(TodoInfoDialogComponent, {
+          width: '550px',
+          maxWidth: '90vw',
+          data: {
+            isEdit: true,
+            todo: event.row,
+          },
+        });
 
-      case 'edit':
-        {
-          const dialogRef = this.dialog.open(TodoInfoDialogComponent,
-            {
-              width: '550px',
-              maxWidth: '90vw',
-              data: {
-                isEdit: true,
-                todo: event.row,
-              },
-            });
+        dialogRef.afterClosed().subscribe((refresh) => {
+          this.load();
+        });
 
-          dialogRef.afterClosed()
-            .subscribe(refresh => {
-
-                this.load();
-
-            });
-
-          break;
-        }
+        break;
+      }
     }
   }
 
   parseTodo() {
+    const dialogRef = this.dialog.open(ParseTodoDialogComponent, {
+      width: '1300px',
+      maxWidth: '95vw',
+    });
 
-    const dialogRef =
-      this.dialog.open(ParseTodoDialogComponent, {
-        width: '1300px',
-        maxWidth: '95vw'
-      });
+    dialogRef.afterClosed().subscribe((result) => {
+      if (!result) {
+        return;
+      }
 
-
-    dialogRef.afterClosed()
-      .subscribe(result => {
-
-        if (!result) {
-          return;
-        }
-
-        this.service.create({
+      this.service
+        .create({
           userId: localStorage.getItem('userId')!,
           description: result.description,
           dueDate: result.dueDate,
           labels: result.labels,
-          priority: this.mapPriority(result.priority)
-
+          priority: this.mapPriority(result.priority),
         })
-          .subscribe(() => {
+        .subscribe(() => {
+          this.snack.success('Todo created');
 
-            this.snack.success(
-              'Todo created'
-            );
-
-            this.load();
-
-          });
-      });
+          this.load();
+        });
+    });
   }
 
   mapPriority(priority: string) {
-
     const map: any = {
-
       Normal: 0,
       Low: 1,
       Medium: 2,
       High: 3,
-      Top: 4
-
+      Top: 4,
     };
     return map[priority] ?? 0;
-
   }
 }

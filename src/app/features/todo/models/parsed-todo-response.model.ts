@@ -1,5 +1,4 @@
 export interface ParsedTodo {
-
   description: string;
 
   categories: string[] | null;
@@ -11,5 +10,4 @@ export interface ParsedTodo {
   dueDate: string;
 
   userId: string;
-
 }

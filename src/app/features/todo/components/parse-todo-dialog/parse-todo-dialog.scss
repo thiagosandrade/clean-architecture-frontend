@@ -1,119 +1,90 @@
 .preview-layout {
-    display: grid;
+  display: grid;
 
-    grid-template-columns:
-        minmax(450px, 1fr) auto minmax(450px, 1fr);
+  grid-template-columns: minmax(450px, 1fr) auto minmax(450px, 1fr);
 
-    gap: 32px;
+  gap: 32px;
 
-    width: 100%;
+  width: 100%;
 
-    align-items: stretch;
+  align-items: stretch;
 }
-
 
 .generate-panel {
-    display: flex;
+  display: flex;
 
-    align-items: center;
+  align-items: center;
 
-    justify-content: center;
+  justify-content: center;
 
-    padding: 0 8px;
+  padding: 0 8px;
 }
-
 
 .input-panel,
 .result-panel {
+  padding: 24px;
 
-    padding: 24px;
+  border-radius: 12px;
 
-    border-radius: 12px;
+  border: 1px solid var(--mat-sys-outline-variant);
 
-    border: 1px solid var(--mat-sys-outline-variant);
-
-    background: var(--mat-sys-surface-container);
-
+  background: var(--mat-sys-surface-container);
 }
-
 
 .input-panel {
+  display: flex;
 
-    display: flex;
-
-    flex-direction: column;
-
+  flex-direction: column;
 }
-
 
 .full-width {
-    width: 100%;
+  width: 100%;
 }
-
 
 .request-textarea {
+  min-height: 280px;
 
-    min-height: 280px;
+  resize: vertical;
 
-    resize: vertical;
-
-    line-height: 1.5;
-
+  line-height: 1.5;
 }
-
 
 .result-panel {
-
-    min-height: 320px;
-
+  min-height: 320px;
 }
 
-
 .result-row {
+  display: flex;
 
-    display: flex;
+  gap: 12px;
 
-    gap: 12px;
+  margin-bottom: 14px;
 
-    margin-bottom: 14px;
+  font-size: 14px;
 
-    font-size: 14px;
+  label {
+    font-weight: 700;
 
+    min-width: 100px;
+  }
 
-    label {
+  span {
+    flex: 1;
 
-        font-weight: 700;
-
-        min-width: 100px;
-
-    }
-
-
-    span {
-
-        flex: 1;
-
-        word-break: break-word;
-
-    }
-
+    word-break: break-word;
+  }
 }
 
 .spin {
-
-    animation: spin 1s linear infinite;
-
+  animation: spin 1s linear infinite;
 }
 
-
 @keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
 
-    from {
-        transform: rotate(0deg);
-    }
-
-    to {
-        transform: rotate(360deg);
-    }
-
+  to {
+    transform: rotate(360deg);
+  }
 }

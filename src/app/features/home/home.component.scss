@@ -1,5 +1,4 @@
 .home {
-
   min-height: calc(100vh - 64px);
 
   display: flex;
@@ -7,35 +6,28 @@
   align-items: flex-start;
 
   padding: 24px;
-
 }
 
 .hero {
-
   width: 100%;
 
   display: flex;
   flex-direction: column;
 
   gap: 16px;
-
 }
 
 .hero h1 {
-
   font-size: 34px;
   font-weight: 600;
 
   margin: 0;
-
 }
 
 .hero p {
-
   margin: 0;
   font-size: 18px;
   color: #666;
-
 }
 
 /* =========================
@@ -43,7 +35,6 @@
 ========================= */
 
 .input-card {
-
   margin-top: 24px;
 
   padding: 16px 20px;
@@ -55,16 +46,13 @@
   background: #f5f7fb;
 
   border-radius: 12px;
-
 }
 
 /* fix form field inside card */
 .input-card mat-form-field {
-
   flex: 1;
   width: 100%;
   margin: 0;
-
 }
 
 /* fix material height issues */
@@ -89,14 +77,12 @@ input {
 
 /* button fix */
 .ask-button {
-
   height: 44px;
   white-space: nowrap;
 
   display: flex;
   align-items: center;
   gap: 6px;
-
 }
 
 .ask-button mat-icon {
@@ -108,20 +94,16 @@ input {
 ========================= */
 
 .suggestions {
-
   display: flex;
   flex-wrap: wrap;
   align-self: center;
   gap: 12px;
 
   margin-top: 20px;
-
 }
 
 .suggestions button {
-
   border-radius: 20px;
-
 }
 
 /* =========================
@@ -129,7 +111,6 @@ input {
 ========================= */
 
 .assistant-message-card {
-
   margin-top: 20px;
 
   padding: 16px 20px;
@@ -141,7 +122,6 @@ input {
   background: #eef4ff;
 
   border-radius: 12px;
-
 }
 
 .assistant-message-card mat-icon {
@@ -153,33 +133,27 @@ input {
 ========================= */
 
 .results {
-
   margin-top: 32px;
 
   width: 100%;
-
 }
 
 /* MAIN TITLE */
 .results-title {
-
   margin: 0 0 24px;
 
   font-size: 28px;
   font-weight: 700;
-
 }
 
 /* SUBTITLE */
 .results-subtitle {
-
   margin: 28px 0 12px;
 
   font-size: 18px;
   font-weight: 600;
 
   color: #333;
-
 }
 
 /* =========================
@@ -187,7 +161,6 @@ input {
 ========================= */
 
 .empty-results {
-
   margin-top: 20px;
   padding: 16px 20px;
 
@@ -200,7 +173,6 @@ input {
   background: #fafafa;
 
   border-radius: 8px;
-
 }
 
 .empty-results mat-icon {

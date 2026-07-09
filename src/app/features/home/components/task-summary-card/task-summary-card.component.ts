@@ -19,13 +19,12 @@ import { Priority } from '../../../../core/enums/priority.enum';
     MatButtonModule,
     MatIconModule,
     MatProgressBarModule,
-    MatChipsModule
+    MatChipsModule,
   ],
   templateUrl: './task-summary-card.component.html',
-  styleUrls: ['./task-summary-card.component.scss']
+  styleUrls: ['./task-summary-card.component.scss'],
 })
 export class TaskSummaryCardComponent {
-
   @Input()
   task!: TodoItem;
 
@@ -33,31 +32,23 @@ export class TaskSummaryCardComponent {
   view = new EventEmitter<TodoItem>();
 
   get completedSubtasks(): number {
-
-    return this.task.subItems.filter(x => x.isCompleted).length;
-
+    return this.task.subItems.filter((x) => x.isCompleted).length;
   }
 
   get totalSubtasks(): number {
-
     return this.task.subItems.length;
-
   }
 
   get progress(): number {
-
     if (this.totalSubtasks === 0) {
       return 0;
     }
 
-    return this.completedSubtasks / this.totalSubtasks * 100;
-
+    return (this.completedSubtasks / this.totalSubtasks) * 100;
   }
 
   get priorityLabel(): string {
-
     switch (this.task.priority) {
-
       case Priority.High:
         return 'High';
 
@@ -75,15 +66,11 @@ export class TaskSummaryCardComponent {
 
       default:
         return 'Unknown';
-
     }
-
   }
 
   get priorityClass(): string {
-
     switch (this.task.priority) {
-
       case Priority.High:
         return 'priority-high';
 
@@ -101,9 +88,6 @@ export class TaskSummaryCardComponent {
 
       default:
         return '';
-
     }
-
   }
-
 }

@@ -1,4 +1,4 @@
-import { Permission } from "./permission.model";
+import { Permission } from './permission.model';
 
 export interface User {
   id: string;

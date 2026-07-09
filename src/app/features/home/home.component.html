@@ -1,138 +1,91 @@
 <div class="home">
-
   <div class="hero">
-
     <h1>{{ greeting }} 👋</h1>
 
-    <p>
-      What would you like to accomplish today?
-    </p>
+    <p>What would you like to accomplish today?</p>
 
     <!-- INPUT SECTION -->
     <mat-card class="input-card">
-
       <mat-form-field appearance="outline">
+        <mat-label>Ask something...</mat-label>
 
-        <mat-label>
-          Ask something...
-        </mat-label>
-
-        <input
-          matInput
-          [(ngModel)]="question"
-          (keyup.enter)="ask()" />
-
+        <input matInput [(ngModel)]="question" (keyup.enter)="ask()" />
       </mat-form-field>
 
-      <button
-        mat-flat-button
-        color="primary"
-        class="ask-button"
-        (click)="ask()">
-
+      <button mat-flat-button color="primary" class="ask-button" (click)="ask()">
         <mat-icon>send</mat-icon>
 
         Ask
-
       </button>
-
     </mat-card>
 
     <!-- SUGGESTIONS -->
     <div class="suggestions" *ngIf="!loading">
-
-      <button
-        mat-stroked-button
-        *ngFor="let item of suggestions"
-        (click)="select(item)">
-
+      <button mat-stroked-button *ngFor="let item of suggestions" (click)="select(item)">
         {{ item }}
-
       </button>
-
     </div>
 
     <!-- LOADING -->
-    @if(loading)
-    {
+    @if (loading) {
       <mat-spinner></mat-spinner>
     }
 
     <!-- ASSISTANT MESSAGE -->
-    @if(!loading && assistantMessage)
-    {
+    @if (!loading && assistantMessage) {
       <mat-card class="assistant-message-card">
-
         <mat-icon>smart_toy</mat-icon>
 
         <span>
           {{ assistantMessage }}
         </span>
-
       </mat-card>
     }
 
     <!-- RESULTS -->
-    @if(!loading && tasks.length)
-    {
+    @if (!loading && tasks.length) {
       <div class="results results-container">
-
-        @if(resultsTitle)
-        {
+        @if (resultsTitle) {
           <h1 class="results-title">
             {{ resultsTitle }}
           </h1>
         }
 
         <!-- RELATED TASKS -->
-        @if(relatedTasks.length)
-        {
-          <h2 class="results-subtitle">
-            Related Tasks
-          </h2>
+        @if (relatedTasks.length) {
+          <h2 class="results-subtitle">Related Tasks</h2>
 
-          <app-overview
-            [tasks]="relatedTasks">
-          </app-overview>
+          <app-overview [tasks]="relatedTasks"></app-overview>
 
           <app-task-summary
             [tasks]="relatedTasks"
             [matchType]="'related'"
-            (view)="openTodo($event, 'related', relatedTasks)">
-          </app-task-summary>
+            (view)="openTodo($event, 'related', relatedTasks)"
+          ></app-task-summary>
         }
 
         <!-- OTHER MATCHES -->
-        @if(otherTasks.length)
-        {
-          <h2 class="results-subtitle">
-            Other Possible Matches
-          </h2>
+        @if (otherTasks.length) {
+          <h2 class="results-subtitle">Other Possible Matches</h2>
 
           <app-task-summary
             [tasks]="otherTasks"
             [matchType]="'possible'"
-            (view)="openTodo($event, 'possible', otherTasks)">
-          </app-task-summary>
+            (view)="openTodo($event, 'possible', otherTasks)"
+          ></app-task-summary>
         }
-
       </div>
     }
 
     <!-- EMPTY STATE -->
-    @if(!loading && hasSearched && !tasks.length)
-    {
+    @if (!loading && hasSearched && !tasks.length) {
       <mat-card class="empty-results">
-
         <mat-icon>search_off</mat-icon>
 
         <span>
           {{ emptyMessage }}
         </span>
-
       </mat-card>
     }
-
   </div>
-
 </div>

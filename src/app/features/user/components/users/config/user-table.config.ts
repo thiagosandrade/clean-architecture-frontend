@@ -1,6 +1,6 @@
-import { TableConfig } from "../../../../../core/components/ui/data-table/table-config.model";
-import { formatDateOnly } from "../../../../../core/utils/date-format.utils";
-import { User } from "../../../models/user.model";
+import { TableConfig } from '../../../../../core/components/ui/data-table/table-config.model';
+import { formatDateOnly } from '../../../../../core/utils/date-format.utils';
+import { User } from '../../../models/user.model';
 
 export const USER_TABLE_CONFIG: TableConfig<User> = {
   columns: [

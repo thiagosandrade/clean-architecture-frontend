@@ -1,162 +1,143 @@
 .overview {
-
   display: flex;
   flex-direction: column;
   gap: 28px;
-
 }
 
 .overview-section {
-
   display: flex;
   flex-direction: column;
   gap: 12px;
-
 }
 
 .overview-section h3 {
-
   margin: 0;
   font-size: 18px;
   font-weight: 600;
-
 }
 
 .overview-grid {
-
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   gap: 16px;
-
 }
 
 .overview-grid mat-card {
-
   padding: 20px;
   text-align: center;
-
 }
 
 .overview-grid h2 {
-
   margin: 0 0 8px;
   font-size: 32px;
   font-weight: 600;
-
 }
 
 .overview-grid span {
-
   color: #757575;
   font-size: 14px;
-
 }
 
 /* ---------- Colored overview cards ---------- */
 
 .overview-grid mat-card {
-
   border-left: 5px solid transparent;
-  transition: transform .15s ease, box-shadow .15s ease;
-
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
 }
 
 .overview-grid mat-card:hover {
-
   transform: translateY(-2px);
-
 }
 
 .overview-grid h2 {
-
   margin: 0 0 8px;
   font-size: 34px;
   font-weight: 700;
-
 }
 
-.card-completed h2 { color: #2e7d32; }
+.card-completed h2 {
+  color: #2e7d32;
+}
 
-.card-overdue h2 { color: #c62828; }
+.card-overdue h2 {
+  color: #c62828;
+}
 
-.card-pending h2 { color: #ef6c00; }
+.card-pending h2 {
+  color: #ef6c00;
+}
 
-.card-high h2 { color: #c62828; }
+.card-high h2 {
+  color: #c62828;
+}
 
-.card-medium h2 { color: #ef6c00; }
+.card-medium h2 {
+  color: #ef6c00;
+}
 
-.card-normal h2 { color: #1565c0; }
+.card-normal h2 {
+  color: #1565c0;
+}
 
-.card-low h2 { color: #2e7d32; }
+.card-low h2 {
+  color: #2e7d32;
+}
 
-.card-top-priority h2 { color: #6a1b9a; }
+.card-top-priority h2 {
+  color: #6a1b9a;
+}
 
-.card-total h2 { color: #424242; }
+.card-total h2 {
+  color: #424242;
+}
 
 /* Status */
 
 .card-total {
-
   background: #f5f5f5;
   border-left-color: #757575;
-
 }
 
 .card-pending {
-
   background: #fff8e1;
   border-left-color: #ffb300;
-
 }
 
 .card-completed {
-
   background: #e8f5e9;
   border-left-color: #43a047;
-
 }
 
 .card-overdue {
-
   background: #ffebee;
   border-left-color: #e53935;
-
 }
-
 
 /* Priorities */
 
 .card-top {
-
   background: #f3e5f5;
   border-left-color: #8e24aa;
-
 }
 
 .card-high {
-
   background: #ffebee;
   border-left-color: #d32f2f;
-
 }
 
 .card-medium {
-
   background: #fff3e0;
   border-left-color: #fb8c00;
-
 }
 
 .card-normal {
-
   background: #e3f2fd;
   border-left-color: #1e88e5;
-
 }
 
 .card-low {
-
   background: #e8f5e9;
   border-left-color: #43a047;
-
 }

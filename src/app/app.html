@@ -1,10 +1,7 @@
 <app-toolbar></app-toolbar>
 
-@if(loadingService.loading$ | async)
-{
-  <mat-progress-bar
-    mode="indeterminate">
-  </mat-progress-bar>
+@if (loadingService.loading$ | async) {
+  <mat-progress-bar mode="indeterminate"></mat-progress-bar>
 }
 
 <div class="content">

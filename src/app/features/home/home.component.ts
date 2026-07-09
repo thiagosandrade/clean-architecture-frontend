@@ -6,12 +6,12 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { FormsModule } from '@angular/forms';
 import { TodoItem, TodoResponse } from '../todo/models/todo.model';
-import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Observable } from 'rxjs';
 
 import { TaskSummaryComponent } from './components/task-summary/task-summary.component';
 import { MatDialog } from '@angular/material/dialog';
-import { OverviewComponent } from "./components/overview/overview.component";
+import { OverviewComponent } from './components/overview/overview.component';
 import { AssistantService } from './services/assistant.service';
 import { AssistantIntent } from '../../core/enums/assistant-intent.enum';
 import { IntentClassifierService } from './services/intent-classifier.service';
@@ -35,13 +35,12 @@ interface HomeQuery {
     FormsModule,
     MatProgressSpinnerModule,
     TaskSummaryComponent,
-    OverviewComponent
+    OverviewComponent,
   ],
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss']
+  styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent {
-
   private dialog = inject(MatDialog);
 
   question = '';
@@ -51,7 +50,7 @@ export class HomeComponent {
   resultsTitle = '';
 
   currentQuery: HomeQuery = {
-    type: 'today'
+    type: 'today',
   };
 
   suggestions = [
@@ -60,7 +59,7 @@ export class HomeComponent {
     'Show high priority tasks',
     'What should I work on next?',
     'Show overdue tasks',
-    'Plan my day'
+    'Plan my day',
   ];
 
   // raw backend results
@@ -74,14 +73,13 @@ export class HomeComponent {
 
   constructor(
     private assistantService: AssistantService,
-    private classifierService: IntentClassifierService
-  ) { }
+    private classifierService: IntentClassifierService,
+  ) {}
 
   // =========================
   // ENTRY POINT
   // =========================
   ask() {
-
     this.hasSearched = false;
     this.emptyMessage = '';
     this.assistantMessage = '';
@@ -91,7 +89,6 @@ export class HomeComponent {
     const result = this.classifierService.classify(this.question);
 
     switch (result.intent) {
-
       case AssistantIntent.Today:
         this.loadTodayTasks();
         break;
@@ -125,37 +122,33 @@ export class HomeComponent {
   // SEMANTIC SEARCH
   // =========================
   searchTasks(query: string) {
-
     this.resultsTitle = `Results for "${query}"`;
 
     this.loading = true;
 
     this.currentQuery = {
       type: 'search',
-      prompt: query
+      prompt: query,
     };
 
-    this.assistantService.search(query)
-      .subscribe({
-        next: response => {
+    this.assistantService.search(query).subscribe({
+      next: (response) => {
+        this.tasks = response.items;
 
-          this.tasks = response.items;
+        this.splitSemanticResults();
+        this.buildSemanticMessage(query);
 
-          this.splitSemanticResults();
-          this.buildSemanticMessage(query);
-
-          this.loading = false;
-          this.hasSearched = true;
-        },
-        error: () => {
-          this.loading = false;
-          this.hasSearched = true;
-        }
-      });
+        this.loading = false;
+        this.hasSearched = true;
+      },
+      error: () => {
+        this.loading = false;
+        this.hasSearched = true;
+      },
+    });
   }
 
   private splitSemanticResults(): void {
-
     this.relatedTasks = [];
     this.otherTasks = [];
 
@@ -168,12 +161,11 @@ export class HomeComponent {
 
     const threshold = Math.max(relativeThreshold, minThreshold);
 
-    this.relatedTasks = this.tasks.filter(x => x.similarity >= threshold);
-    this.otherTasks = this.tasks.filter(x => x.similarity < threshold);
+    this.relatedTasks = this.tasks.filter((x) => x.similarity >= threshold);
+    this.otherTasks = this.tasks.filter((x) => x.similarity < threshold);
   }
 
   private buildSemanticMessage(query: string): void {
-
     if (!this.relatedTasks.length) {
       this.emptyMessage = `I couldn't find any tasks related to "${query}".`;
       this.assistantMessage = '';
@@ -184,16 +176,13 @@ export class HomeComponent {
 
     const count = this.relatedTasks.length;
 
-    if (bestSimilarity >= 0.90) {
+    if (bestSimilarity >= 0.9) {
       this.assistantMessage = `I found ${count} highly relevant task${count === 1 ? '' : 's'} related to "${query}".`;
-    }
-    else if (bestSimilarity >= 0.80) {
+    } else if (bestSimilarity >= 0.8) {
       this.assistantMessage = `I found ${count} relevant task${count === 1 ? '' : 's'} related to "${query}".`;
-    }
-    else if (bestSimilarity >= 0.70) {
+    } else if (bestSimilarity >= 0.7) {
       this.assistantMessage = `I found ${count} possibly related task${count === 1 ? '' : 's'} for "${query}".`;
-    }
-    else {
+    } else {
       this.assistantMessage = `Here are the closest matches I could find for "${query}".`;
     }
 
@@ -204,57 +193,52 @@ export class HomeComponent {
   // FILTERED QUERIES
   // =========================
   loadTodayTasks() {
-
     this.resultsTitle = 'Tasks Due Today';
 
     this.executeQuery(
       this.assistantService.getTasksForToday(),
       'today',
-      count => `You have ${count} task${count === 1 ? '' : 's'} due today.`
+      (count) => `You have ${count} task${count === 1 ? '' : 's'} due today.`,
     );
   }
 
   getThisWeekTasks() {
-
     this.resultsTitle = 'Tasks Due This Week';
 
     this.executeQuery(
       this.assistantService.getTasksForThisWeek(),
       'this week',
-      count => `You have ${count} task${count === 1 ? '' : 's'} for this week.`
+      (count) => `You have ${count} task${count === 1 ? '' : 's'} for this week.`,
     );
   }
 
   getOverdueTasks() {
-
     this.resultsTitle = 'Overdue Tasks';
 
     this.executeQuery(
       this.assistantService.getOverdueTasks(),
       'overdue',
-      count => `You have ${count} overdue task${count === 1 ? '' : 's'}.`
+      (count) => `You have ${count} overdue task${count === 1 ? '' : 's'}.`,
     );
   }
 
   getNextWorkTasks() {
-
     this.resultsTitle = 'Recommended Tasks';
 
     this.executeQuery(
       this.assistantService.getNextWorkTasks(),
       'next work',
-      count => `You have ${count} task${count === 1 ? '' : 's'} ready to work on.`
+      (count) => `You have ${count} task${count === 1 ? '' : 's'} ready to work on.`,
     );
   }
 
   getHighPriorityTasks() {
-
     this.resultsTitle = 'High Priority Tasks';
 
     this.executeQuery(
       this.assistantService.getHighPriorityTasks(),
       'high priority',
-      count => `You have ${count} high priority task${count === 1 ? '' : 's'}.`
+      (count) => `You have ${count} high priority task${count === 1 ? '' : 's'}.`,
     );
   }
 
@@ -264,16 +248,14 @@ export class HomeComponent {
   executeQuery(
     request: Observable<TodoResponse>,
     queryType: HomeQuery['type'],
-    successMessage: (count: number) => string
+    successMessage: (count: number) => string,
   ): void {
-
     this.loading = true;
 
     this.currentQuery = { type: queryType };
 
     request.subscribe({
-      next: response => {
-
+      next: (response) => {
         this.tasks = response.items;
 
         // IMPORTANT: filtered view still uses semantic structure
@@ -296,7 +278,7 @@ export class HomeComponent {
       error: () => {
         this.loading = false;
         this.hasSearched = true;
-      }
+      },
     });
   }
 
@@ -308,9 +290,7 @@ export class HomeComponent {
   }
 
   refreshCurrentView() {
-
     switch (this.currentQuery.type) {
-
       case 'today':
         this.loadTodayTasks();
         break;
@@ -332,7 +312,6 @@ export class HomeComponent {
   }
 
   get greeting(): string {
-
     const hour = new Date().getHours();
 
     if (hour < 12) return 'Good morning';
@@ -340,29 +319,27 @@ export class HomeComponent {
     return 'Good evening';
   }
 
-  openTodo(todo: TodoItem, matchType: TodoWorkspaceMatchType = 'normal', navigation: TodoItem[] = []): void {
+  openTodo(
+    todo: TodoItem,
+    matchType: TodoWorkspaceMatchType = 'normal',
+    navigation: TodoItem[] = [],
+  ): void {
+    const dialogRef = this.dialog.open(TodoWorkspaceDialogComponent, {
+      width: '90vw',
+      maxWidth: '1400px',
+      height: 'auto',
+      maxHeight: '90vh',
+      data: {
+        todo: todo,
+        isEdit: true,
+        origin: 'search',
+        matchType: matchType,
+        navigation: navigation,
+      },
+    });
 
-    const dialogRef = this.dialog.open(
-      TodoWorkspaceDialogComponent,
-      {
-        width: '90vw',
-        maxWidth: '1400px',
-        height: 'auto',
-        maxHeight: '90vh',
-        data: {
-          todo: todo,
-          isEdit: true,
-          origin: 'search',
-          matchType: matchType,
-          navigation: navigation
-        }
-      }
-    );
-
-    dialogRef.afterClosed().subscribe(refresh => {
-      if (refresh) {
+    dialogRef.afterClosed().subscribe((refresh) => {
         this.refreshCurrentView();
-      }
     });
   }
 }

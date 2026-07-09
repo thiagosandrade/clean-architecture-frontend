@@ -1,114 +1,75 @@
-<h2 mat-dialog-title>
-    Create Todo with AI
-</h2>
+<h2 mat-dialog-title>Create Todo with AI</h2>
 
 <mat-dialog-content>
+  <div class="dialog-body">
+    <div class="preview-layout">
+      <!-- LEFT -->
+      <div class="input-panel">
+        <h3>Your Request</h3>
 
-    <div class="dialog-body">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Describe your task</mat-label>
 
-        <div class="preview-layout">
+          <textarea
+            matInput
+            rows="10"
+            class="request-textarea"
+            [formControl]="form.controls.text"
+          ></textarea>
+        </mat-form-field>
+      </div>
 
-            <!-- LEFT -->
-            <div class="input-panel">
+      <!-- CENTER -->
+      <div class="generate-panel">
+        <button
+          mat-fab
+          color="primary"
+          matTooltip="Generate todo"
+          (click)="generate()"
+          [disabled]="form.invalid || isGenerating"
+        >
+          @if (isGenerating) {
+            <mat-icon class="spin">sync</mat-icon>
+          } @else {
+            <mat-icon>arrow_forward</mat-icon>
+          }
+        </button>
+      </div>
 
-                <h3>Your Request</h3>
+      <!-- RIGHT -->
+      <div class="result-panel">
+        @if (result) {
+          <div class="result-row">
+            <label>Description:</label>
+            <span>{{ result.description }}</span>
+          </div>
 
-                <mat-form-field appearance="outline" class="full-width">
+          <div class="result-row">
+            <label>Priority:</label>
+            <span>{{ result.priority }}</span>
+          </div>
 
-                    <mat-label>
-                        Describe your task
-                    </mat-label>
+          <div class="result-row">
+            <label>Due Date:</label>
+            <span>{{ result.dueDate | date: 'mediumDate' }}</span>
+          </div>
 
-                    <textarea matInput rows="10" class="request-textarea" [formControl]="form.controls.text"></textarea>
-
-                </mat-form-field>
-
-            </div>
-
-            <!-- CENTER -->
-            <div class="generate-panel">
-
-                <button mat-fab color="primary" matTooltip="Generate todo" (click)="generate()"
-                    [disabled]="form.invalid || isGenerating">
-
-
-                    @if(isGenerating)
-                    {
-
-                    <mat-icon class="spin">
-                        sync
-                    </mat-icon>
-
-                    }
-                    @else
-                    {
-
-                    <mat-icon>
-                        arrow_forward
-                    </mat-icon>
-
-                    }
-
-
-                </button>
-
-            </div>
-
-            <!-- RIGHT -->
-            <div class="result-panel">
-
-                @if(result)
-                {
-
-                <div class="result-row">
-                    <label>Description:</label>
-                    <span>{{ result.description }}</span>
-                </div>
-
-                <div class="result-row">
-                    <label>Priority:</label>
-                    <span>{{ result.priority }}</span>
-                </div>
-
-                <div class="result-row">
-                    <label>Due Date:</label>
-                    <span>{{ result.dueDate | date:'mediumDate' }}</span>
-                </div>
-
-                <div class="result-row">
-                    <label>Labels:</label>
-                    <span>{{ result.labels.join(', ') }}</span>
-                </div>
-
-                }
-                @else
-                {
-
-                <div class="empty-state">
-                    Click Generate to preview the todo.
-                </div>
-
-                }
-            </div>
-
-        </div>
-
+          <div class="result-row">
+            <label>Labels:</label>
+            <span>{{ result.labels.join(', ') }}</span>
+          </div>
+        } @else {
+          <div class="empty-state">Click Generate to preview the todo.</div>
+        }
+      </div>
     </div>
-
+  </div>
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">
+  <button mat-button (click)="cancel()">Cancel</button>
 
-    <button mat-button (click)="cancel()">
-
-        Cancel
-
-    </button>
-
-    <button mat-flat-button color="primary" [disabled]="!result" (click)="confirm()">
-
-        Create Todo
-
-    </button>
-
+  <button mat-flat-button color="primary" [disabled]="!result" (click)="confirm()">
+    Create Todo
+  </button>
 </mat-dialog-actions>

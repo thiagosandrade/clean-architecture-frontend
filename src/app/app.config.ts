@@ -9,21 +9,11 @@ import { loadingInterceptor } from './core/interceptors/loading.interceptor';
 import { routes } from './app.routes';
 
 export const appConfig = {
-
   providers: [
-
     provideRouter(routes),
 
-    provideHttpClient(
-      withInterceptors([
-        jwtInterceptor,
-        errorInterceptor,
-        loadingInterceptor
-      ])
-    ),
+    provideHttpClient(withInterceptors([jwtInterceptor, errorInterceptor, loadingInterceptor])),
 
-    provideNativeDateAdapter()
-
+    provideNativeDateAdapter(),
   ],
-
 };

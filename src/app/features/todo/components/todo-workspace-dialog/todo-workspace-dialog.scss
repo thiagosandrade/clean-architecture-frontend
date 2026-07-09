@@ -1,11 +1,14 @@
 .workspace-header {
+  padding-top: 20px;
+  padding-right: 20px;
+  padding-left: 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+}
 
-    padding-top: 20px;
-    padding-right: 20px;
-    padding-left: 20px;
-    padding-bottom: 12px;
-    border-bottom: 1px solid rgba(0,0,0,.12);
-
+.workspace-content.disabled {
+  pointer-events: none;
+  opacity: 0.6;
 }
 
 /* =========================
@@ -13,170 +16,135 @@
 ========================= */
 
 .header-top {
+  display: grid;
 
-    display: grid;
+  grid-template-columns: auto 1fr auto;
 
-    grid-template-columns: auto 1fr auto;
+  align-items: center;
 
-    align-items: center;
-
-    padding-bottom: 12px;
-
+  padding-bottom: 12px;
 }
 
 /* left area */
 .context {
-    justify-self: start;
+  justify-self: start;
 }
-
 
 /* =========================
    Navigation
 ========================= */
 .navigation {
+  display: flex;
 
-    display: flex;
+  justify-content: center;
 
-    justify-content: center;
+  align-items: center;
 
-    align-items: center;
-
-    gap: 8px;
-
+  gap: 8px;
 }
-
 
 /* =========================
    Title row
 ========================= */
 .workspace-title {
+  margin: 0;
 
-    margin: 0;
+  font-size: 1.4rem;
 
-    font-size: 1.4rem;
-
-    font-weight: 600;
-
+  font-weight: 600;
 }
-
 
 /* close button */
 .workspace-header > button:last-child {
-    justify-self: end;
+  justify-self: end;
 }
 
 .workspace-header > * {
-    min-width: 0;
+  min-width: 0;
 }
 
 /* title/status second row */
 .workspace-title-container {
+  grid-column: 1 / -1;
 
-    grid-column: 1 / -1;
-
-    text-align: center;
-
+  text-align: center;
 }
 
 /* =========================
    Status
 ========================= */
 .workspace-status {
+  margin-top: 4px;
 
-    margin-top: 4px;
+  font-size: 0.85rem;
 
-    font-size: .85rem;
-
-    font-weight: 500;
-
+  font-weight: 500;
 }
-
 
 /* =========================
    Status colors
 ========================= */
 
 .saved {
-
-    color: #2e7d32;
-
+  color: #2e7d32;
 }
-
 
 .dirty {
-
-    color: #ef6c00;
-
+  color: #ef6c00;
 }
-
 
 .saving {
-
-    color: #1565c0;
-
+  color: #1565c0;
 }
-
 
 /* =========================
    Workspace content
 ========================= */
 
 .workspace {
-    position: relative;
-    padding: 0 20px 20px;
+  position: relative;
+  padding: 0 20px 20px;
 }
-
 
 .workspace-content {
+  display: grid;
 
-    display: grid;
+  grid-template-columns: 1fr 1.5fr;
 
-    grid-template-columns: 1fr 1.5fr;
+  gap: 24px;
 
-    gap: 24px;
-
-    min-height: 600px;
-
-    transition:
-        opacity .2s ease,
-        transform .2s ease;
-
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease;
 }
-
 
 .workspace-content.switching {
+  opacity: 0.35;
 
-    opacity: .35;
+  transform: translateY(4px);
 
-    transform: translateY(4px);
-
-    pointer-events: none;
-
+  pointer-events: none;
 }
-
-
 
 .task-loading {
+  position: absolute;
 
-    position: absolute;
+  inset: 0;
 
-    inset: 0;
+  z-index: 10;
 
-    z-index: 10;
+  display: flex;
 
-    display: flex;
+  flex-direction: column;
 
-    flex-direction: column;
+  justify-content: center;
 
-    justify-content: center;
+  align-items: center;
 
-    align-items: center;
+  gap: 12px;
 
-    gap: 12px;
-
-    background: rgba(255,255,255,.75);
+  background: rgba(255, 255, 255, 0.75);
 }
-
 
 /* =========================
    Panels
@@ -184,80 +152,58 @@
 
 .left,
 .right {
+  display: flex;
 
-    display: flex;
+  flex-direction: column;
 
-    flex-direction: column;
+  gap: 16px;
 
-    gap: 16px;
+  min-width: 0;
 
-    min-width: 0;
-
-    min-height: 0;
-
+  min-height: 0;
 }
-
 
 .left {
-
-    padding-right: 8px;
-
+  padding-right: 8px;
 }
-
 
 .right {
-
-    padding-right: 8px;
-
+  padding-right: 8px;
 }
-
 
 /* =========================
    Extra badges
 ========================= */
 
 .match-badge {
+  padding: 4px 10px;
 
-    padding: 4px 10px;
+  border-radius: 14px;
 
-    border-radius: 14px;
+  background: var(--mat-sys-secondary-container);
 
-    background: var(--mat-sys-secondary-container);
-
-    font-size: .75rem;
-
+  font-size: 0.75rem;
 }
-
 
 /* =========================
    Responsive
 ========================= */
 
 @media (max-width: 900px) {
+  .workspace-content {
+    grid-template-columns: 1fr;
+  }
 
-    .workspace-content {
+  .header-actions {
+    flex-direction: column;
 
-        grid-template-columns: 1fr;
+    align-items: stretch;
 
-    }
+    gap: 8px;
+  }
 
-
-    .header-actions {
-
-        flex-direction: column;
-
-        align-items: stretch;
-
-        gap: 8px;
-
-    }
-
-
-    .header-left,
-    .header-right {
-
-        justify-content: space-between;
-
-    }
-
+  .header-left,
+  .header-right {
+    justify-content: space-between;
+  }
 }

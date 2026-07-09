@@ -1,142 +1,110 @@
-import { Injectable } from "@angular/core";
-import { Priority } from "../../../core/enums/priority.enum";
-import { TodoService } from "../../todo/services/todo.service";
+import { Injectable } from '@angular/core';
+import { Priority } from '../../../core/enums/priority.enum';
+import { TodoService } from '../../todo/services/todo.service';
 
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root',
 })
 export class AssistantService {
+  private readonly page = 1;
+  private readonly size = 20;
 
-    private readonly page = 1;
-    private readonly size = 20;
+  constructor(private todoService: TodoService) {}
 
-    constructor(
-        private todoService: TodoService
-    ) { }
+  private getToday(): string {
+    return new Date().toISOString().split('T')[0];
+  }
 
-    private getToday(): string {
+  private getTomorrow(): string {
+    const tomorrow = new Date();
 
-        return new Date()
-            .toISOString()
-            .split('T')[0];
+    tomorrow.setDate(tomorrow.getDate() + 1);
 
-    }
+    return tomorrow.toISOString().split('T')[0];
+  }
 
-    private getTomorrow(): string {
+  private getThisWeek(): { start: string; end: string } {
+    const today = new Date();
+    const startOfWeek = new Date(today);
+    startOfWeek.setDate(today.getDate() - today.getDay());
+    startOfWeek.setHours(0, 0, 0, 0);
 
-        const tomorrow = new Date();
+    const endOfWeek = new Date(startOfWeek);
+    endOfWeek.setDate(startOfWeek.getDate() + 6);
+    endOfWeek.setHours(23, 59, 59, 999);
 
-        tomorrow.setDate(
-            tomorrow.getDate() + 1
-        );
+    return {
+      start: startOfWeek.toISOString().split('T')[0],
+      end: endOfWeek.toISOString().split('T')[0],
+    };
+  }
 
-        return tomorrow
-            .toISOString()
-            .split('T')[0];
+  getTasksForToday() {
+    return this.todoService.getAll(
+      this.page,
+      this.size,
+      'dueDate',
+      false,
+      undefined,
+      this.getToday(),
+      this.getTomorrow(),
+      false,
+    );
+  }
 
-    }
-    
-    private getThisWeek(): { start: string; end: string } {
+  getTasksForThisWeek() {
+    return this.todoService.getAll(
+      this.page,
+      this.size,
+      'dueDate',
+      false,
+      undefined,
+      this.getThisWeek().start,
+      this.getThisWeek().end,
+      false,
+    );
+  }
 
-        const today = new Date();
-        const startOfWeek = new Date(today);
-        startOfWeek.setDate(today.getDate() - today.getDay());
-        startOfWeek.setHours(0, 0, 0, 0);
+  getHighPriorityTasks() {
+    return this.todoService.getAll(
+      this.page,
+      this.size,
+      'priority',
+      true,
+      Priority.High,
+      undefined,
+      undefined,
+      false,
+    );
+  }
 
-        const endOfWeek = new Date(startOfWeek);
-        endOfWeek.setDate(startOfWeek.getDate() + 6);
-        endOfWeek.setHours(23, 59, 59, 999);
+  getNextWorkTasks() {
+    return this.todoService.getAll(
+      this.page,
+      this.size,
+      'dueDate',
+      false,
+      undefined,
+      undefined,
+      undefined,
+      false,
+    );
+  }
 
-        return {
-            start: startOfWeek.toISOString().split('T')[0],
-            end: endOfWeek.toISOString().split('T')[0]
-        };
+  getOverdueTasks() {
+    return this.todoService.getAll(
+      this.page,
+      this.size,
+      'dueDate',
+      false,
+      undefined,
+      undefined,
+      this.getToday(),
+      false,
+    );
+  }
 
-    }
-
-    getTasksForToday() {
-
-        return this.todoService.getAll(
-            this.page,
-            this.size,
-            'dueDate',
-            false,
-            undefined,
-            this.getToday(),
-            this.getTomorrow(),
-            false
-        );
-
-    }
-
-    getTasksForThisWeek() {
-
-        return this.todoService.getAll(
-            this.page,
-            this.size,
-            'dueDate',
-            false,
-            undefined,
-            this.getThisWeek().start,
-            this.getThisWeek().end,
-            false
-        );
-
-    }
-
-    getHighPriorityTasks() {
-
-        return this.todoService.getAll(
-            this.page,
-            this.size,
-            'priority',
-            true,
-            Priority.High,
-            undefined,
-            undefined,
-            false
-        );
-
-    }
-
-    getNextWorkTasks() {
-
-        return this.todoService.getAll(
-            this.page,
-            this.size,
-            'dueDate',
-            false,
-            undefined,
-            undefined,
-            undefined,
-            false
-        );
-
-    }
-
-    getOverdueTasks() {
-
-        return this.todoService.getAll(
-            this.page,
-            this.size,
-            'dueDate',
-            false,
-            undefined,
-            undefined,
-            this.getToday(),
-            false
-        );
-
-    }
-
-    search(query: string) {
-
-        return this.todoService.searchTodos(
-            query,
-            1,
-            20
-        );
-
-    }
-
+  search(query: string) {
+    return this.todoService.searchTodos(query, 1, 20);
+  }
 }

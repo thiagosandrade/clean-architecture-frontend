@@ -1,5 +1,4 @@
 export function formatPriority(value: unknown): string {
-
   const priority = value as number;
 
   switch (priority) {

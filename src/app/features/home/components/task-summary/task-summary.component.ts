@@ -8,15 +8,11 @@ import { TodoWorkspaceMatchType } from '../../../todo/models/todo-workspace-data
 @Component({
   selector: 'app-task-summary',
   standalone: true,
-  imports: [
-    CommonModule,
-    TaskSummaryCardComponent
-  ],
+  imports: [CommonModule, TaskSummaryCardComponent],
   templateUrl: './task-summary.component.html',
-  styleUrls: ['./task-summary.component.scss']
+  styleUrls: ['./task-summary.component.scss'],
 })
 export class TaskSummaryComponent {
-
   @Input()
   tasks: TodoItem[] = [];
 
@@ -25,5 +21,4 @@ export class TaskSummaryComponent {
 
   @Output()
   view = new EventEmitter<TodoItem>();
-
 }

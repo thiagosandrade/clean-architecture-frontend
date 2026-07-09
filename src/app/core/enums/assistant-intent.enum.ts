@@ -1,11 +1,9 @@
 export enum AssistantIntent {
-
-    Today,
-    ThisWeek,
-    HighPriority,
-    NextWork,
-    Overdue,
-    PlanDay,
-    SemanticSearch
-
+  Today,
+  ThisWeek,
+  HighPriority,
+  NextWork,
+  Overdue,
+  PlanDay,
+  SemanticSearch,
 }

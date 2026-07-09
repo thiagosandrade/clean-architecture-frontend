@@ -7,7 +7,6 @@
 }
 
 .content {
-
   display: flex;
 
   flex-direction: column;
@@ -15,57 +14,43 @@
   gap: 12px;
 
   min-width: 450px;
-
 }
-
 
 /* =========================
    Form Fields
 ========================= */
 
 mat-form-field {
-
   width: 100%;
-
 }
-
 
 /* =========================
    Compact Material Fields
 ========================= */
 
 :host ::ng-deep .mat-mdc-form-field-subscript-wrapper {
-
   display: none;
-
 }
 
 :host ::ng-deep .mat-mdc-text-field-wrapper {
-
   padding-top: 0;
 
   padding-bottom: 0;
-
 }
-
 
 /* =========================
    Textarea
 ========================= */
 
 textarea {
-
   resize: vertical;
-
 }
-
 
 /* =========================
    Actions
 ========================= */
 
 .actions {
-
   display: flex;
 
   justify-content: flex-end;

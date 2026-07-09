@@ -1,9 +1,7 @@
-import { AssistantIntent } from "../../../core/enums/assistant-intent.enum";
+import { AssistantIntent } from '../../../core/enums/assistant-intent.enum';
 
 export interface AssistantIntentResult {
+  intent: AssistantIntent;
 
-    intent: AssistantIntent;
-
-    query?: string;
-
+  query?: string;
 }
