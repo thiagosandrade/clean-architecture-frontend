@@ -10,8 +10,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 
 import { MatIconModule } from '@angular/material/icon';
-import { ParsedTodo } from '../../models/parsed-todo-response.model';
-import { TodoService } from '../../services/todo.service';
+import { TodoService } from '../../../services/todo.service';
+import { ParsedTodo } from '../../../models/parsed-todo-response.model';
 
 @Component({
   selector: 'app-parse-todo-dialog',

@@ -1,0 +1,157 @@
+<h2 mat-dialog-title>
+  Rewrite Task
+</h2>
+
+<mat-dialog-content>
+
+  @if (!rewritten()) {
+
+    <div class="rewrite-form">
+
+      <p class="description">
+        Choose how you would like AI to rewrite this task.
+      </p>
+
+      <mat-form-field appearance="outline" class="full-width">
+
+        <mat-label>Rewrite Style</mat-label>
+
+        <mat-select [(ngModel)]="selectedStyle">
+
+          @for (style of styles; track style.value) {
+
+            <mat-option [value]="style.value">
+
+              {{ style.label }}
+
+            </mat-option>
+
+          }
+
+        </mat-select>
+
+      </mat-form-field>
+
+      <div class="original">
+
+        <label>Current Description</label>
+
+        <div class="preview">
+
+          {{ todo.description }}
+
+        </div>
+
+      </div>
+
+    </div>
+
+  }
+  @else {
+
+    <div class="rewrite-preview">
+
+      <div class="section">
+
+        <label>Current Description</label>
+
+        <div class="preview current">
+
+          {{ todo.description }}
+
+        </div>
+
+      </div>
+
+      <div class="section">
+
+        <label>AI Suggestion</label>
+
+        <div class="preview suggestion">
+
+          {{ rewritten() }}
+
+        </div>
+
+      </div>
+
+    </div>
+
+  }
+
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+
+  @if (!rewritten()) {
+
+    <button
+      mat-button
+      (click)="cancel()"
+      [disabled]="loading()">
+
+      Cancel
+
+    </button>
+
+    <button
+      mat-flat-button
+      color="primary"
+      (click)="rewrite()"
+      [disabled]="loading()">
+
+      @if (loading()) {
+
+        <mat-spinner diameter="18"></mat-spinner>
+
+      }
+      @else {
+
+        Rewrite
+
+      }
+
+    </button>
+
+  }
+  @else {
+
+    <button
+      mat-button
+      (click)="cancel()">
+
+      Cancel
+
+    </button>
+
+    <button
+      mat-stroked-button
+      color="primary"
+      (click)="rewriteAgain()"
+      [disabled]="loading()">
+
+      @if (loading()) {
+
+        <mat-spinner diameter="18"></mat-spinner>
+
+      }
+      @else {
+
+        Rewrite Again
+
+      }
+
+    </button>
+
+    <button
+      mat-flat-button
+      color="primary"
+      (click)="accept()">
+
+      Accept
+
+    </button>
+
+  }
+
+</mat-dialog-actions>

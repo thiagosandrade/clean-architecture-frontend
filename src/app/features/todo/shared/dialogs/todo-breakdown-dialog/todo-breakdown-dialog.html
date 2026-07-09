@@ -1,0 +1,232 @@
+<h2 mat-dialog-title>
+  Breakdown task
+</h2>
+
+<mat-dialog-content>
+
+  @if (!previewMode()) {
+
+  <form [formGroup]="form" class="options-form">
+
+    <p class="task">
+      {{ data.description }}
+    </p>
+
+    <div class="options-grid">
+
+      <div class="options-group">
+
+        <h3>Complexity</h3>
+
+        <mat-radio-group formControlName="complexity" class="options-group">
+
+          <mat-radio-button [value]="Complexity.Simple">
+            <div class="option">
+              <strong>Simple</strong>
+              <small>3–5 subtasks</small>
+            </div>
+          </mat-radio-button>
+
+          <mat-radio-button [value]="Complexity.Standard">
+            <div class="option">
+              <strong>Standard</strong>
+              <small>5–8 subtasks</small>
+            </div>
+          </mat-radio-button>
+
+          <mat-radio-button [value]="Complexity.Detailed">
+            <div class="option">
+              <strong>Detailed</strong>
+              <small>8–15 subtasks</small>
+            </div>
+          </mat-radio-button>
+
+        </mat-radio-group>
+      </div>
+
+      <div class="options-group">
+
+        <h3>Strategy</h3>
+
+        <mat-radio-group formControlName="strategy" class="options-group">
+
+          <mat-radio-button [value]="Strategy.Sequential">
+            Sequential
+          </mat-radio-button>
+
+          <mat-radio-button [value]="Strategy.Category">
+            By category
+          </mat-radio-button>
+
+          <mat-radio-button [value]="Strategy.Deliverables">
+            Deliverables
+          </mat-radio-button>
+
+          <mat-radio-button [value]="Strategy.Checklist">
+            Checklist
+          </mat-radio-button>
+
+        </mat-radio-group>
+      </div>
+    </div>
+  </form>
+
+  }
+
+  @else {
+
+  <div class="preview">
+
+    <div class="preview-header">
+
+      <h3>
+        Generated subtasks
+      </h3>
+
+      <div class="preview-actions">
+
+        <button mat-stroked-button color="primary" (click)="generate()" [disabled]="generating()">
+
+          @if(generating()){
+
+          <mat-spinner diameter="18"></mat-spinner>
+
+          }
+          @else{
+
+          Regenerate
+
+          }
+
+        </button>
+
+        <button mat-stroked-button color="primary" (click)="add()">
+
+          <mat-icon>add</mat-icon>
+
+          Add
+
+        </button>
+
+      </div>
+
+    </div>
+
+    <table class="subtasks">
+
+      <thead>
+
+        <tr>
+
+          <th class="order-column">
+            Order
+          </th>
+
+          <th>
+            Description
+          </th>
+
+          <th class="action-column"></th>
+
+        </tr>
+
+      </thead>
+
+      <tbody>
+
+        <tr *ngFor="let item of generatedSubtasks(); let i = index">
+
+          <td class="order-column order-cell">
+
+            <button mat-icon-button (click)="moveUp(i)" [disabled]="i === 0">
+
+              <mat-icon>
+                keyboard_arrow_up
+              </mat-icon>
+
+            </button>
+
+            <button mat-icon-button (click)="moveDown(i)" [disabled]="i === generatedSubtasks().length - 1">
+
+              <mat-icon>
+                keyboard_arrow_down
+              </mat-icon>
+
+            </button>
+
+          </td>
+
+          <td>
+
+            <input class="description-input" [class.invalid]="!item.description.trim()" [value]="item.description"
+              (input)="updateDescription(i, $any($event.target).value)" />
+
+          </td>
+
+          <td class="action-column">
+
+            <button mat-icon-button color="warn" (click)="remove(i)">
+
+              <mat-icon>
+                delete
+              </mat-icon>
+
+            </button>
+
+          </td>
+
+        </tr>
+
+      </tbody>
+
+    </table>
+
+    <div class="empty" *ngIf="generatedSubtasks().length === 0">
+
+      No subtasks generated.
+
+    </div>
+
+  </div>
+
+  }
+
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+
+  <button mat-button (click)="cancel()">
+
+    Cancel
+
+  </button>
+
+  @if (!previewMode()) {
+
+  <button mat-flat-button color="primary" (click)="generate()" [disabled]="generating()">
+
+    @if (generating()) {
+
+    <mat-spinner diameter="18"></mat-spinner>
+
+    }
+    @else {
+
+    Generate
+
+    }
+
+  </button>
+
+  }
+  @else {
+
+  <button mat-flat-button color="primary" (click)="confirm()">
+
+    Confirm
+
+  </button>
+
+  }
+
+</mat-dialog-actions>

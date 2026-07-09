@@ -19,11 +19,14 @@ import { MatIcon } from '@angular/material/icon';
 import { firstValueFrom } from 'rxjs';
 
 import { DATE_FORMATS } from '../../../../core/constants/date.constants';
-import { TodoItem } from '../../models/todo.model';
+import { TaskItem } from '../../models/todo.model';
 import { TodoService } from '../../services/todo.service';
 import { SnackbarService } from '../../../../core/services/snackbar.service';
 import { WorkspaceStatus } from '../../../../core/enums/workspace-status.enum';
 import { MachineState } from '../../../../core/enums/machine-state.enum';
+import { TodoBreakdownDialogComponent } from '../../shared/dialogs/todo-breakdown-dialog/todo-breakdown-dialog';
+import { MatDialog } from '@angular/material/dialog';
+import { formatPriority } from '../../../../core/utils/priority-format.utils';
 
 @Component({
   selector: 'app-todo-details',
@@ -44,8 +47,10 @@ export class TodoDetailsComponent implements OnChanges {
 
   private snack = inject(SnackbarService);
 
+  private dialog = inject(MatDialog);
+
   @Input({ required: true })
-  todo!: TodoItem;
+  todo!: TaskItem;
 
   @Output()
   refreshRequested = new EventEmitter<void>();
@@ -53,30 +58,59 @@ export class TodoDetailsComponent implements OnChanges {
   @Output()
   statusChanged = new EventEmitter<WorkspaceStatus>();
 
+  @Output()
+  subtasksChanged = new EventEmitter<TaskItem['subtasks']>();
+
   state = signal(MachineState.Loading);
 
   canSave = false;
 
-  originalSubItems: TodoItem['subItems'] = [];
+  originalSubItems: TaskItem['subtasks'] = [];
 
   readonly DATE_FORMATS = DATE_FORMATS;
 
   readonly DetailsState = MachineState;
 
+  readonly generatedCount = signal(0);
+
+  private currentTodoId?: string;
+
   ngOnChanges(changes: SimpleChanges): void {
+
     if (!changes['todo'] || !this.todo) {
       return;
     }
 
+    const isNewTodo =
+      this.currentTodoId !== this.todo.id;
+
+
+    if (!isNewTodo) {
+      return;
+    }
+
+
+    this.currentTodoId = this.todo.id;
+
+
     this.setState(MachineState.Loading);
 
-    this.originalSubItems = structuredClone(this.todo.subItems ?? []);
+
+    this.originalSubItems =
+      structuredClone(this.todo.subtasks ?? []);
+
 
     this.canSave = false;
 
+
     this.setState(MachineState.Ready);
+
   }
 
+  get priorityLabel(): string {
+    return formatPriority(this.todo.priority);
+  }
+  
   isLoading(): boolean {
     return this.state() === MachineState.Loading;
   }
@@ -98,7 +132,7 @@ export class TodoDetailsComponent implements OnChanges {
   }
 
   hasChanges(): boolean {
-    return JSON.stringify(this.todo?.subItems) !== JSON.stringify(this.originalSubItems);
+    return JSON.stringify(this.todo?.subtasks) !== JSON.stringify(this.originalSubItems);
   }
 
   moveUp(index: number): void {
@@ -106,7 +140,7 @@ export class TodoDetailsComponent implements OnChanges {
       return;
     }
 
-    const items = this.todo.subItems;
+    const items = this.todo.subtasks;
 
     [items[index], items[index - 1]] = [items[index - 1], items[index]];
 
@@ -120,7 +154,7 @@ export class TodoDetailsComponent implements OnChanges {
       return;
     }
 
-    const items = this.todo.subItems;
+    const items = this.todo.subtasks;
 
     if (index >= items.length - 1) {
       return;
@@ -133,13 +167,13 @@ export class TodoDetailsComponent implements OnChanges {
     this.updateState();
   }
 
-  toggleCompleted(subtask: TodoItem['subItems'][number]): void {
+  toggleCompleted(subtask: TaskItem['subtasks'][number]): void {
     subtask.isCompleted = !subtask.isCompleted;
 
     this.updateState();
   }
 
-  updateDescription(subtask: TodoItem['subItems'][number], value: string): void {
+  updateDescription(subtask: TaskItem['subtasks'][number], value: string): void {
     subtask.description = value;
 
     this.updateState();
@@ -153,13 +187,15 @@ export class TodoDetailsComponent implements OnChanges {
     this.setState(MachineState.Saving);
 
     try {
-      await firstValueFrom(this.service.saveSubItems(this.todo.id, this.todo.subItems));
+      await firstValueFrom(this.service.saveSubItems(this.todo.id, this.todo.subtasks));
 
-      this.originalSubItems = structuredClone(this.todo.subItems);
+      this.originalSubItems = structuredClone(this.todo.subtasks);
 
       this.canSave = false;
 
       this.setState(MachineState.Saved);
+
+      this.refreshRequested.emit();
 
       this.snack.success('Subtask updated');
 
@@ -173,8 +209,18 @@ export class TodoDetailsComponent implements OnChanges {
       return;
     }
 
-    this.todo.subItems.push(this.createEmptySubtask());
+    const newSubtask = this.createEmptySubtask();
 
+    this.todo = {
+      ...this.todo,
+      subtasks: [
+        ...this.todo.subtasks,
+        newSubtask
+      ]
+    };
+
+    this.recalculateOrder();
+    
     this.updateState();
   }
 
@@ -183,7 +229,7 @@ export class TodoDetailsComponent implements OnChanges {
       return;
     }
 
-    this.todo.subItems.splice(index, 1);
+    this.todo.subtasks.splice(index, 1);
 
     this.recalculateOrder();
 
@@ -191,44 +237,57 @@ export class TodoDetailsComponent implements OnChanges {
   }
 
   hasInvalidSubtasks(): boolean {
-    return !!this.todo?.subItems.some((x) => !x.description.trim());
+    return !!this.todo?.subtasks.some((x) => !x.description.trim());
   }
 
-  async breakDown(): Promise<void> {
-    if (!this.todo) {
-      return;
-    }
+  openBreakdown(): void {
 
-    this.setState(MachineState.BreakingDown);
+    const ref = this.dialog.open(
+      TodoBreakdownDialogComponent,
+      {
+        width: '650px',
+        data: {
+          todoId: this.todo.id,
+          description: this.todo.description
+        }
+      }
+    );
 
-    try {
-      await firstValueFrom(this.service.breakdown(this.todo.id));
+    ref.afterClosed()
+      .subscribe(result => {
 
-      this.refreshRequested.emit();
+        if (!result) {
+          return;
+        }
 
-      this.snack.success('Subtasks generated');
-    } catch {
-      this.setState(MachineState.Ready);
-    }
-  }
+        this.todo = {
+          ...this.todo,
+          subtasks: result.subtasks
+        };
 
-  hasSubtasks(): boolean {
-    return (this.todo?.subItems.length ?? 0) > 0;
+        this.recalculateOrder();
+
+        this.updateState();
+
+        this.subtasksChanged.emit(result.subtasks);
+
+      });
+
   }
 
   private recalculateOrder(): void {
-    this.todo!.subItems.forEach((x, i) => {
+    this.todo!.subtasks.forEach((x, i) => {
       x.order = i + 1;
     });
   }
 
-  private createEmptySubtask(): TodoItem['subItems'][number] {
+  private createEmptySubtask(): TaskItem['subtasks'][number] {
     return {
       id: '00000000-0000-0000-0000-000000000000',
 
       todoItemId: this.todo!.id,
 
-      order: this.todo!.subItems.length + 1,
+      order: this.todo!.subtasks.length + 1,
 
       description: '',
 

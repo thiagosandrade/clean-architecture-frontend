@@ -21,6 +21,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatSelectModule } from '@angular/material/select';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatDialog } from '@angular/material/dialog';
 
 import { firstValueFrom } from 'rxjs';
 
@@ -31,7 +32,9 @@ import { MachineState } from '../../../../core/enums/machine-state.enum';
 import { enumToOptions } from '../../../../core/utils/enum.utils';
 import { SnackbarService } from '../../../../core/services/snackbar.service';
 import { TodoService } from '../../services/todo.service';
-import { TodoItem } from '../../models/todo.model';
+import { TaskItem } from '../../models/todo.model';
+import { MatIconModule } from "@angular/material/icon";
+import { TodoRewriteDialogComponent } from '../../shared/dialogs/todo-rewrite-dialog/todo-rewrite-dialog';
 
 @Component({
   selector: 'app-todo-info',
@@ -46,7 +49,8 @@ import { TodoItem } from '../../models/todo.model';
     MatSelectModule,
     MatDatepickerModule,
     MatProgressSpinnerModule,
-  ],
+    MatIconModule
+],
   templateUrl: './todo-info.html',
   styleUrls: ['./todo-info.scss'],
 })
@@ -57,8 +61,10 @@ export class TodoInfoComponent implements OnInit, OnChanges {
 
   private snack = inject(SnackbarService);
 
+  private dialog = inject(MatDialog);
+
   @Input({ required: true })
-  todo!: TodoItem;
+  todo!: TaskItem;
 
   @Output()
   refreshRequested = new EventEmitter<void>();
@@ -72,6 +78,8 @@ export class TodoInfoComponent implements OnInit, OnChanges {
   readonly state = signal(MachineState.Ready);
 
   readonly priorityOptions = enumToOptions(Priority);
+
+  private originalValue: ReturnType<typeof this.form.getRawValue> | null = null;
 
   form = this.fb.group({
     description: ['', Validators.required],
@@ -93,9 +101,23 @@ export class TodoInfoComponent implements OnInit, OnChanges {
     });
 
     this.form.valueChanges.subscribe(() => {
-      if (this.state() !== MachineState.Saving && this.form.dirty) {
-        this.setState(MachineState.Dirty);
+
+      if (this.state() === MachineState.Loading) {
+        return;
       }
+
+      const changed = this.hasChanges();
+
+      if (!changed) {
+        this.form.markAsPristine();
+      }
+
+      this.setState(
+        changed
+          ? MachineState.Dirty
+          : MachineState.Ready
+      );
+
     });
   }
 
@@ -118,11 +140,12 @@ export class TodoInfoComponent implements OnInit, OnChanges {
 
         isCompleted: this.todo.isCompleted,
       },
-
       {
         emitEvent: false,
       },
     );
+
+    this.originalValue = structuredClone(this.form.getRawValue());
 
     this.form.markAsPristine();
 
@@ -159,15 +182,43 @@ export class TodoInfoComponent implements OnInit, OnChanges {
     try {
       await firstValueFrom(this.service.update(this.todo.id, request));
 
+      this.originalValue =  structuredClone(this.form.getRawValue());
+      
       this.form.markAsPristine();
 
       this.setState(MachineState.Saved);
 
-      this.snack.success('Todo updated');
+      this.refreshRequested.emit();
 
+      this.snack.success('Task updated');
     } catch {
       this.setState(MachineState.Dirty);
     }
+  }
+
+  hasChanges(): boolean {
+    return JSON.stringify(this.form.getRawValue()) !==
+      JSON.stringify(this.originalValue);
+  }
+
+  async rewrite(): Promise<void> {
+    const dialogRef = this.dialog.open(TodoRewriteDialogComponent, {
+      width: '650px',
+      data: {
+        id: this.todo.id,
+        description: this.form.controls.description.value ?? '',
+      },
+    });
+
+    const result = await firstValueFrom(dialogRef.afterClosed());
+
+    if (!result?.description) {
+      return;
+    }
+
+    this.form.controls.description.setValue(result.description);
+
+    this.descriptionChanged.emit(result.description);
   }
 
   isSaving(): boolean {
@@ -180,27 +231,22 @@ export class TodoInfoComponent implements OnInit, OnChanges {
     switch (state) {
       case MachineState.Loading:
         this.statusChanged.emit('none');
-
         break;
 
       case MachineState.Ready:
         this.statusChanged.emit('none');
-
         break;
 
       case MachineState.Dirty:
         this.statusChanged.emit('dirty');
-
         break;
 
       case MachineState.Saving:
         this.statusChanged.emit('saving');
-
         break;
 
       case MachineState.Saved:
         this.statusChanged.emit('saved');
-
         break;
     }
   }

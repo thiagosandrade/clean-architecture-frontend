@@ -3,22 +3,22 @@ import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 
 import { MatButtonModule } from '@angular/material/button';
+import { TodoDetailsComponent } from '../../../components/todo-details/todo-details';
+import { TodoDialogData } from '../../../models/todo-dialog-data';
 
-import { TodoDialogData } from '../../models/todo-dialog-data';
-import { TodoInfoComponent } from '../todo-info/todo-info';
 
 @Component({
-  selector: 'app-todo-info-dialog',
+  selector: 'app-todo-details-dialog',
   standalone: true,
-  imports: [MatDialogModule, MatButtonModule, TodoInfoComponent],
-  templateUrl: './todo-info-dialog.component.html',
-  styleUrls: ['./todo-info-dialog.component.scss'],
+  imports: [MatDialogModule, MatButtonModule, TodoDetailsComponent],
+  templateUrl: './todo-details-dialog.html',
+  styleUrls: ['./todo-details-dialog.scss'],
 })
-export class TodoInfoDialogComponent {
+export class TodoDetailsDialogComponent {
   hasChanges = false;
 
   constructor(
-    private dialogRef: MatDialogRef<TodoInfoDialogComponent>,
+    private dialogRef: MatDialogRef<TodoDetailsDialogComponent>,
 
     @Inject(MAT_DIALOG_DATA)
     public data: TodoDialogData,

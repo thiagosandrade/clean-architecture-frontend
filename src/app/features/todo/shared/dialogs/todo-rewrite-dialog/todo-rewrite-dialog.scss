@@ -1,0 +1,90 @@
+:host {
+  display: block;
+}
+
+mat-dialog-content {
+  width: 100%;
+  max-width: 600px;
+  min-width: 0;
+  overflow-x: hidden;
+  padding-top: 0.5rem;
+  box-sizing: border-box;
+}
+
+.rewrite-preview,
+.rewrite-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  align-items: flex-start;
+}
+
+.description {
+  margin: 0;
+  color: #666;
+  font-size: 14px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.section,
+.original {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.section label,
+.original label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #555;
+}
+
+.preview {
+  padding: 1rem;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  background: #fafafa;
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+.preview.current {
+  background: #f8f9fa;
+}
+
+.preview.suggestion {
+  background: #eef8ff;
+  border-color: #90caf9;
+}
+
+mat-dialog-actions {
+  gap: .75rem;
+  padding: 1rem 1.5rem;
+}
+
+button mat-spinner {
+  margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+
+  mat-dialog-content {
+    min-width: auto;
+    width: 100%;
+  }
+
+  mat-dialog-actions {
+    flex-wrap: wrap;
+  }
+
+  mat-dialog-actions button {
+    flex: 1 1 auto;
+  }
+
+}

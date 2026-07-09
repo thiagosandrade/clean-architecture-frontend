@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { TodoItem } from '../../../todo/models/todo.model';
+import { TaskItem } from '../../../todo/models/todo.model';
 import { Priority } from '../../../../core/enums/priority.enum';
 import { MatCardModule } from '@angular/material/card';
 
@@ -11,7 +11,7 @@ import { MatCardModule } from '@angular/material/card';
 })
 export class OverviewComponent {
   @Input()
-  tasks: TodoItem[] = [];
+  tasks: TaskItem[] = [];
 
   get total() {
     return this.tasks.length;

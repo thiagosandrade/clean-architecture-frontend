@@ -78,6 +78,7 @@
         [todo]="currentTodo()!"
         (refreshRequested)="onRefresh()"
         (statusChanged)="onRightStatusChanged($event)"
+        (subtasksChanged)="onSubtasksChanged($event)">
       ></app-todo-details>
     </section>
   </div>

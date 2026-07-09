@@ -21,16 +21,14 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { firstValueFrom } from 'rxjs';
+import { WorkspaceStatus } from '../../../../../core/enums/workspace-status.enum';
+import { TodoDetailsComponent } from '../../../components/todo-details/todo-details';
+import { TodoInfoComponent } from '../../../components/todo-info/todo-info';
+import { TodoDialogData } from '../../../models/todo-dialog-data';
+import { TaskItem } from '../../../models/todo.model';
+import { TodoService } from '../../../services/todo.service';
+import { UnsavedChangesDialogComponent } from '../unsaved-changes-dialog/unsaved-changes-dialog';
 
-import { TodoDialogData } from '../../models/todo-dialog-data';
-import { TodoItem } from '../../models/todo.model';
-
-import { TodoInfoComponent } from '../todo-info/todo-info';
-import { TodoDetailsComponent } from '../todo-details/todo-details';
-
-import { WorkspaceStatus } from '../../../../core/enums/workspace-status.enum';
-import { UnsavedChangesDialogComponent } from '../../../../core/shared/dialogs/unsaved-changes-dialog/unsaved-changes-dialog';
-import { TodoService } from '../../services/todo.service';
 
 @Component({
   selector: 'app-todo-workspace-dialog',
@@ -60,7 +58,7 @@ export class TodoWorkspaceDialogComponent implements OnDestroy {
   private service = inject(TodoService);
 
   readonly currentTodo =
-    signal<TodoItem | null>(null);
+    signal<TaskItem | null>(null);
 
   readonly pendingChanges =
     signal(false);
@@ -204,7 +202,7 @@ export class TodoWorkspaceDialogComponent implements OnDestroy {
   }
 
   private replaceNavigation(
-    todo: TodoItem
+    todo: TaskItem
   ): void {
 
     if (!this.data.navigation) {
@@ -378,6 +376,21 @@ export class TodoWorkspaceDialogComponent implements OnDestroy {
       action();
 
     }
+
+  }
+
+  onSubtasksChanged(subtasks: TaskItem['subtasks']) {
+
+    const todo = this.currentTodo();
+
+    if (!todo) {
+      return;
+    }
+
+    this.currentTodo.set({
+      ...todo,
+      subtasks
+    });
 
   }
 

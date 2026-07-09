@@ -2,9 +2,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { UpdateTodoRequest } from '../models/update-todo-request.model';
 import { CreateTodoRequest } from '../models/create-todo-request.model';
-import { TodoItem, TodoResponse } from '../models/todo.model';
+import { TaskItem, TodoResponse } from '../models/todo.model';
 import { ParsedTodo } from '../models/parsed-todo-response.model';
 import { environment } from '../../../../environments/environment';
+import { RewriteStyle } from '../../../core/enums/rewrite-style.enum';
+import { SubtaskRewriteResponse } from '../models/subtask-rewrite-response.model';
+import { BreakdownComplexity, BreakdownStrategy } from '../../../core/enums/todo-breakdown-options.enum';
+import { BreakdownResponse } from '../models/breakdown-response.model';
 
 @Injectable({ providedIn: 'root' })
 export class TodoService {
@@ -106,17 +110,29 @@ export class TodoService {
     });
   }
 
-  breakdown(id: string) {
-    return this.http.put(`${this.base}/${id}/breakdown`, {
-      userId: localStorage.getItem('id') ?? '',
-    });
+  breakdown(id: string, options: { complexity: BreakdownComplexity; strategy: BreakdownStrategy; }) {
+    return this.http.put<BreakdownResponse>(
+      `${this.base}/ai/${id}/breakdown`,
+      {
+        userId:
+          localStorage.getItem('id') ?? '',
+
+        ...options
+      }
+    );
   }
 
+  rewrite(id: string, request: { userId: string; description: string; style: RewriteStyle; }) {
+    return this.http.put<SubtaskRewriteResponse>(
+      `${environment.apiUrl}/todos/ai/${id}/rewrite`,
+      request
+    );
+  }
   getById(id: string) {
-    return this.http.get<TodoItem>(`${this.base}/${id}`);
+    return this.http.get<TaskItem>(`${this.base}/${id}`);
   }
 
-  saveSubItems(id: string, subItems: TodoItem['subItems']) {
+  saveSubItems(id: string, subItems: TaskItem['subtasks']) {
     return this.http.put(`${this.base}/${id}/subitems`, {
       userId: localStorage.getItem('id') ?? '',
       todoSubItems: subItems,

@@ -5,7 +5,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { FormsModule } from '@angular/forms';
-import { TodoItem, TodoResponse } from '../todo/models/todo.model';
+import { TaskItem, TodoResponse } from '../todo/models/todo.model';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Observable } from 'rxjs';
 
@@ -15,8 +15,8 @@ import { OverviewComponent } from './components/overview/overview.component';
 import { AssistantService } from './services/assistant.service';
 import { AssistantIntent } from '../../core/enums/assistant-intent.enum';
 import { IntentClassifierService } from './services/intent-classifier.service';
-import { TodoWorkspaceDialogComponent } from '../todo/components/todo-workspace-dialog/todo-workspace-dialog';
 import { TodoWorkspaceMatchType } from '../todo/models/todo-workspace-data';
+import { TodoWorkspaceDialogComponent } from '../todo/shared/dialogs/todo-workspace-dialog/todo-workspace-dialog';
 
 interface HomeQuery {
   type: 'today' | 'this week' | 'search' | 'high priority' | 'next work' | 'overdue';
@@ -63,11 +63,11 @@ export class HomeComponent {
   ];
 
   // raw backend results
-  tasks: TodoItem[] = [];
+  tasks: TaskItem[] = [];
 
   // UI projections
-  relatedTasks: TodoItem[] = [];
-  otherTasks: TodoItem[] = [];
+  relatedTasks: TaskItem[] = [];
+  otherTasks: TaskItem[] = [];
 
   loading: boolean = false;
 
@@ -320,9 +320,9 @@ export class HomeComponent {
   }
 
   openTodo(
-    todo: TodoItem,
+    todo: TaskItem,
     matchType: TodoWorkspaceMatchType = 'normal',
-    navigation: TodoItem[] = [],
+    navigation: TaskItem[] = [],
   ): void {
     const dialogRef = this.dialog.open(TodoWorkspaceDialogComponent, {
       width: '90vw',

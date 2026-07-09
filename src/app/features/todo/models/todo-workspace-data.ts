@@ -1,12 +1,12 @@
-import { TodoItem } from './todo.model';
+import { TaskItem } from './todo.model';
 
 export type TodoWorkspaceOrigin = 'search' | 'list' | 'direct';
 
 export type TodoWorkspaceMatchType = 'related' | 'possible' | 'normal';
 
 export interface TodoWorkspaceData {
-  todo: TodoItem;
+  todo: TaskItem;
   origin?: TodoWorkspaceOrigin;
   matchType?: TodoWorkspaceMatchType;
-  navigation?: TodoItem[];
+  navigation?: TaskItem[];
 }

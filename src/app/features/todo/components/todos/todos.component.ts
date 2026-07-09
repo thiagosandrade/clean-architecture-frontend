@@ -12,15 +12,15 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
 import { MatInputModule } from '@angular/material/input';
-import { ParseTodoDialogComponent } from '../parse-todo-dialog/parse-todo-dialog';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { DataTableComponent } from '../../../../core/components/ui/data-table/data-table.component';
 import { LoadingService } from '../../../../core/services/loading.service';
 import { SnackbarService } from '../../../../core/services/snackbar.service';
-import { TodoItem } from '../../models/todo.model';
+import { TaskItem } from '../../models/todo.model';
 import { TodoService } from '../../services/todo.service';
-import { TodoDetailsDialogComponent } from '../todo-details-dialog/todo-details-dialog';
-import { TodoInfoDialogComponent } from '../todo-info-dialog/todo-info-dialog.component';
+import { ParseTodoDialogComponent } from '../../shared/dialogs/parse-todo-dialog/parse-todo-dialog';
+import { TodoDetailsDialogComponent } from '../../shared/dialogs/todo-details-dialog/todo-details-dialog';
+import { TodoInfoDialogComponent } from '../../shared/dialogs/todo-info-dialog/todo-info-dialog.component';
 
 @Component({
   standalone: true,
@@ -42,7 +42,7 @@ import { TodoInfoDialogComponent } from '../todo-info-dialog/todo-info-dialog.co
   styleUrls: ['./todos.component.scss'],
 })
 export class TodosComponent implements OnInit {
-  todos: TodoItem[] = [];
+  todos: TaskItem[] = [];
   tableConfig = TODO_TABLE_CONFIG;
   page = 1;
   size = 10;
@@ -164,7 +164,7 @@ export class TodosComponent implements OnInit {
     });
   }
 
-  handleAction(event: { action: string; row: TodoItem }) {
+  handleAction(event: { action: string; row: TaskItem }) {
     switch (event.action) {
       case 'delete':
         this.service.delete(event.row.id).subscribe(() => {

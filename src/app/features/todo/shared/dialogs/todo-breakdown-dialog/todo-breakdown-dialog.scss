@@ -1,0 +1,294 @@
+:host {
+  display: block;
+}
+
+/* =========================
+   Dialog Layout
+========================= */
+
+mat-dialog-content {
+  width: 100%;
+  max-width: 700px;
+
+  overflow-x: hidden;
+  overflow-y: auto;
+
+  box-sizing: border-box;
+
+  padding-top: 8px;
+}
+
+/* =========================
+   Task Summary
+========================= */
+
+.task {
+  margin-bottom: 18px;
+
+  padding: 12px 14px;
+
+  border-radius: 6px;
+
+  background: #f7f7f7;
+
+  line-height: 1.45;
+
+  color: #555;
+}
+
+/* =========================
+   Configuration
+========================= */
+
+.options-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.options-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.options-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.options-group h3 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.options-group mat-radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.options-group mat-radio-button {
+  border: 1px solid var(--mat-sys-outline-variant);
+  border-radius: 6px;
+  padding: 8px 12px;
+}
+
+.option {
+  display: flex;
+  flex-direction: column;
+}
+
+.option strong {
+  font-weight: 600;
+}
+
+.option small {
+  font-size: 11px;
+  color: gray;
+}
+
+@media (max-width: 700px) {
+
+  .options-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+}
+
+/* =========================
+   Preview Header
+========================= */
+
+.preview {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 12px;
+}
+
+.preview-header {
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+}
+
+.preview-header h3 {
+  margin: 0;
+
+  font-size: 16px;
+}
+
+.preview-actions {
+  display: flex;
+
+  gap: 8px;
+}
+
+/* =========================
+   Subtasks Table
+========================= */
+
+.subtasks {
+  width: 100%;
+
+  border-collapse: collapse;
+
+  table-layout: fixed;
+}
+
+.subtasks th {
+  padding: 6px 8px;
+
+  text-align: left;
+
+  font-weight: 600;
+}
+
+.subtasks td {
+  padding: 4px 8px;
+
+  vertical-align: middle;
+}
+
+.subtasks tbody tr {
+  height: 34px;
+
+  border-bottom: 1px solid var(--mat-sys-outline-variant);
+}
+
+/* =========================
+   Columns
+========================= */
+
+.order-column {
+  width: 60px;
+
+  text-align: center;
+}
+
+.action-column {
+  width: 44px;
+
+  text-align: center;
+}
+
+/* =========================
+   Reorder Controls
+========================= */
+
+.order-cell {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+}
+
+.order-cell button {
+  width: 22px;
+
+  height: 22px;
+
+  padding: 0;
+}
+
+.order-cell mat-icon {
+  width: 16px;
+
+  height: 16px;
+
+  font-size: 16px;
+}
+
+/* =========================
+   Description Editing
+========================= */
+
+.description-input {
+  width: 100%;
+
+  box-sizing: border-box;
+
+  min-height: 32px;
+
+  padding: 4px 8px;
+
+  font: inherit;
+
+  border: 1px solid var(--mat-sys-outline-variant);
+
+  border-radius: 4px;
+
+  background: transparent;
+}
+
+.description-input:focus {
+  outline: none;
+
+  border-color: var(--mat-sys-primary);
+}
+
+.description-input.invalid {
+  border-color: #d32f2f;
+
+  background: rgba(211, 47, 47, 0.05);
+}
+
+/* =========================
+   Empty State
+========================= */
+
+.empty {
+  padding: 20px;
+
+  text-align: center;
+
+  color: gray;
+
+  font-style: italic;
+}
+
+/* =========================
+   Dialog Actions
+========================= */
+
+mat-dialog-actions {
+  margin-top: 12px;
+}
+
+mat-spinner {
+  margin: auto;
+}
+
+/* =========================
+   Responsive
+========================= */
+
+@media (max-width: 800px) {
+
+  mat-dialog-content {
+    max-width: 100%;
+  }
+
+  .preview-header {
+    flex-direction: column;
+
+    align-items: flex-start;
+
+    gap: 10px;
+  }
+
+  .preview-actions {
+    width: 100%;
+
+    justify-content: flex-end;
+  }
+
+}

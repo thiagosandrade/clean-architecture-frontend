@@ -14,7 +14,7 @@
   <div class="row">
     <label>Priority</label>
 
-    <span>{{ todo.priority }}</span>
+    <span>{{ priorityLabel }}</span>
   </div>
 
   <div class="row">
@@ -43,17 +43,54 @@
 
   <mat-divider></mat-divider>
 
-  <div class="subtasks-header">
-    <h3>Subtasks</h3>
-
+  <div class="actions">
     <button mat-stroked-button color="primary" (click)="addSubtask()">
       <mat-icon>add</mat-icon>
 
       Add Subtask
     </button>
+    
+    <button mat-flat-button color="primary" (click)="openBreakdown()"
+      [disabled]="isBreakingDown() || !todo">
+
+      <mat-spinner *ngIf="isBreakingDown()" diameter="18">
+      </mat-spinner>
+
+
+      <span *ngIf="!isBreakingDown()" class="button-content">
+        <mat-icon>auto_awesome</mat-icon>
+        <span>Breakdown Tasks</span>
+      </span>
+
+
+      <span *ngIf="isBreakingDown()">
+        Generating subtasks...
+      </span>
+
+    </button>
+
+    <button mat-flat-button color="accent" (click)="save()"
+      [disabled]="!hasChanges() || isSaving() || hasInvalidSubtasks()">
+      <mat-spinner *ngIf="isSaving()" diameter="18"></mat-spinner>
+
+      <span *ngIf="!isSaving()">Save</span>
+    </button>
+
+    <div
+      class="generated-info"
+      *ngIf="generatedCount() > 0">
+
+      ✓ Generated {{ generatedCount() }} subtasks
+
+    </div>
   </div>
 
-  <table *ngIf="todo.subItems.length" class="subtasks">
+  <div class="subtasks-header">
+    <h3>Subtasks</h3>
+    
+  </div>
+
+  <table *ngIf="todo.subtasks.length" class="subtasks">
     <thead>
       <tr>
         <th class="order-column">Order</th>
@@ -67,32 +104,24 @@
     </thead>
 
     <tbody>
-      <tr *ngFor="let subtask of todo.subItems; let i = index">
+      <tr *ngFor="let subtask of todo.subtasks; let i = index">
         <td class="order-column order-cell">
           <button mat-icon-button (click)="moveUp(i)" [disabled]="i === 0">
             <mat-icon>keyboard_arrow_up</mat-icon>
           </button>
 
-          <button mat-icon-button (click)="moveDown(i)" [disabled]="i === todo.subItems.length - 1">
+          <button mat-icon-button (click)="moveDown(i)" [disabled]="i === todo.subtasks.length - 1">
             <mat-icon>keyboard_arrow_down</mat-icon>
           </button>
         </td>
 
         <td class="status-column">
-          <mat-checkbox
-            [checked]="subtask.isCompleted"
-            (change)="toggleCompleted(subtask)"
-          ></mat-checkbox>
+          <mat-checkbox [checked]="subtask.isCompleted" (change)="toggleCompleted(subtask)"></mat-checkbox>
         </td>
 
         <td class="description-column">
-          <input
-            class="description-input"
-            [class.invalid]="!subtask.description.trim()"
-            placeholder="Enter subtask..."
-            [value]="subtask.description"
-            (input)="updateDescription(subtask, $any($event.target).value)"
-          />
+          <input class="description-input" [class.invalid]="!subtask.description.trim()" placeholder="Enter subtask..."
+            [value]="subtask.description" (input)="updateDescription(subtask, $any($event.target).value)" />
         </td>
 
         <td class="action-column">
@@ -104,29 +133,7 @@
     </tbody>
   </table>
 
-  <div *ngIf="!todo.subItems.length" class="empty">No subtasks generated yet.</div>
+  <div *ngIf="!todo.subtasks.length" class="empty">No subtasks generated yet.</div>
 
-  <div class="actions">
-    <button
-      mat-flat-button
-      color="primary"
-      (click)="breakDown()"
-      [disabled]="isBreakingDown() || hasSubtasks()"
-    >
-      <mat-spinner *ngIf="isBreakingDown()" diameter="18"></mat-spinner>
-
-      <span *ngIf="!isBreakingDown()">Breakdown Tasks</span>
-    </button>
-
-    <button
-      mat-flat-button
-      color="accent"
-      (click)="save()"
-      [disabled]="!hasChanges() || isSaving() || hasInvalidSubtasks()"
-    >
-      <mat-spinner *ngIf="isSaving()" diameter="18"></mat-spinner>
-
-      <span *ngIf="!isSaving()">Save</span>
-    </button>
-  </div>
+  
 </div>
