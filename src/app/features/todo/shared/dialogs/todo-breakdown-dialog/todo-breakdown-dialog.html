@@ -8,9 +8,17 @@
 
   <form [formGroup]="form" class="options-form">
 
-    <p class="task">
-      {{ data.description }}
-    </p>
+    <div class="original-description">
+
+      <label>Current description</label>
+
+      <div class="readonly-box">
+
+        {{data.description}}
+
+      </div>
+
+    </div>
 
     <div class="options-grid">
 
@@ -89,7 +97,13 @@
 
           @if(generating()){
 
-          <mat-spinner diameter="18"></mat-spinner>
+          <div class="loading">
+
+            <mat-spinner diameter="36"></mat-spinner>
+
+            <span>Generating better subtasks...</span>
+
+          </div>
 
           }
           @else{
@@ -181,11 +195,23 @@
 
     </table>
 
-    <div class="empty" *ngIf="generatedSubtasks().length === 0">
+    @if(generatedSubtasks().length === 0){
 
-      No subtasks generated.
+      <div class="empty-state">
 
-    </div>
+        <mat-icon>playlist_add_check</mat-icon>
+
+        <h4>No subtasks yet</h4>
+
+        <p>
+
+          Add one manually or regenerate AI suggestions.
+
+        </p>
+
+      </div>
+
+      }
 
   </div>
 

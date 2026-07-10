@@ -133,7 +133,19 @@
     </tbody>
   </table>
 
-  <div *ngIf="!todo.subtasks.length" class="empty">No subtasks generated yet.</div>
+  <div *ngIf="!todo.subtasks.length" class="empty-state">
+
+    <mat-icon>playlist_add_check</mat-icon>
+
+    <h4>No subtasks yet</h4>
+
+    <p>
+
+      Add manually or generate on AI breakdown suggestions.
+
+    </p>
+
+  </div>
 
   
 </div>
