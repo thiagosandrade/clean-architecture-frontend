@@ -1,0 +1,75 @@
+@if (loading()) {
+
+<div class="loading">
+
+  <mat-icon>
+    history
+  </mat-icon>
+
+  <span>
+    Loading activity...
+  </span>
+
+</div>
+
+}
+@else if (activities().length === 0) {
+
+<div class="empty">
+
+  <mat-icon>
+    history
+  </mat-icon>
+
+  <span>
+    No activity recorded yet.
+  </span>
+
+</div>
+
+}
+@else {
+
+<div class="timeline">
+
+  <div
+    class="event"
+    *ngFor="let activity of activities(); trackBy: trackById">
+
+    <mat-icon>
+
+      {{ icon(activity.activityType) }}
+
+    </mat-icon>
+
+    <div class="content">
+
+      <div class="title">
+
+        {{ format(activity.activityType) }}
+
+      </div>
+
+      <div class="description">
+
+        {{ activity.description }}
+
+      </div>
+
+      <div class="subtitle">
+
+        {{ activity.username }}
+
+        •
+
+        {{ activity.createdAtUtc | date:'medium' }}
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+}

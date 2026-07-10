@@ -1,89 +1,48 @@
 .workspace-header {
-  padding-top: 20px;
-  padding-right: 20px;
-  padding-left: 20px;
-  padding-bottom: 12px;
+  padding: 20px 20px 12px;
   border-bottom: 1px solid rgba(0, 0, 0, 0.12);
 }
 
-.workspace-content.disabled {
-  pointer-events: none;
-  opacity: 0.6;
-}
-
 /* =========================
-   Top navigation row
+   Header
 ========================= */
 
 .header-top {
   display: grid;
-
   grid-template-columns: auto 1fr auto;
-
   align-items: center;
 
   padding-bottom: 12px;
 }
 
-/* left area */
 .context {
   justify-self: start;
 }
 
-/* =========================
-   Navigation
-========================= */
 .navigation {
   display: flex;
-
   justify-content: center;
-
   align-items: center;
-
   gap: 8px;
 }
 
-/* =========================
-   Title row
-========================= */
 .workspace-title {
   margin: 0;
 
   font-size: 1.4rem;
-
   font-weight: 600;
 }
 
-/* close button */
-.workspace-header > button:last-child {
-  justify-self: end;
-}
-
-.workspace-header > * {
-  min-width: 0;
-}
-
-/* title/status second row */
 .workspace-title-container {
-  grid-column: 1 / -1;
-
   text-align: center;
 }
 
-/* =========================
-   Status
-========================= */
 .workspace-status {
   margin-top: 4px;
 
-  font-size: 0.85rem;
-
+  font-size: .85rem;
   font-weight: 500;
 }
-
-/* =========================
-   Status colors
-========================= */
 
 .saved {
   color: #2e7d32;
@@ -97,113 +56,77 @@
   color: #1565c0;
 }
 
+.workspace-link {
+  cursor: pointer;
+  transition: color .15s ease;
+}
+
+.workspace-link:hover {
+  color: var(--mat-sys-primary);
+  text-decoration: underline;
+}
+
 /* =========================
-   Workspace content
+   Dialog body
 ========================= */
 
 .workspace {
-  position: relative;
-  padding: 0 20px 20px;
+  display: flex;
+  flex-direction: column;
+
+  height: 100%;
+  min-height: 0;
+
+  padding: 0 20px;
+
+  overflow: hidden;
+
 }
 
-.workspace-content {
-  display: grid;
-
-  grid-template-columns: 1fr 1.5fr;
-
-  gap: 24px;
-
-  transition:
-    opacity 0.2s ease,
-    transform 0.2s ease;
+app-task-workspace {
+  flex: 1;
+  min-height: 0;
+  display: flex;
 }
 
-.workspace-content.switching {
-  opacity: 0.35;
+.workspace-body {
+  display: flex;
+  flex-direction: column;
+
+  flex: 1;
+  min-height: 0;
+}
+
+.workspace-body.switching {
+  opacity: .35;
 
   transform: translateY(4px);
 
   pointer-events: none;
 }
 
+.workspace-body.disabled {
+  pointer-events: none;
+}
+
+/* =========================
+   Loading overlay
+========================= */
+
 .task-loading {
   position: absolute;
-
   inset: 0;
 
   z-index: 10;
 
   display: flex;
-
   flex-direction: column;
 
   justify-content: center;
-
   align-items: center;
 
   gap: 12px;
 
-  background: rgba(255, 255, 255, 0.75);
+  background: rgba(255, 255, 255, .75);
 }
 
-/* =========================
-   Panels
-========================= */
-
-.left,
-.right {
-  display: flex;
-
-  flex-direction: column;
-
-  gap: 16px;
-
-  min-width: 0;
-
-  min-height: 0;
-}
-
-.left {
-  padding-right: 8px;
-}
-
-.right {
-  padding-right: 8px;
-}
-
-/* =========================
-   Extra badges
-========================= */
-
-.match-badge {
-  padding: 4px 10px;
-
-  border-radius: 14px;
-
-  background: var(--mat-sys-secondary-container);
-
-  font-size: 0.75rem;
-}
-
-/* =========================
-   Responsive
-========================= */
-
-@media (max-width: 900px) {
-  .workspace-content {
-    grid-template-columns: 1fr;
-  }
-
-  .header-actions {
-    flex-direction: column;
-
-    align-items: stretch;
-
-    gap: 8px;
-  }
-
-  .header-left,
-  .header-right {
-    justify-content: space-between;
-  }
-}

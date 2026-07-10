@@ -38,11 +38,18 @@ export const routes: Routes = [
       import('./features/user/components/users/users.component').then((m) => m.UsersComponent),
   },
   {
-    title: 'Task App - Todos',
+    title: 'Task App - Tasks',
     path: 'todos',
     canActivate: [authGuard],
     loadComponent: () =>
       import('./features/todo/components/todos/todos.component').then((m) => m.TodosComponent),
+  },
+  {
+    title: 'Task App - Task Details',
+    path: 'tasks/:id',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./features/todo/components/task-workspace/task-workspace').then((m) => m.TaskWorkspaceComponent),
   },
   {
     title: 'Task App',

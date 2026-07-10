@@ -1,0 +1,102 @@
+:host {
+  display: flex;
+  flex-direction: column;
+
+  flex: 1;
+  min-height: 0;
+
+  height: 100%;
+}
+
+.workspace-content {
+  display: grid;
+
+  grid-template-columns: 1fr 1.5fr;
+
+  gap: 24px;
+
+  flex: 1;
+  min-height: 0;
+
+  height: 100%;
+}
+
+.left,
+.right {
+  display: flex;
+  flex-direction: column;
+
+  min-width: 0;
+  min-height: 0;
+}
+
+.left {
+  padding-right: 8px;
+}
+
+.right {
+  display: flex;
+  flex-direction: column;
+
+  min-width: 0;
+  min-height: 0;
+
+  overflow: hidden;
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  height: 100%;
+  min-height: 250px;
+}
+
+/* =========================
+   Right panel tabs
+========================= */
+
+.right mat-tab-group {
+  display: flex;
+
+  flex-direction: column;
+
+  flex: 1;
+
+  min-height: 0;
+}
+
+
+::ng-deep .right .mat-mdc-tab-body-wrapper {
+  flex: 1;
+
+  min-height: 0;
+
+  overflow: hidden;
+}
+
+
+::ng-deep .right .mat-mdc-tab-body {
+  height: 100%;
+}
+
+
+::ng-deep .right .mat-mdc-tab-body-content {
+  height: 100%;
+
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* =========================
+   Responsive
+========================= */
+
+@media (max-width: 900px) {
+
+  .workspace-content {
+    grid-template-columns: 1fr;
+  }
+
+}

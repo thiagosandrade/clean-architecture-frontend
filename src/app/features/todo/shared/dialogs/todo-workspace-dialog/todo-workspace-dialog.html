@@ -1,85 +1,141 @@
 <div class="workspace-header">
   <!-- TOP ROW -->
   <div class="header-top">
-    <button class="context" mat-button *ngIf="origin === 'search'" (click)="backToResults()">
+    <button
+      class="context"
+      mat-button
+      *ngIf="origin === 'search'"
+      (click)="backToResults()">
+
       <mat-icon>arrow_back</mat-icon>
 
       Search Results
+
     </button>
 
     <div class="navigation">
-      <button mat-button (click)="previous()" [disabled]="!hasPrevious()">
+
+      <button
+        mat-button
+        (click)="previous()"
+        [disabled]="!hasPrevious()">
+
         <mat-icon>chevron_left</mat-icon>
 
         Previous
+
       </button>
 
-      <button mat-button (click)="next()" [disabled]="!hasNext()">
+      <button
+        mat-button
+        (click)="next()"
+        [disabled]="!hasNext()">
+
         Next
 
         <mat-icon>chevron_right</mat-icon>
+
       </button>
+
     </div>
 
-    <button mat-icon-button (click)="close()">
+    <button
+      mat-icon-button
+      (click)="close()">
+
       <mat-icon>close</mat-icon>
+
     </button>
+
   </div>
 
   <!-- TITLE ROW -->
+
   <div class="workspace-title-container">
-    <h1 class="workspace-title">
+
+    <h1
+      class="workspace-title workspace-link"
+      (click)="openFullPage()">
+
       {{ currentTitle }}
+
     </h1>
 
     @if (workspaceStatus() !== 'none') {
+
       <div class="workspace-status">
+
         @switch (workspaceStatus()) {
+
           @case ('dirty') {
-            <span class="dirty">● Unsaved changes</span>
+
+            <span class="dirty">
+
+              ● Unsaved changes
+
+            </span>
+
           }
 
           @case ('saving') {
-            <span class="saving">Saving...</span>
+
+            <span class="saving">
+
+              Saving...
+
+            </span>
+
           }
 
           @case ('saved') {
-            <span class="saved">✓ {{ saveAge() }}</span>
+
+            <span class="saved">
+
+              ✓ {{ saveAge() }}
+
+            </span>
+
           }
+
         }
+
       </div>
+
     }
+
   </div>
+
 </div>
 
 <mat-dialog-content class="workspace">
-  <div class="task-loading" *ngIf="taskSwitching()">
+
+  <div
+    class="task-loading"
+    *ngIf="taskSwitching()">
+
     <mat-spinner diameter="45"></mat-spinner>
 
-    <span>Loading task...</span>
+    <span>
+
+      Loading task...
+
+    </span>
+
   </div>
 
   <div
-    class="workspace-content"
+    class="workspace-body"
     [class.switching]="taskSwitching()"
-    [class.disabled]="taskSwitching()"
-  >
-    <section class="left">
-      <app-todo-info
-        [todo]="currentTodo()!"
+    [class.disabled]="taskSwitching()">
+
+    <app-task-workspace
+        [todoId]="currentTodo()!.id"
         (refreshRequested)="onRefresh()"
         (descriptionChanged)="onDescriptionChanged($event)"
-        (statusChanged)="onLeftStatusChanged($event)"
-      ></app-todo-info>
-    </section>
-
-    <section class="right">
-      <app-todo-details
-        [todo]="currentTodo()!"
-        (refreshRequested)="onRefresh()"
-        (statusChanged)="onRightStatusChanged($event)"
+        (workspaceStatusChanged)="onWorkspaceStatusChanged($event)"
         (subtasksChanged)="onSubtasksChanged($event)">
-      ></app-todo-details>
-    </section>
+    </app-task-workspace>
+
   </div>
+
 </mat-dialog-content>

@@ -328,7 +328,7 @@ export class HomeComponent {
       width: '90vw',
       maxWidth: '1400px',
       height: 'auto',
-      maxHeight: '90vh',
+      maxHeight: '100vh',
       data: {
         todo: todo,
         isEdit: true,

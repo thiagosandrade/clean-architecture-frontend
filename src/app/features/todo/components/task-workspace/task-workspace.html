@@ -1,0 +1,51 @@
+@if (loading()) {
+
+  <div class="loading">
+    <mat-spinner diameter="40"></mat-spinner>
+  </div>
+
+} @else if (task(); as todo) {
+
+  <div class="workspace-content">
+
+    <section class="left">
+
+      <app-todo-info
+        [todo]="todo"
+        (refreshRequested)="onRefresh()"
+        (descriptionChanged)="descriptionChanged.emit($event)"
+        (statusChanged)="onLeftStatusChanged($event)">
+      </app-todo-info>
+
+    </section>
+
+    <section class="right">
+
+        <mat-tab-group>
+
+            <mat-tab label="Subtasks">
+
+            <app-todo-details
+                [todo]="todo"
+                (refreshRequested)="onRefresh()"
+                (statusChanged)="onRightStatusChanged($event)"
+                (subtasksChanged)="subtasksChanged.emit($event)">
+            </app-todo-details>
+
+            </mat-tab>
+
+            <mat-tab label="Activity">
+
+            <app-task-activity
+                [taskId]="todo.id">
+            </app-task-activity>
+
+            </mat-tab>
+
+        </mat-tab-group>
+
+        </section>
+
+  </div>
+
+}
