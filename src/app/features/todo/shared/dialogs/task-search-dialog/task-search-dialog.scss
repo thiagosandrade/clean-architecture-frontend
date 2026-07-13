@@ -1,0 +1,153 @@
+/* =========================
+   Dialog Layout
+========================= */
+
+.content {
+  display: flex;
+  flex-direction: column;
+
+  width: 650px;
+  max-width: 100%;
+
+  min-height: 420px;
+  max-height: 600px;
+
+  overflow: hidden;
+  padding-top: 10px !important;
+}
+
+/* =========================
+   Search
+========================= */
+
+.search-field {
+  width: 100%;
+
+  margin-bottom: 12px;
+}
+
+/* =========================
+   Loading
+========================= */
+
+.loading {
+  display: flex;
+
+  justify-content: center;
+  align-items: center;
+
+  flex: 1;
+}
+
+/* =========================
+   Empty State
+========================= */
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+
+  justify-content: center;
+  align-items: center;
+
+  gap: 12px;
+
+  flex: 1;
+
+  color: var(--mat-sys-on-surface-variant);
+
+  text-align: center;
+}
+
+.empty-state mat-icon {
+  width: 42px;
+  height: 42px;
+
+  font-size: 42px;
+
+  opacity: .65;
+}
+
+.empty-state p {
+  margin: 0;
+}
+
+/* =========================
+   Results
+========================= */
+
+.search-results-container {
+
+  min-height: 250px;
+
+  max-height: 350px;
+
+  overflow-y: auto;
+
+  overflow-x: hidden;
+
+}
+
+
+.results {
+  flex: 1;
+
+  overflow-y: auto;
+
+  border: 1px solid var(--mat-sys-outline-variant);
+
+  border-radius: 6px;
+}
+
+/* =========================
+   Result Row
+========================= */
+
+.result {
+  display: flex;
+  align-items: center;
+
+  padding: 12px 16px;
+
+  cursor: pointer;
+
+  transition:
+    background .15s ease,
+    color .15s ease;
+
+  border-bottom: 1px solid var(--mat-sys-outline-variant);
+}
+
+.result:last-child {
+  border-bottom: none;
+}
+
+.result:hover {
+  background: rgba(0, 0, 0, .04);
+}
+
+.result.selected {
+  background: var(--mat-sys-secondary-container);
+}
+
+/* =========================
+   Description
+========================= */
+
+.description {
+  flex: 1;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  font-size: .95rem;
+}
+
+/* =========================
+   Dialog Actions
+========================= */
+
+mat-dialog-actions {
+  padding-top: 16px;
+}

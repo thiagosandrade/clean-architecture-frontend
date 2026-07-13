@@ -9,6 +9,8 @@ import { RewriteStyle } from '../../../core/enums/rewrite-style.enum';
 import { SubtaskRewriteResponse } from '../models/subtask-rewrite-response.model';
 import { BreakdownComplexity, BreakdownStrategy } from '../../../core/enums/todo-breakdown-options.enum';
 import { BreakdownResponse } from '../models/breakdown-response.model';
+import { TaskDependency } from '../models/task-dependency';
+import { TaskSearchResult } from '../models/task-search-response.model';
 
 @Injectable({ providedIn: 'root' })
 export class TodoService {
@@ -137,5 +139,37 @@ export class TodoService {
       userId: localStorage.getItem('id') ?? '',
       todoSubItems: subItems,
     });
+  }
+
+  updateDependencies(taskId: string, dependencies: TaskDependency[]) {
+
+    return this.http.put(
+        `${this.base}/${taskId}/dependencies`,
+        {
+
+            userId: localStorage.getItem("id"),
+
+            taskDependencies:
+                dependencies.map(x => ({
+                    id: x.dependsOnTodoItemId
+                }))
+        });
+
+  }
+
+  searchByDescription(description: string) {
+
+    const userId = localStorage.getItem('id') ?? '';
+
+    return this.http.get<TaskSearchResult[]>(
+      `${this.base}/searchby`,
+      {
+        params: {
+          userId,
+          description
+        }
+      }
+    );
+
   }
 }

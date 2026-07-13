@@ -8,7 +8,7 @@
   },
   "include": [
     "src/**/*.ts"
-  ],
+, "src/app/features/todo/models"  ],
   "exclude": [
     "src/**/*.spec.ts"
   ]

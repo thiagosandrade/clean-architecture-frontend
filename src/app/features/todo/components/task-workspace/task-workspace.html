@@ -21,7 +21,7 @@
 
     <section class="right">
 
-        <mat-tab-group>
+        <mat-tab-group [(selectedIndex)]="selectedTab">
 
             <mat-tab label="Subtasks">
 
@@ -33,12 +33,20 @@
             </app-todo-details>
 
             </mat-tab>
+            <mat-tab label="Dependencies">
 
+              <app-task-dependencies
+                  [task]="todo"
+                  (statusChanged)="onDependencyStatusChanged($event)"
+                  (refreshRequested)="onRefresh()">
+              </app-task-dependencies>
+
+            </mat-tab>
             <mat-tab label="Activity">
 
-            <app-task-activity
-                [taskId]="todo.id">
-            </app-task-activity>
+              <app-task-activity
+                  [taskId]="todo.id">
+              </app-task-activity>
 
             </mat-tab>
 

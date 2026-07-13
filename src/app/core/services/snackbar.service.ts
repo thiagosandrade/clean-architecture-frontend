@@ -11,6 +11,10 @@ export class SnackbarService {
     this.open(`✓ ${message}`, 'success');
   }
 
+  warning(message: string) {
+    this.open(`! ${message}`, 'warning');
+  }
+
   error(message: string) {
     this.open(`✕ ${message}`, 'error');
   }

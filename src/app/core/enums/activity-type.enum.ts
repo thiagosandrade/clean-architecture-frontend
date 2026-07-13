@@ -13,5 +13,6 @@ export enum TaskActivityType {
   NoteAdded = 11,
   AttachmentAdded = 12,
   EmbeddingsGenerated = 13,
-  CategoriesGenerated = 14
+  CategoriesGenerated = 14,
+  DependencyUpdated = 15
 }

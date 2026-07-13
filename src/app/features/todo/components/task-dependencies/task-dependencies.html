@@ -1,0 +1,120 @@
+<div class="dependencies">
+
+  <div class="dependencies-header">
+
+    <h3>Dependencies</h3>
+
+  </div>
+
+  @if (task.dependencies.length === 0) {
+
+    <div class="empty-state">
+
+      <mat-icon>link_off</mat-icon>
+
+      <h4>No dependencies</h4>
+
+      <p>
+        This task does not depend on any other task.
+      </p>
+
+    </div>
+
+  } @else {
+
+    <table class="dependencies-table">
+
+      <thead>
+
+        <tr>
+
+          <th>Description</th>
+
+          <th class="actions-column"></th>
+
+        </tr>
+
+      </thead>
+
+      <tbody>
+
+        @for (
+          dependency of task.dependencies;
+          track trackByDependency($index)
+        ) {
+
+          <tr>
+
+            <td>
+
+              {{ dependency.description }}
+
+            </td>
+
+            <td class="actions-column">
+
+              <button
+                mat-icon-button
+                color="warn"
+                type="button"
+                (click)="removeDependency($index)">
+
+                <mat-icon>delete</mat-icon>
+
+              </button>
+
+            </td>
+
+          </tr>
+
+        }
+
+      </tbody>
+
+    </table>
+
+  }
+
+  <div class="actions">
+
+    <button
+      mat-stroked-button
+      type="button"
+      (click)="addDependency()">
+
+      <mat-icon>add</mat-icon>
+
+      Add Dependency
+
+    </button>
+
+    <button
+      mat-flat-button
+      color="primary"
+      type="button"
+      [disabled]="!canSave"
+      (click)="save()">
+
+      <span class="button-content">
+
+        @if (isSaving()) {
+
+          <mat-spinner diameter="18"></mat-spinner>
+
+          Saving...
+
+        } @else {
+
+          <mat-icon>save</mat-icon>
+
+          Save
+
+        }
+
+      </span>
+
+    </button>
+
+  </div>
+
+</div>

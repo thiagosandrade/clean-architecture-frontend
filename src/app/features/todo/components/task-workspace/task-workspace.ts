@@ -33,6 +33,7 @@ import { firstValueFrom } from 'rxjs';
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { TaskActivityComponent } from "../../shared/task-activity/task-activity";
 import { MatTabsModule } from '@angular/material/tabs';
+import { TaskDependenciesComponent } from "../task-dependencies/task-dependencies";
 
 
 @Component({
@@ -44,7 +45,8 @@ import { MatTabsModule } from '@angular/material/tabs';
     TodoDetailsComponent,
     MatProgressSpinnerModule,
     TaskActivityComponent,
-    MatTabsModule
+    MatTabsModule,
+    TaskDependenciesComponent
 ],
   templateUrl: './task-workspace.html',
   styleUrls: [
@@ -87,7 +89,9 @@ export class TaskWorkspaceComponent implements OnInit {
 
   rightStatus: WorkspaceStatus = 'none';
 
+  dependencyStatus: WorkspaceStatus = 'none';
 
+  selectedTab = 0;
   async ngOnInit(): Promise<void> {
 
     const id =
@@ -151,27 +155,36 @@ export class TaskWorkspaceComponent implements OnInit {
     this.updateWorkspaceStatus();
   }
 
+  onDependencyStatusChanged(status: WorkspaceStatus): void {
+    this.dependencyStatus = status;
+    this.updateWorkspaceStatus();
+  }
+
   private updateWorkspaceStatus(): void {
 
     let status: WorkspaceStatus = 'none';
 
     if (
       this.leftStatus === 'saving' ||
-      this.rightStatus === 'saving'
+      this.rightStatus === 'saving' ||
+      this.dependencyStatus === 'saving'
     ) {
 
       status = 'saving';
 
     } else if (
       this.leftStatus === 'dirty' ||
-      this.rightStatus === 'dirty'
+      this.rightStatus === 'dirty' ||
+      this.dependencyStatus === 'dirty'
+
     ) {
 
       status = 'dirty';
 
     } else if (
       this.leftStatus === 'saved' ||
-      this.rightStatus === 'saved'
+      this.rightStatus === 'saved' ||
+      this.dependencyStatus === 'saved'
     ) {
 
       status = 'saved';

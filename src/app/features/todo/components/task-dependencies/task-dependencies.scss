@@ -1,0 +1,127 @@
+/* =========================
+   Component Layout
+========================= */
+
+.dependencies {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  min-width: 700px;
+  padding-top: 15px;
+}
+
+/* =========================
+   Header
+========================= */
+
+.dependencies-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.dependencies-header h3 {
+  margin: 0;
+
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+/* =========================
+   Empty State
+========================= */
+
+.empty-state {
+  padding: 40px 16px;
+
+  text-align: center;
+
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.empty-state mat-icon {
+  width: 40px;
+  height: 40px;
+
+  font-size: 40px;
+
+  opacity: .6;
+
+  margin-bottom: 12px;
+}
+
+.empty-state h4 {
+  margin: 0 0 8px;
+}
+
+.empty-state p {
+  margin: 0;
+}
+
+/* =========================
+   Table
+========================= */
+
+.dependencies-table {
+  width: 100%;
+
+  border-collapse: collapse;
+
+  table-layout: fixed;
+}
+
+.dependencies-table th {
+  padding: 8px;
+
+  text-align: left;
+
+  font-weight: 600;
+}
+
+.dependencies-table td {
+  padding: 8px;
+
+  vertical-align: middle;
+}
+
+.dependencies-table tbody tr {
+  border-bottom: 1px solid var(--mat-sys-outline-variant);
+}
+
+.dependencies-table tbody tr:hover {
+  background: rgba(0, 0, 0, .025);
+}
+
+/* =========================
+   Columns
+========================= */
+
+.actions-column {
+  width: 60px;
+
+  text-align: center;
+}
+
+/* =========================
+   Footer actions
+========================= */
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.button-content {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.button-content mat-icon {
+  width: 20px;
+  height: 20px;
+
+  font-size: 20px;
+}

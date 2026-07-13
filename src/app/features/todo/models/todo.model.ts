@@ -1,3 +1,5 @@
+import { TaskDependency } from "./task-dependency";
+
 export interface TaskItem {
   id: string;
   userId: number;
@@ -11,6 +13,7 @@ export interface TaskItem {
   priority: number;
   similarity: number;
   subtasks: TodoSubtask[];
+  dependencies: TaskDependency[];
 }
 
 export interface TodoSubtask {
