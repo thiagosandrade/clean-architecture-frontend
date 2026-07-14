@@ -2,32 +2,61 @@ import {
   Component,
   EventEmitter,
   Input,
-  OnChanges,
   Output,
+  OnInit,
+  OnChanges,
   SimpleChanges,
   inject,
-  signal,
+  signal
 } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
 
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatDialog } from '@angular/material/dialog';
+import {
+  MatButtonModule
+} from '@angular/material/button';
 
-import { firstValueFrom } from 'rxjs';
+import {
+  MatIconModule
+} from '@angular/material/icon';
 
-import { TaskItem } from '../../models/todo.model';
+import {
+  MatProgressSpinnerModule
+} from '@angular/material/progress-spinner';
 
-import { TodoService } from '../../services/todo.service';
+import {
+  MatDialog
+} from '@angular/material/dialog';
 
-import { SnackbarService } from '../../../../core/services/snackbar.service';
+import {
+  firstValueFrom
+} from 'rxjs';
 
-import { WorkspaceStatus } from '../../../../core/enums/workspace-status.enum';
-import { MachineState } from '../../../../core/enums/machine-state.enum';
-import { TaskDependency } from '../../models/task-dependency';
-import { TaskSearchDialogComponent } from '../../shared/dialogs/task-search-dialog/task-search-dialog';
+import {
+  TodoService
+} from '../../services/todo.service';
+
+import {
+  SnackbarService
+} from '../../../../core/services/snackbar.service';
+
+import {
+  WorkspaceStatus
+} from '../../../../core/enums/workspace-status.enum';
+
+import {
+  MachineState
+} from '../../../../core/enums/machine-state.enum';
+
+import {
+  TaskDependency
+} from '../../models/task-dependency';
+
+import {
+  TaskSearchDialogComponent
+} from '../../dialogs/task-search-dialog/task-search-dialog';
+import { TaskWorkspaceStore } from '../../stores/task-workspace.store';
+
 
 @Component({
   selector: 'app-task-dependencies',
@@ -36,97 +65,190 @@ import { TaskSearchDialogComponent } from '../../shared/dialogs/task-search-dial
     CommonModule,
     MatButtonModule,
     MatIconModule,
-    MatProgressSpinnerModule,
+    MatProgressSpinnerModule
   ],
   templateUrl: './task-dependencies.html',
-  styleUrls: ['./task-dependencies.scss'],
+  styleUrls: ['./task-dependencies.scss']
 })
-export class TaskDependenciesComponent implements OnChanges {
+export class TaskDependenciesComponent
+  implements OnInit, OnChanges {
 
-  private readonly service = inject(TodoService);
+  private readonly workspacestore = inject(TaskWorkspaceStore);
 
-  private readonly snack = inject(SnackbarService);
+  private readonly service =
+    inject(TodoService);
 
-  private readonly dialog = inject(MatDialog);
+
+  private readonly snack =
+    inject(SnackbarService);
+
+
+  private readonly dialog =
+    inject(MatDialog);
+
+
 
   @Input({ required: true })
-  task!: TaskItem;
+  taskId!: string;
+
+
 
   @Output()
-  statusChanged = new EventEmitter<WorkspaceStatus>();
+  statusChanged =
+    new EventEmitter<WorkspaceStatus>();
 
-  @Output()
-  refreshRequested = new EventEmitter<void>();
 
-  readonly state = signal(MachineState.Ready);
+
+  readonly state =
+    signal(MachineState.Ready);
+
+
+
+  readonly dependencies =
+    signal<TaskDependency[]>([]);
+
+
+
+  private originalDependencies:
+    TaskDependency[] = [];
+
+
 
   canSave = false;
 
-  originalDependencies: TaskDependency[] = [];
 
-  ngOnChanges(changes: SimpleChanges): void {
 
-    if (!changes['task'] || !this.task) {
+  ngOnInit(): void {
+
+    void this.load();
+
+  }
+
+
+
+  ngOnChanges(
+    changes: SimpleChanges
+  ): void {
+
+    if (
+      changes['taskId'] &&
+      !changes['taskId'].firstChange
+    ) {
+
+      void this.load();
+
+    }
+
+  }
+
+
+
+  private async load(): Promise<void> {
+
+    if (!this.taskId) {
       return;
     }
 
-    this.setState(MachineState.Loading);
+
+    this.setState(
+      MachineState.Loading
+    );
+
+
+    const task = this.workspacestore.task()
+
+    if(task == null)
+      return;
+
+
+    const deps =
+      task.dependencies ?? [];
+
+
+    this.dependencies.set(
+      structuredClone(deps)
+    );
+
 
     this.originalDependencies =
-      structuredClone(this.task.dependencies ?? []);
+      structuredClone(deps);
+
 
     this.canSave = false;
 
-    this.setState(MachineState.Ready);
+
+    this.setState(
+      MachineState.Ready
+    );
 
   }
 
-  isSaving(): boolean {
 
-    return this.state() === MachineState.Saving;
-
-  }
 
   async save(): Promise<void> {
 
-    if (!this.canSave || this.isSaving()) {
+    if (
+      !this.canSave ||
+      this.state() === MachineState.Saving
+    ) {
       return;
     }
 
-    this.setState(MachineState.Saving);
+
+    this.setState(
+      MachineState.Saving
+    );
+
 
     try {
 
       await firstValueFrom(
 
         this.service.updateDependencies(
-          this.task.id,
-          this.task.dependencies
+          this.taskId,
+          this.dependencies()
         )
 
       );
 
+      await this.workspacestore.refresh();
+
       this.originalDependencies =
-        structuredClone(this.task.dependencies);
+        structuredClone(
+          this.dependencies()
+        );
+
 
       this.canSave = false;
 
-      this.setState(MachineState.Saved);
 
-      this.snack.success('Dependencies updated');
+      this.setState(
+        MachineState.Saved
+      );
 
-      this.refreshRequested.emit();
+
+      this.snack.success(
+        'Dependencies updated'
+      );
+
 
     }
     catch {
 
-      this.setState(MachineState.Dirty);
+      this.setState(
+        MachineState.Dirty
+      );
 
     }
 
   }
 
+  isSaving(): boolean {
+    return this.state() === MachineState.Saving;
+  }
+
   async addDependency(): Promise<void> {
+
 
     const dialogRef =
       this.dialog.open(
@@ -136,9 +258,8 @@ export class TaskDependenciesComponent implements OnChanges {
           maxHeight: '80vh',
           autoFocus: false,
           restoreFocus: false,
-          disableClose: false,
           data: {
-            excludeTaskId: this.task.id
+            excludeTaskId: this.taskId
           }
         }
       );
@@ -156,10 +277,11 @@ export class TaskDependenciesComponent implements OnChanges {
 
 
     const exists =
-      this.task.dependencies.some(
-        x =>
-          x.dependsOnTodoItemId === selected.id
-      );
+      this.dependencies()
+        .some(
+          x =>
+            x.dependsOnTodoItemId === selected.id
+        );
 
 
     if (exists) {
@@ -173,42 +295,56 @@ export class TaskDependenciesComponent implements OnChanges {
     }
 
 
-    this.task.dependencies.push({
 
-      todoItemId: this.task.id,
+    this.dependencies.update(
+      items => [
 
-      dependsOnTodoItemId: selected.id,
+        ...items,
 
-      description: selected.description
+        {
+          todoItemId: this.taskId,
+          dependsOnTodoItemId: selected.id,
+          description: selected.description
+        }
 
-    });
+      ]
+    );
 
-
-    this.updateState();
-
-  }
-
-  removeDependency(index: number): void {
-
-    this.task.dependencies.splice(index, 1);
 
     this.updateState();
 
   }
 
-  trackByDependency(
+
+
+  removeDependency(
     index: number
-  ): string {
+  ): void {
 
-    return index.toString();
+
+    this.dependencies.update(
+      items =>
+        items.filter(
+          (_, i) => i !== index
+        )
+    );
+
+
+    this.updateState();
 
   }
+
+
 
   private updateState(): void {
 
-    const dirty = this.hasChanges();
+    const dirty =
+      this.hasChanges();
 
-    this.canSave = dirty;
+
+    this.canSave =
+      dirty;
+
 
     this.setState(
 
@@ -220,47 +356,61 @@ export class TaskDependenciesComponent implements OnChanges {
 
   }
 
+
+
   private hasChanges(): boolean {
 
-    return JSON.stringify(this.task.dependencies)
+    return JSON.stringify(
+      this.dependencies()
+    )
       !==
-      JSON.stringify(this.originalDependencies);
+      JSON.stringify(
+        this.originalDependencies
+      );
 
   }
 
-  private setState(state: MachineState): void {
+
+
+  private setState(
+    state: MachineState
+  ): void {
+
 
     this.state.set(state);
 
+
     switch (state) {
 
-      case MachineState.Loading:
-
-      case MachineState.Ready:
-
-        this.statusChanged.emit('none');
-
-        break;
-
       case MachineState.Dirty:
-
         this.statusChanged.emit('dirty');
-
         break;
+
 
       case MachineState.Saving:
-
         this.statusChanged.emit('saving');
-
         break;
+
 
       case MachineState.Saved:
-
         this.statusChanged.emit('saved');
-
         break;
 
+
+      default:
+        this.statusChanged.emit('none');
+
     }
+
+  }
+
+
+
+  trackByDependency(
+    index: number
+  ): string {
+
+    return index.toString();
 
   }
 

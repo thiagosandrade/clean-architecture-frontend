@@ -34,19 +34,15 @@ import {
 
 import {
   WorkspaceStatus
-} from '../../../../../core/enums/workspace-status.enum';
+} from '../../../../core/enums/workspace-status.enum';
 
 import {
   TaskItem
-} from '../../../models/todo.model';
+} from '../../models/todo.model';
 
 import {
   TodoDialogData
-} from '../../../models/todo-dialog-data';
-
-import {
-  TodoService
-} from '../../../services/todo.service';
+} from '../../models/todo-dialog-data';
 
 import {
   UnsavedChangesDialogComponent
@@ -54,8 +50,9 @@ import {
 
 import {
   TaskWorkspaceComponent
-} from '../../../components/task-workspace/task-workspace';
+} from '../../components/task-workspace/task-workspace';
 import { Router } from '@angular/router';
+import { TaskWorkspaceStore } from '../../stores/task-workspace.store';
 
 
 @Component({
@@ -80,8 +77,8 @@ export class TodoWorkspaceDialogComponent
     inject(MatDialog);
 
 
-  private service =
-    inject(TodoService);
+  private workspacestore =
+    inject(TaskWorkspaceStore);
 
   private router = inject(Router);
 
@@ -277,49 +274,6 @@ export class TodoWorkspaceDialogComponent
 
   }
 
-  async onRefresh(): Promise<void> {
-
-    setTimeout(() => {
-
-      void this.reloadCurrentTodo();
-
-    });
-
-  }
-
-
-
-  private async reloadCurrentTodo(): Promise<void> {
-
-
-    const current =
-      this.currentTodo();
-
-
-    if (!current) {
-
-      return;
-
-    }
-
-
-    const fresh =
-      await firstValueFrom(
-        this.service.getById(current.id)
-      );
-
-
-    this.currentTodo.set(fresh);
-
-
-    this.currentTitle =
-      fresh.description;
-
-
-  }
-
-
-
   close(): void {
 
     this.confirmBeforeAction(() => {
@@ -409,22 +363,22 @@ export class TodoWorkspaceDialogComponent
       const item =
         this.data.navigation![this.currentIndex];
 
+      this.workspacestore.load(item.id).then(() => {
+        const todo = this.workspacestore.task();
 
-      const todo =
-        await firstValueFrom(
-          this.service.getById(item.id)
-        );
-
-
-      this.currentTodo.set(todo);
+        if(todo == null)
+          return;
 
 
-      this.currentTitle =
-        todo.description;
+        this.currentTodo.set(todo);
 
 
-      this.resetWorkspace();
+        this.currentTitle =
+          todo.description;
 
+
+        this.resetWorkspace();
+      });
     }
     finally {
 

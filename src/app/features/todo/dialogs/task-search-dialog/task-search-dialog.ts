@@ -49,9 +49,9 @@ import {
   firstValueFrom
 } from 'rxjs';
 
-import { TodoService } from '../../../services/todo.service';
-import { UserService } from '../../../../user/services/user.service';
-import { TaskSearchResult } from '../../../models/task-search-response.model';
+import { TodoService } from '../../services/todo.service';
+import { UserService } from '../../../user/services/user.service';
+import { TaskSearchResult } from '../../models/task-search-response.model';
 
 
 

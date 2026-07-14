@@ -48,17 +48,17 @@ import {
   BreakdownComplexity,
   BreakdownStrategy,
   TodoBreakdownOptions
-} from '../../../../../core/enums/todo-breakdown-options.enum';
+} from '../../../../core/enums/todo-breakdown-options.enum';
 
 import {
   TodoService
-} from '../../../services/todo.service';
+} from '../../services/todo.service';
 
 import {
   TaskItem
-} from '../../../models/todo.model';
+} from '../../models/todo.model';
 import { MatIconModule } from "@angular/material/icon";
-import { mapGeneratedSubtasks as mapBreakdownGeneratedSubtasks } from '../../../../../core/utils/map-generated-subtasks';
+import { mapGeneratedSubtasks as mapBreakdownGeneratedSubtasks } from '../../../../core/utils/map-generated-subtasks';
 
 
 @Component({

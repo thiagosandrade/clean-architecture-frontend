@@ -3,8 +3,8 @@ import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 
 import { MatButtonModule } from '@angular/material/button';
-import { TodoInfoComponent } from '../../../components/todo-info/todo-info';
-import { TodoDialogData } from '../../../models/todo-dialog-data';
+import { TodoInfoComponent } from '../../components/todo-info/todo-info';
+import { TodoDialogData } from '../../models/todo-dialog-data';
 
 @Component({
   selector: 'app-todo-info-dialog',
@@ -22,10 +22,6 @@ export class TodoInfoDialogComponent {
     @Inject(MAT_DIALOG_DATA)
     public data: TodoDialogData,
   ) {}
-
-  onRefreshRequested(): void {
-    this.hasChanges = true;
-  }
 
   close(): void {
     this.dialogRef.close({

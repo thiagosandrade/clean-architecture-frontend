@@ -129,8 +129,7 @@
     [class.disabled]="taskSwitching()">
 
     <app-task-workspace
-        [todoId]="currentTodo()!.id"
-        (refreshRequested)="onRefresh()"
+        [taskId]="currentTodo()!.id"
         (descriptionChanged)="onDescriptionChanged($event)"
         (workspaceStatusChanged)="onWorkspaceStatusChanged($event)"
         (subtasksChanged)="onSubtasksChanged($event)">

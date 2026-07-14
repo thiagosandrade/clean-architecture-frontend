@@ -34,7 +34,8 @@ import { SnackbarService } from '../../../../core/services/snackbar.service';
 import { TodoService } from '../../services/todo.service';
 import { TaskItem } from '../../models/todo.model';
 import { MatIconModule } from "@angular/material/icon";
-import { TodoRewriteDialogComponent } from '../../shared/dialogs/todo-rewrite-dialog/todo-rewrite-dialog';
+import { TodoRewriteDialogComponent } from '../../dialogs/todo-rewrite-dialog/todo-rewrite-dialog';
+import { TaskWorkspaceStore } from '../../stores/task-workspace.store';
 
 @Component({
   selector: 'app-todo-info',
@@ -50,7 +51,7 @@ import { TodoRewriteDialogComponent } from '../../shared/dialogs/todo-rewrite-di
     MatDatepickerModule,
     MatProgressSpinnerModule,
     MatIconModule
-],
+  ],
   templateUrl: './todo-info.html',
   styleUrls: ['./todo-info.scss'],
 })
@@ -59,15 +60,17 @@ export class TodoInfoComponent implements OnInit, OnChanges {
 
   private service = inject(TodoService);
 
+  private readonly workspacestore =
+  inject(TaskWorkspaceStore);
+  
   private snack = inject(SnackbarService);
 
   private dialog = inject(MatDialog);
 
   @Input({ required: true })
-  todo!: TaskItem;
+  taskId!: string;
 
-  @Output()
-  refreshRequested = new EventEmitter<void>();
+  todo!: TaskItem;
 
   @Output()
   descriptionChanged = new EventEmitter<string>();
@@ -80,6 +83,8 @@ export class TodoInfoComponent implements OnInit, OnChanges {
   readonly priorityOptions = enumToOptions(Priority);
 
   private originalValue: ReturnType<typeof this.form.getRawValue> | null = null;
+
+  private currentTodoId?: string;
 
   form = this.fb.group({
     description: ['', Validators.required],
@@ -121,35 +126,62 @@ export class TodoInfoComponent implements OnInit, OnChanges {
     });
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (!changes['todo'] || !this.todo) {
+  async ngOnChanges(changes: SimpleChanges): Promise<void> {
+
+    if (!changes['taskId'] || !this.taskId) {
       return;
     }
 
+    if (this.currentTodoId === this.taskId) {
+      return;
+    }
+
+    this.currentTodoId = this.taskId;
+
+    await this.load();
+
+  }
+
+  private async load(): Promise<void> {
+
     this.setState(MachineState.Loading);
 
-    this.form.patchValue(
-      {
-        description: this.todo.description,
+    try {
 
-        dueDate: this.todo.dueDate ? new Date(this.todo.dueDate) : null,
+      const task = this.workspacestore.task()
 
-        labels: this.todo.labels?.join(', ') ?? '',
+      if(task == null)
+        return;
 
-        priority: this.todo.priority,
+      this.todo = task;
 
-        isCompleted: this.todo.isCompleted,
-      },
-      {
-        emitEvent: false,
-      },
-    );
+      this.form.patchValue(
+        {
+          description: task.description,
+          dueDate: task.dueDate
+            ? new Date(task.dueDate)
+            : null,
+          labels: task.labels?.join(', ') ?? '',
+          priority: task.priority,
+          isCompleted: task.isCompleted,
+        },
+        {
+          emitEvent: false,
+        }
+      );
 
-    this.originalValue = structuredClone(this.form.getRawValue());
+      this.originalValue =
+        structuredClone(this.form.getRawValue());
 
-    this.form.markAsPristine();
+      this.form.markAsPristine();
 
-    this.setState(MachineState.Ready);
+    }
+    finally {
+
+      this.setState(MachineState.Ready);
+
+    }
+
   }
 
   async save(): Promise<void> {
@@ -182,13 +214,13 @@ export class TodoInfoComponent implements OnInit, OnChanges {
     try {
       await firstValueFrom(this.service.update(this.todo.id, request));
 
-      this.originalValue =  structuredClone(this.form.getRawValue());
-      
+      this.originalValue = structuredClone(this.form.getRawValue());
+
       this.form.markAsPristine();
 
       this.setState(MachineState.Saved);
 
-      this.refreshRequested.emit();
+      await this.workspacestore.refresh();
 
       this.snack.success('Task updated');
     } catch {

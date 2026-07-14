@@ -3,7 +3,7 @@
 </h2>
 
 <mat-dialog-content>
-  <app-todo-info [todo]="data.todo!" (refreshRequested)="onRefreshRequested()"></app-todo-info>
+  <app-todo-info [taskId]="data.todo!.id"></app-todo-info>
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">

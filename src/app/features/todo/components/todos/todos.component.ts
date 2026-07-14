@@ -18,9 +18,9 @@ import { LoadingService } from '../../../../core/services/loading.service';
 import { SnackbarService } from '../../../../core/services/snackbar.service';
 import { TaskItem } from '../../models/todo.model';
 import { TodoService } from '../../services/todo.service';
-import { ParseTodoDialogComponent } from '../../shared/dialogs/parse-todo-dialog/parse-todo-dialog';
-import { TodoDetailsDialogComponent } from '../../shared/dialogs/todo-details-dialog/todo-details-dialog';
-import { TodoInfoDialogComponent } from '../../shared/dialogs/todo-info-dialog/todo-info-dialog.component';
+import { ParseTodoDialogComponent } from '../../dialogs/parse-todo-dialog/parse-todo-dialog';
+import { TodoDetailsDialogComponent } from '../../dialogs/todo-details-dialog/todo-details-dialog';
+import { TodoInfoDialogComponent } from '../../dialogs/todo-info-dialog/todo-info-dialog.component';
 
 @Component({
   standalone: true,

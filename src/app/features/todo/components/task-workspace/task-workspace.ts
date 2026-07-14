@@ -3,6 +3,7 @@ import {
   EventEmitter,
   inject,
   Input,
+  OnChanges,
   OnInit,
   Output,
   signal
@@ -29,11 +30,11 @@ import {
 } from '../todo-details/todo-details';
 import { ActivatedRoute } from '@angular/router';
 import { TodoService } from '../../services/todo.service';
-import { firstValueFrom } from 'rxjs';
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
-import { TaskActivityComponent } from "../../shared/task-activity/task-activity";
+import { TaskActivityComponent } from "../task-activity/task-activity";
 import { MatTabsModule } from '@angular/material/tabs';
 import { TaskDependenciesComponent } from "../task-dependencies/task-dependencies";
+import { TaskWorkspaceStore } from '../../stores/task-workspace.store';
 
 
 @Component({
@@ -47,30 +48,25 @@ import { TaskDependenciesComponent } from "../task-dependencies/task-dependencie
     TaskActivityComponent,
     MatTabsModule,
     TaskDependenciesComponent
-],
+  ],
   templateUrl: './task-workspace.html',
   styleUrls: [
     './task-workspace.scss'
   ]
 })
-export class TaskWorkspaceComponent implements OnInit {
+export class TaskWorkspaceComponent implements OnInit, OnChanges {
 
   private route = inject(ActivatedRoute);
 
   private service = inject(TodoService);
 
   @Input({ required: true })
-  todoId?: string;
+  taskId?: string;
 
 
   @Output()
   workspaceStatusChanged =
     new EventEmitter<WorkspaceStatus>();
-
-  @Output()
-  refreshRequested =
-    new EventEmitter<void>();
-
 
   @Output()
   descriptionChanged =
@@ -81,10 +77,15 @@ export class TaskWorkspaceComponent implements OnInit {
     new EventEmitter<TaskItem['subtasks']>();
 
 
-  readonly task =  signal<TaskItem | null>(null);
+  readonly workspacestore =
+    inject(TaskWorkspaceStore);
 
-  readonly loading = signal(true);
-  
+  readonly task =
+    this.workspacestore.task;
+
+  readonly loading =
+    this.workspacestore.loading;
+
   leftStatus: WorkspaceStatus = 'none';
 
   rightStatus: WorkspaceStatus = 'none';
@@ -92,55 +93,56 @@ export class TaskWorkspaceComponent implements OnInit {
   dependencyStatus: WorkspaceStatus = 'none';
 
   selectedTab = 0;
+
+  private currentTaskId?: string;
+
   async ngOnInit(): Promise<void> {
 
     const id =
-      this.todoId ??
+      this.taskId ??
       this.route.snapshot.paramMap.get('id');
 
     if (!id) {
       return;
     }
 
-    await this.loadTask(id);
+    this.currentTaskId = id;
+
+    await this.workspacestore.load(id);
 
   }
 
-  async onRefresh(): Promise<void> {
+  async ngOnChanges(): Promise<void> {
 
-    const task =
-      this.task();
+    const id =
+      this.taskId ??
+      this.route.snapshot.paramMap.get('id');
 
-    if (!task) {
+    if (!id) {
       return;
     }
 
-    await this.loadTask(task.id);
-
-  }
-
-  private async loadTask(id: string): Promise<void> {
-
-    this.loading.set(true);
-
-    try {
-
-      const task =
-        await firstValueFrom(
-          this.service.getById(id)
-        );
-
-      this.task.set(task);
-
-    }
-    finally {
-
-      this.loading.set(false);
-
+    if (this.currentTaskId === id) {
+      return;
     }
 
+    this.currentTaskId = id;
+
+    await this.workspacestore.load(id);
+
+    this.resetWorkspaceStatus();
   }
 
+  private resetWorkspaceStatus(): void {
+
+    this.leftStatus = 'none';
+    this.rightStatus = 'none';
+    this.dependencyStatus = 'none';
+
+    this.workspaceStatusChanged.emit('none');
+
+  }
+  
   onWorkspaceStatusChanged(status: WorkspaceStatus): void {
     this.workspaceStatusChanged.emit(status);
   }

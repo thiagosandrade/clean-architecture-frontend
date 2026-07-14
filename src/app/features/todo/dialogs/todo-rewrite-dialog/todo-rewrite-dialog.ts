@@ -21,9 +21,9 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { firstValueFrom } from 'rxjs';
-import { RewriteStyle, rewriteStyleLabels } from '../../../../../core/enums/rewrite-style.enum';
-import { TaskItem } from '../../../models/todo.model';
-import { TodoService } from '../../../services/todo.service';
+import { RewriteStyle, rewriteStyleLabels } from '../../../../core/enums/rewrite-style.enum';
+import { TaskItem } from '../../models/todo.model';
+import { TodoService } from '../../services/todo.service';
 
 
 @Component({

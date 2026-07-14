@@ -16,7 +16,7 @@ import { AssistantService } from './services/assistant.service';
 import { AssistantIntent } from '../../core/enums/assistant-intent.enum';
 import { IntentClassifierService } from './services/intent-classifier.service';
 import { TodoWorkspaceMatchType } from '../todo/models/todo-workspace-data';
-import { TodoWorkspaceDialogComponent } from '../todo/shared/dialogs/todo-workspace-dialog/todo-workspace-dialog';
+import { TodoWorkspaceDialogComponent } from '../todo/dialogs/todo-workspace-dialog/todo-workspace-dialog';
 
 interface HomeQuery {
   type: 'today' | 'this week' | 'search' | 'high priority' | 'next work' | 'overdue';

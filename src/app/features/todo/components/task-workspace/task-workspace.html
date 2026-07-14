@@ -11,8 +11,7 @@
     <section class="left">
 
       <app-todo-info
-        [todo]="todo"
-        (refreshRequested)="onRefresh()"
+        [taskId]="todo.id"
         (descriptionChanged)="descriptionChanged.emit($event)"
         (statusChanged)="onLeftStatusChanged($event)">
       </app-todo-info>
@@ -26,19 +25,16 @@
             <mat-tab label="Subtasks">
 
             <app-todo-details
-                [todo]="todo"
-                (refreshRequested)="onRefresh()"
-                (statusChanged)="onRightStatusChanged($event)"
-                (subtasksChanged)="subtasksChanged.emit($event)">
+                [taskId]="todo.id"
+                (statusChanged)="onRightStatusChanged($event)">
             </app-todo-details>
 
             </mat-tab>
             <mat-tab label="Dependencies">
 
               <app-task-dependencies
-                  [task]="todo"
-                  (statusChanged)="onDependencyStatusChanged($event)"
-                  (refreshRequested)="onRefresh()">
+                  [taskId]="todo.id"
+                  (statusChanged)="onDependencyStatusChanged($event)">
               </app-task-dependencies>
 
             </mat-tab>

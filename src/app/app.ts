@@ -5,10 +5,14 @@ import { ThemeService } from './core/services/theme.service';
 import { LoadingService } from './core/services/loading.service';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { AsyncPipe } from '@angular/common';
+import { TaskWorkspaceStore } from './features/todo/stores/task-workspace.store';
 @Component({
   selector: 'app-root',
   standalone: true,
   imports: [RouterOutlet, ToolbarComponent, MatProgressBarModule, AsyncPipe],
+  providers:[
+    TaskWorkspaceStore
+  ],
   templateUrl: './app.html',
   styleUrls: ['./app.scss'],
 })

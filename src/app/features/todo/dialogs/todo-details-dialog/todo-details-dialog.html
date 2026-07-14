@@ -2,8 +2,7 @@
 
 <mat-dialog-content>
   <app-todo-details
-    [todo]="data.todo!"
-    (refreshRequested)="onRefreshRequested()"
+    [taskId]="data.todo!.id"
   ></app-todo-details>
 </mat-dialog-content>
 
