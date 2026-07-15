@@ -43,6 +43,9 @@ export function activityIcon(type: TaskActivityType): string {
     case TaskActivityType.AttachmentAdded:
       return 'attach_file';
 
+    case TaskActivityType.AttachmentDeleted:
+      return 'attach_file';
+
     case TaskActivityType.EmbeddingsGenerated:
       return 'psychology';
 

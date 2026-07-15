@@ -1,0 +1,167 @@
+<div class="attachments">
+
+  <div class="attachments-header">
+
+    <h3>Attachments</h3>
+
+    <button
+      mat-flat-button
+      color="primary"
+      type="button"
+      [disabled]="uploading()">
+
+      <label class="upload-label">
+
+        <input
+          type="file"
+          hidden
+          (change)="upload($event)" />
+
+        <mat-icon>upload</mat-icon>
+
+        Upload
+
+      </label>
+
+    </button>
+
+  </div>
+
+  @if (uploading()) {
+
+    <div class="loading">
+
+      <mat-spinner diameter="32"></mat-spinner>
+
+      <span>
+
+        Uploading...
+
+      </span>
+
+    </div>
+
+  } @else {
+
+    @if (attachments().length === 0) {
+
+      <div class="empty-state">
+
+        <mat-icon>
+
+          attach_file
+
+        </mat-icon>
+
+        <h4>
+
+          No attachments
+
+        </h4>
+
+        <p>
+
+          Upload files related to this task.
+
+        </p>
+
+      </div>
+
+    } @else {
+
+      <table class="attachments-table">
+
+        <thead>
+
+          <tr>
+
+            <th>File</th>
+
+            <th>Type</th>
+
+            <th>Size</th>
+
+            <th>Created</th>
+
+            <th class="actions-column"></th>
+
+          </tr>
+
+        </thead>
+
+        <tbody>
+
+          @for (
+            attachment of attachments();
+            track trackByAttachment($index, attachment)
+          ) {
+
+            <tr>
+
+              <td>
+
+                {{ attachment.originalFileName }}
+
+              </td>
+
+              <td>
+
+                {{ attachment.contentType }}
+
+              </td>
+
+              <td>
+
+                {{ formatFileSize(attachment.size) }}
+
+              </td>
+
+              <td>
+
+                {{ attachment.createdOn | date:'short' }}
+
+              </td>
+
+              <td class="actions-column">
+
+                <button
+                  mat-icon-button
+                  color="primary"
+                  (click)="download(attachment)">
+
+                  <mat-icon>
+
+                    download
+
+                  </mat-icon>
+
+                </button>
+
+                <button
+                  mat-icon-button
+                  color="warn"
+                  (click)="delete(attachment)">
+
+                  <mat-icon>
+
+                    delete
+
+                  </mat-icon>
+
+                </button>
+
+              </td>
+
+            </tr>
+
+          }
+
+        </tbody>
+
+      </table>
+
+    }
+
+  }
+
+</div>

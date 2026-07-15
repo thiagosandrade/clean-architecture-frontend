@@ -35,6 +35,7 @@ import { TaskActivityComponent } from "../task-activity/task-activity";
 import { MatTabsModule } from '@angular/material/tabs';
 import { TaskDependenciesComponent } from "../task-dependencies/task-dependencies";
 import { TaskWorkspaceStore } from '../../stores/task-workspace.store';
+import { TaskAttachmentsComponent } from '../task-attachments/task-attachments';
 
 
 @Component({
@@ -47,7 +48,8 @@ import { TaskWorkspaceStore } from '../../stores/task-workspace.store';
     MatProgressSpinnerModule,
     TaskActivityComponent,
     MatTabsModule,
-    TaskDependenciesComponent
+    TaskDependenciesComponent,
+    TaskAttachmentsComponent
   ],
   templateUrl: './task-workspace.html',
   styleUrls: [
@@ -91,6 +93,8 @@ export class TaskWorkspaceComponent implements OnInit, OnChanges {
   rightStatus: WorkspaceStatus = 'none';
 
   dependencyStatus: WorkspaceStatus = 'none';
+
+  attachmentStatus: WorkspaceStatus = 'none';
 
   selectedTab = 0;
 
@@ -162,6 +166,11 @@ export class TaskWorkspaceComponent implements OnInit, OnChanges {
     this.updateWorkspaceStatus();
   }
 
+  onAttachmentStatusChanged(status: WorkspaceStatus): void {
+    this.attachmentStatus = status;
+    this.updateWorkspaceStatus();
+  }
+
   private updateWorkspaceStatus(): void {
 
     let status: WorkspaceStatus = 'none';
@@ -169,7 +178,8 @@ export class TaskWorkspaceComponent implements OnInit, OnChanges {
     if (
       this.leftStatus === 'saving' ||
       this.rightStatus === 'saving' ||
-      this.dependencyStatus === 'saving'
+      this.dependencyStatus === 'saving' ||
+      this.attachmentStatus === 'saving'
     ) {
 
       status = 'saving';
@@ -177,7 +187,8 @@ export class TaskWorkspaceComponent implements OnInit, OnChanges {
     } else if (
       this.leftStatus === 'dirty' ||
       this.rightStatus === 'dirty' ||
-      this.dependencyStatus === 'dirty'
+      this.dependencyStatus === 'dirty'||
+      this.attachmentStatus === 'dirty'
 
     ) {
 
@@ -186,7 +197,8 @@ export class TaskWorkspaceComponent implements OnInit, OnChanges {
     } else if (
       this.leftStatus === 'saved' ||
       this.rightStatus === 'saved' ||
-      this.dependencyStatus === 'saved'
+      this.dependencyStatus === 'saved'||
+      this.attachmentStatus === 'saved'
     ) {
 
       status = 'saved';

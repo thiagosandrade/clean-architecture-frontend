@@ -1,4 +1,4 @@
-import { TaskDependency } from "./task-dependency";
+import { TaskDependency } from "./task-dependency.model";
 
 export interface TaskItem {
   id: string;
@@ -30,3 +30,4 @@ export interface TodoResponse {
   items: TaskItem[];
   total: number;
 }
+

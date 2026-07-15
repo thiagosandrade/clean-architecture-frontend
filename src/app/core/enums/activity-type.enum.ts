@@ -14,5 +14,6 @@ export enum TaskActivityType {
   AttachmentAdded = 12,
   EmbeddingsGenerated = 13,
   CategoriesGenerated = 14,
-  DependencyUpdated = 15
+  DependencyUpdated = 15,
+  AttachmentDeleted = 16
 }

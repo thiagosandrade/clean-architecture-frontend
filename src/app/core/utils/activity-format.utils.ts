@@ -30,6 +30,12 @@ export function formatActivity(type: TaskActivityType): string {
 
         case TaskActivityType.DescriptionRewritten:
             return 'AI rewrote description';
+        
+        case TaskActivityType.AttachmentAdded:
+            return 'Attachment Added';
+
+        case TaskActivityType.AttachmentDeleted:
+            return 'Attachment Deleted';
 
         default:
             return 'Activity';

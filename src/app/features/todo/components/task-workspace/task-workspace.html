@@ -38,6 +38,14 @@
               </app-task-dependencies>
 
             </mat-tab>
+            <mat-tab label="Attachments">
+
+              <app-task-attachments
+                  [taskId]="todo.id"
+                  (statusChanged)="onAttachmentStatusChanged($event)">
+              </app-task-attachments>
+
+            </mat-tab>
             <mat-tab label="Activity">
 
               <app-task-activity

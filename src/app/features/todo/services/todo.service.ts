@@ -3,14 +3,17 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { UpdateTodoRequest } from '../models/update-todo-request.model';
 import { CreateTodoRequest } from '../models/create-todo-request.model';
 import { TaskItem, TodoResponse } from '../models/todo.model';
+import { TaskAttachment, TaskAttachmentsResponse } from "../models/task-attachment-response";
 import { ParsedTodo } from '../models/parsed-todo-response.model';
 import { environment } from '../../../../environments/environment';
 import { RewriteStyle } from '../../../core/enums/rewrite-style.enum';
 import { SubtaskRewriteResponse } from '../models/subtask-rewrite-response.model';
 import { BreakdownComplexity, BreakdownStrategy } from '../../../core/enums/todo-breakdown-options.enum';
 import { BreakdownResponse } from '../models/breakdown-response.model';
-import { TaskDependency } from '../models/task-dependency';
+import { TaskDependency } from '../models/task-dependency.model';
 import { TaskSearchResult } from '../models/task-search-response.model';
+import { Observable } from 'rxjs';
+import { DownloadAttachmentResponse } from '../models/task-download-attachment-response';
 
 @Injectable({ providedIn: 'root' })
 export class TodoService {
@@ -167,6 +170,67 @@ export class TodoService {
         params: {
           userId,
           description
+        }
+      }
+    );
+
+  }
+
+  getAttachments(taskId: string): Observable<TaskAttachmentsResponse> {
+    const userId = localStorage.getItem('id') ?? '';
+
+    return this.http.get<TaskAttachmentsResponse>(
+      `${this.base}/${taskId}/attachments`,
+      {
+        params: {
+          userId
+        }
+      }
+    );
+  }
+
+  createAttachment(todoId: string, file: File): Observable<void> {
+
+    const userId = localStorage.getItem('id') ?? '';
+
+    const formData = new FormData();
+
+    formData.append('file', file);
+
+    return this.http.post<void>(
+      `${this.base}/${todoId}/attachments`,
+        formData,
+        {
+          params: {
+            userId
+          }
+        }
+    );
+
+  }
+
+  deleteAttachment(taskId: string,  attachmentId: string): Observable<void> {
+    const userId = localStorage.getItem('id') ?? '';
+
+    return this.http.delete<void>(
+      `${this.base}/${taskId}/attachments/${attachmentId}`,
+        {
+          params: {
+            userId
+          }
+        }
+    );
+  }
+
+  downloadAttachment(todoId: string,  attachmentId: string): Observable<Blob> {
+    const userId = localStorage.getItem('id') ?? '';
+
+    return this.http.get(
+      `${this.base}/${todoId}/attachments/${attachmentId}/download`,
+      {
+        responseType: 'blob',
+        params: {
+          userId
         }
       }
     );

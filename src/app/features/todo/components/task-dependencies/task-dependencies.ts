@@ -50,7 +50,7 @@ import {
 
 import {
   TaskDependency
-} from '../../models/task-dependency';
+} from '../../models/task-dependency.model';
 
 import {
   TaskSearchDialogComponent
