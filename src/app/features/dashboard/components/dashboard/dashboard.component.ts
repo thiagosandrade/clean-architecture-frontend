@@ -1,6 +1,5 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { firstValueFrom } from 'rxjs';
+import { CommonModule } from '@angular/common';import { Router } from '@angular/router';import { firstValueFrom } from 'rxjs';
 import { DashboardService } from '../../services/dashboard.service';
 import { DashboardResponse } from '../../models/dashboard-response.model';
 import { DashboardWidgetComponent } from '../dashboard-widget/dashboard-widget.component';
@@ -17,6 +16,7 @@ import { DashboardWidgetComponent } from '../dashboard-widget/dashboard-widget.c
 })
 export class DashboardComponent implements OnInit {
   private readonly service = inject(DashboardService);
+  private readonly router = inject(Router);
 
   readonly loading = signal(true);
   readonly dashboard = signal<DashboardResponse | null>(null);
@@ -31,4 +31,8 @@ export class DashboardComponent implements OnInit {
       this.loading.set(false);
     }
   }
-}
+  goToSearch(query: string): void {
+    this.router.navigate(['/home'], {
+      queryParams: { q: query },
+    });
+  }}

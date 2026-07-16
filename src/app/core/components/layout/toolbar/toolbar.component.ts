@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, HostListener, OnInit, signal } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
@@ -11,16 +12,31 @@ import { AuthService } from '../../../../features/auth/services/auth.service';
 @Component({
   selector: 'app-toolbar',
   standalone: true,
-  imports: [MatToolbarModule, MatButtonModule, MatMenuModule, MatIconModule, MatDividerModule],
+  imports: [CommonModule, MatToolbarModule, MatButtonModule, MatMenuModule, MatIconModule, MatDividerModule],
   templateUrl: './toolbar.component.html',
   styleUrls: ['./toolbar.component.scss'],
 })
-export class ToolbarComponent {
+export class ToolbarComponent implements OnInit {
+  readonly showHamburger = signal(false);
+
   constructor(
     private theme: ThemeService,
     private router: Router,
     private authService: AuthService,
   ) {}
+
+  ngOnInit(): void {
+    this.updateLayout();
+  }
+
+  @HostListener('window:resize')
+  onResize(): void {
+    this.updateLayout();
+  }
+
+  private updateLayout(): void {
+    this.showHamburger.set(window.innerWidth <= 768);
+  }
 
   goToUser() {
     this.router.navigate(['/user']);

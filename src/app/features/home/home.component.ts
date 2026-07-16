@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
@@ -17,6 +17,7 @@ import { AssistantIntent } from '../../core/enums/assistant-intent.enum';
 import { IntentClassifierService } from './services/intent-classifier.service';
 import { TodoWorkspaceMatchType } from '../todo/models/todo-workspace-data';
 import { TodoWorkspaceDialogComponent } from '../todo/dialogs/todo-workspace-dialog/todo-workspace-dialog';
+import { ActivatedRoute } from '@angular/router';
 
 interface HomeQuery {
   type: 'today' | 'this week' | 'search' | 'high priority' | 'next work' | 'overdue';
@@ -40,8 +41,9 @@ interface HomeQuery {
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
 })
-export class HomeComponent {
+export class HomeComponent implements OnInit {
   private dialog = inject(MatDialog);
+  private route = inject(ActivatedRoute);
 
   question = '';
   assistantMessage = '';
@@ -75,6 +77,19 @@ export class HomeComponent {
     private assistantService: AssistantService,
     private classifierService: IntentClassifierService,
   ) {}
+
+  ngOnInit(): void {
+    this.route.queryParamMap.subscribe((params) => {
+      const query = params.get('q');
+
+      if (!query) {
+        return;
+      }
+
+      this.question = query;
+      this.ask();
+    });
+  }
 
   // =========================
   // ENTRY POINT

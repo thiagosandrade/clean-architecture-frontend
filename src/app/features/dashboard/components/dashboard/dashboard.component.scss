@@ -16,15 +16,37 @@
     border-radius: 12px;
     padding: 1rem 1.25rem;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.2rem;
+}
+
+.summary-card-button {
+    border: 0;
+    cursor: pointer;
+    text-align: left;
+    width: 100%;
+}
+
+.summary-footer {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+}
+
+.summary-icon {
+    font-size: 1.4rem;
+    line-height: 1;
 }
 
 .summary-card h3 {
-    margin: 0 0 0.5rem;
+    margin: 0;
     font-size: 0.95rem;
     color: #6b7280;
 }
 
-.summary-card p {
+.summary-value {
     margin: 0;
     font-size: 1.5rem;
     font-weight: 600;
@@ -35,6 +57,10 @@
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
     gap: 1rem;
+}
+
+.widgets-grid > app-dashboard-widget {
+    cursor: pointer;
 }
 
 .loading {

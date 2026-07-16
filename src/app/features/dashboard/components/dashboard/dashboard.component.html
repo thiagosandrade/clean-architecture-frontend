@@ -9,33 +9,60 @@
         </div>
     </div>
     <div class="dashboard-summary">
-        <div class="summary-card">
+        <button class="summary-card summary-card-button" type="button" (click)="goToSearch('Active Tasks')">
             <h3>Active Tasks</h3>
-            <p>{{ dashboard()?.summary?.activeTasks ?? 0 }}</p>
-        </div>
-        <div class="summary-card">
-            <h3>Completed Tasks</h3>
-            <p>{{ dashboard()?.summary?.completedTasks ?? 0 }}</p>
-        </div>
-        <div class="summary-card">
+            <div class="summary-footer">
+                <div class="summary-icon">📋</div>
+                <p class="summary-value">{{ dashboard()?.summary?.activeTasks ?? 0 }}</p>
+            </div>
+        </button>
+        <button class="summary-card summary-card-button" type="button" (click)="goToSearch('Completed')">
+            <h3>Completed</h3>
+            <div class="summary-footer">
+                <div class="summary-icon">✔</div>
+                <p class="summary-value">{{ dashboard()?.summary?.completedTasks ?? 0 }}</p>
+            </div>
+        </button>
+        <button class="summary-card summary-card-button" type="button" (click)="goToSearch('Due Today')">
             <h3>Due Today</h3>
-            <p>{{ dashboard()?.summary?.dueToday ?? 0 }}</p>
-        </div>
-        <div class="summary-card">
+            <div class="summary-footer">
+                <div class="summary-icon">📅</div>
+                <p class="summary-value">{{ dashboard()?.summary?.dueToday ?? 0 }}</p>
+            </div>
+        </button>
+        <button class="summary-card summary-card-button" type="button" (click)="goToSearch('Overdue')">
             <h3>Overdue</h3>
-            <p>{{ dashboard()?.summary?.overdue ?? 0 }}</p>
-        </div>
+            <div class="summary-footer">
+                <div class="summary-icon">⚠</div>
+                <p class="summary-value">{{ dashboard()?.summary?.overdue ?? 0 }}</p>
+            </div>
+        </button>
     </div>
 
     <div class="widgets-grid">
-        <app-dashboard-widget title="Recently Updated"
-            [tasks]="dashboard()?.recentlyUpdated ?? []"></app-dashboard-widget>
+        <app-dashboard-widget
+            title="Recently Updated"
+            [tasks]="dashboard()?.recentlyUpdated ?? []"
+            (click)="goToSearch('Recently Updated')"
+        ></app-dashboard-widget>
 
-        <app-dashboard-widget title="High Priority" [tasks]="dashboard()?.highPriority ?? []"></app-dashboard-widget>
+        <app-dashboard-widget
+            title="High Priority"
+            [tasks]="dashboard()?.highPriority ?? []"
+            (click)="goToSearch('High Priority')"
+        ></app-dashboard-widget>
 
-        <app-dashboard-widget title="Due This Week" [tasks]="dashboard()?.dueThisWeek ?? []"></app-dashboard-widget>
+        <app-dashboard-widget
+            title="Due This Week"
+            [tasks]="dashboard()?.dueThisWeek ?? []"
+            (click)="goToSearch('Due This Week')"
+        ></app-dashboard-widget>
 
-        <app-dashboard-widget title="Overdue" [tasks]="dashboard()?.overdue ?? []"></app-dashboard-widget>
+        <app-dashboard-widget
+            title="Overdue"
+            [tasks]="dashboard()?.overdue ?? []"
+            (click)="goToSearch('Overdue')"
+        ></app-dashboard-widget>
     </div>
     }
 </section>

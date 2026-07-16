@@ -1,67 +1,80 @@
 <mat-toolbar class="toolbar">
-  <span>Task App</span>
+  <span class="toolbar-title">Task App</span>
 
-  <span class="spacer"></span>
+  @if (showHamburger()) {
+    <span class="toolbar-spacer"></span>
 
-  <button mat-icon-button [matMenuTriggerFor]="menu" class="menu">
-    <mat-icon>menu</mat-icon>
-  </button>
-
-  <mat-menu #menu="matMenu">
-    <!-- NAVIGATION -->
-
-    <button mat-menu-item (click)="goToDashboard()">
-      <mat-icon class="menu-icon dashboard">dashboard</mat-icon>
-
-      <span>Dashboard</span>
+    <button mat-icon-button [matMenuTriggerFor]="menu" class="menu" aria-label="Open navigation menu">
+      <mat-icon>menu</mat-icon>
     </button>
 
-    <mat-divider></mat-divider>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item (click)="goToDashboard()">
+        <mat-icon class="menu-icon dashboard">dashboard</mat-icon>
+        <span>Dashboard</span>
+      </button>
 
-    <button mat-menu-item (click)="goToSearch()">
-      <mat-icon class="menu-icon auto_awesome">auto_awesome</mat-icon>
+      <mat-divider></mat-divider>
 
-      <span>Search</span>
+      <button mat-menu-item (click)="goToSearch()">
+        <mat-icon class="menu-icon auto_awesome">auto_awesome</mat-icon>
+        <span>Search</span>
+      </button>
+
+      <button mat-menu-item (click)="goToTodos()">
+        <mat-icon class="menu-icon todos-icon">checklist</mat-icon>
+        <span>Todos</span>
+      </button>
+
+      <button mat-menu-item (click)="goToUsers()">
+        <mat-icon class="menu-icon users-icon">people</mat-icon>
+        <span>Users</span>
+      </button>
+
+      <mat-divider></mat-divider>
+
+      <button mat-menu-item (click)="goToUser()">
+        <mat-icon class="menu-icon user-icon">person</mat-icon>
+        <span>User Details</span>
+      </button>
+
+      <button mat-menu-item (click)="toggleTheme()">
+        <mat-icon class="menu-icon theme-icon">dark_mode</mat-icon>
+        <span>Toggle Theme</span>
+      </button>
+
+      <button mat-menu-item (click)="logout()">
+        <mat-icon class="menu-icon logout-icon">logout</mat-icon>
+        <span>Logout</span>
+      </button>
+    </mat-menu>
+  } @else {
+    <nav class="nav-links" aria-label="Primary navigation">
+      <button mat-button (click)="goToDashboard()">Dashboard</button>
+      <button mat-button (click)="goToSearch()">Search</button>
+      <button mat-button (click)="goToTodos()">Todos</button>
+      <button mat-button (click)="goToUsers()">Users</button>
+    </nav>
+
+    <button mat-icon-button [matMenuTriggerFor]="userMenu" class="user-menu-button" aria-label="User actions">
+      <mat-icon>account_circle</mat-icon>
     </button>
 
-    <button mat-menu-item (click)="goToTodos()">
-      <mat-icon class="menu-icon todos-icon">checklist</mat-icon>
+    <mat-menu #userMenu="matMenu">
+      <button mat-menu-item (click)="goToUser()">
+        <mat-icon class="menu-icon user-icon">person</mat-icon>
+        <span>User Details</span>
+      </button>
 
-      <span>Todos</span>
-    </button>
+      <button mat-menu-item (click)="toggleTheme()">
+        <mat-icon class="menu-icon theme-icon">dark_mode</mat-icon>
+        <span>Toggle Theme</span>
+      </button>
 
-    <mat-divider></mat-divider>
-
-    <button mat-menu-item (click)="goToUsers()">
-      <mat-icon class="menu-icon users-icon">people</mat-icon>
-
-      <span>Users</span>
-    </button>
-
-    <button mat-menu-item (click)="goToUser()">
-      <mat-icon class="menu-icon user-icon">person</mat-icon>
-
-      <span>User Details</span>
-    </button>
-
-    <mat-divider></mat-divider>
-
-    <!-- THEME -->
-
-    <button mat-menu-item (click)="toggleTheme()">
-      <mat-icon class="menu-icon theme-icon">dark_mode</mat-icon>
-
-      <span>Toggle Theme</span>
-    </button>
-
-    <mat-divider></mat-divider>
-
-    <!-- LOGOUT -->
-
-    <button mat-menu-item (click)="logout()">
-      <mat-icon class="menu-icon logout-icon">logout</mat-icon>
-
-      <span>Logout</span>
-    </button>
-  </mat-menu>
+      <button mat-menu-item (click)="logout()">
+        <mat-icon class="menu-icon logout-icon">logout</mat-icon>
+        <span>Logout</span>
+      </button>
+    </mat-menu>
+  }
 </mat-toolbar>
