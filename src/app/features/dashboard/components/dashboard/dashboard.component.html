@@ -40,29 +40,17 @@
     </div>
 
     <div class="widgets-grid">
-        <app-dashboard-widget
-            title="Recently Updated"
-            [tasks]="dashboard()?.recentlyUpdated ?? []"
-            (click)="goToSearch('Recently Updated')"
-        ></app-dashboard-widget>
+        <app-dashboard-widget title="Recently Updated" [tasks]="dashboard()?.recentlyUpdated ?? []"
+            (click)="goToSearch('Recently Updated')"></app-dashboard-widget>
 
-        <app-dashboard-widget
-            title="High Priority"
-            [tasks]="dashboard()?.highPriority ?? []"
-            (click)="goToSearch('High Priority')"
-        ></app-dashboard-widget>
+        <app-dashboard-widget title="High Priority" [tasks]="dashboard()?.highPriority ?? []"
+            (click)="goToSearch('High Priority')"></app-dashboard-widget>
 
-        <app-dashboard-widget
-            title="Due This Week"
-            [tasks]="dashboard()?.dueThisWeek ?? []"
-            (click)="goToSearch('Due This Week')"
-        ></app-dashboard-widget>
+        <app-dashboard-widget title="Due This Week" [tasks]="dashboard()?.dueThisWeek ?? []"
+            (click)="goToSearch('Due This Week')"></app-dashboard-widget>
 
-        <app-dashboard-widget
-            title="Overdue"
-            [tasks]="dashboard()?.overdue ?? []"
-            (click)="goToSearch('Overdue')"
-        ></app-dashboard-widget>
+        <app-dashboard-widget title="Overdue" [tasks]="dashboard()?.overdue ?? []"
+            (click)="goToSearch('Overdue')"></app-dashboard-widget>
     </div>
     }
 </section>

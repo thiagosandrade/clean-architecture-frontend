@@ -94,10 +94,11 @@ export class TodoDetailsComponent implements OnChanges {
 
     try {
 
-      const task = this.workspacestore.task()
+      const task = this.workspacestore.task();
 
-      if(task == null)
+      if (task == null) {
         return;
+      }
 
       this.todo.set(task);
 

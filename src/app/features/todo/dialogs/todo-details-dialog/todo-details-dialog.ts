@@ -17,6 +17,10 @@ import { TodoDialogData } from '../../models/todo-dialog-data';
 export class TodoDetailsDialogComponent {
   hasChanges = false;
 
+  get taskId(): string {
+    return this.data?.todo?.id ?? '';
+  }
+
   constructor(
     private dialogRef: MatDialogRef<TodoDetailsDialogComponent>,
 

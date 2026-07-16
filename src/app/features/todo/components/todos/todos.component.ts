@@ -180,7 +180,7 @@ export class TodosComponent implements OnInit {
           height: 'auto',
           maxHeight: '90vh',
           data: {
-            id: event.row.id,
+            todo: event.row,
           },
         });
 
