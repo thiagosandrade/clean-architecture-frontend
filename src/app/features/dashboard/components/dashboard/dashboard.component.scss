@@ -1,0 +1,44 @@
+.dashboard-page {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    padding: 24px;
+}
+
+.dashboard-summary {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem;
+}
+
+.summary-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 1rem 1.25rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.summary-card h3 {
+    margin: 0 0 0.5rem;
+    font-size: 0.95rem;
+    color: #6b7280;
+}
+
+.summary-card p {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #111827;
+}
+
+.widgets-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1rem;
+}
+
+.loading {
+    padding: 2rem;
+    text-align: center;
+    color: #6b7280;
+}

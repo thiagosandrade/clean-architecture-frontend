@@ -10,10 +10,18 @@
   <mat-menu #menu="matMenu">
     <!-- NAVIGATION -->
 
-    <button mat-menu-item (click)="goToHome()">
-      <mat-icon class="menu-icon home-icon">home</mat-icon>
+    <button mat-menu-item (click)="goToDashboard()">
+      <mat-icon class="menu-icon dashboard">dashboard</mat-icon>
 
-      <span>Home</span>
+      <span>Dashboard</span>
+    </button>
+
+    <mat-divider></mat-divider>
+
+    <button mat-menu-item (click)="goToSearch()">
+      <mat-icon class="menu-icon auto_awesome">auto_awesome</mat-icon>
+
+      <span>Search</span>
     </button>
 
     <button mat-menu-item (click)="goToTodos()">
@@ -21,6 +29,8 @@
 
       <span>Todos</span>
     </button>
+
+    <mat-divider></mat-divider>
 
     <button mat-menu-item (click)="goToUsers()">
       <mat-icon class="menu-icon users-icon">people</mat-icon>

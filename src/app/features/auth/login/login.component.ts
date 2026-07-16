@@ -51,7 +51,7 @@ export class LoginComponent {
         this.loadingService.hide();
         this.isLoggingIn = false;
         this.auth.saveUserInfo(res.token, res.id, res.email);
-        this.router.navigate(['/home']);
+        this.router.navigate(['/dashboard']);
       },
       () => {
         this.loadingService.hide();

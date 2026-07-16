@@ -4,52 +4,39 @@ import { guestGuard } from './core/guards/guest.guard';
 
 export const routes: Routes = [
   {
-    title: 'Task App - Login',
-    path: 'login',
-    canActivate: [guestGuard],
-    loadComponent: () =>
-      import('./features/auth/login/login.component').then((m) => m.LoginComponent),
-  },
-  {
-    title: 'Task App - Register',
-    path: 'register',
-    canActivate: [guestGuard],
-    loadComponent: () =>
-      import('./features/auth/register/register.component').then((m) => m.RegisterComponent),
+    title: 'Task App - Auth',
+    path: '',
+    loadChildren: () => import('./features/auth/auth.routes').then((m) => m.authRoutes),
   },
   {
     title: 'Task App - Home',
     path: 'home',
     canActivate: [authGuard],
-    loadComponent: () => import('./features/home/home.component').then((m) => m.HomeComponent),
+    loadChildren: () => import('./features/home/home.routes').then((m) => m.homeRoutes),
   },
   {
     title: 'Task App - User',
     path: 'user',
     canActivate: [authGuard],
-    loadComponent: () =>
-      import('./features/user/components/user/user.component').then((m) => m.UserComponent),
+    loadChildren: () => import('./features/user/user.routes').then((m) => m.userRoutes),
   },
   {
     title: 'Task App - Users',
     path: 'users',
     canActivate: [authGuard],
-    loadComponent: () =>
-      import('./features/user/components/users/users.component').then((m) => m.UsersComponent),
+    loadChildren: () => import('./features/user/user.routes').then((m) => m.userRoutes),
   },
   {
     title: 'Task App - Tasks',
     path: 'todos',
     canActivate: [authGuard],
-    loadComponent: () =>
-      import('./features/todo/components/todos/todos.component').then((m) => m.TodosComponent),
+    loadChildren: () => import('./features/todo/todo.routes').then((m) => m.todoRoutes),
   },
   {
-    title: 'Task App - Task Details',
-    path: 'tasks/:id',
+    title: 'Task App - Dashboard',
+    path: 'dashboard',
     canActivate: [authGuard],
-    loadComponent: () =>
-      import('./features/todo/components/task-workspace/task-workspace').then((m) => m.TaskWorkspaceComponent),
+    loadChildren: () => import('./features/dashboard/dashboard.routes').then((m) => m.dashboardRoutes),
   },
   {
     title: 'Task App',

@@ -34,7 +34,11 @@ export class ToolbarComponent {
     this.router.navigate(['/todos']);
   }
 
-  goToHome() {
+  goToDashboard() {
+    this.router.navigate(['/dashboard']);
+  }
+
+  goToSearch() {
     this.router.navigate(['/home']);
   }
 

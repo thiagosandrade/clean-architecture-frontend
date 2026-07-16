@@ -1,0 +1,41 @@
+<section class="dashboard-page">
+    @if (loading()) {
+    <div class="loading">Loading dashboard...</div>
+    } @else {
+    <div class="page-header">
+        <div class="title-section">
+            <h1>Dashboard</h1>
+            <span>Visualize your summary</span>
+        </div>
+    </div>
+    <div class="dashboard-summary">
+        <div class="summary-card">
+            <h3>Active Tasks</h3>
+            <p>{{ dashboard()?.summary?.activeTasks ?? 0 }}</p>
+        </div>
+        <div class="summary-card">
+            <h3>Completed Tasks</h3>
+            <p>{{ dashboard()?.summary?.completedTasks ?? 0 }}</p>
+        </div>
+        <div class="summary-card">
+            <h3>Due Today</h3>
+            <p>{{ dashboard()?.summary?.dueToday ?? 0 }}</p>
+        </div>
+        <div class="summary-card">
+            <h3>Overdue</h3>
+            <p>{{ dashboard()?.summary?.overdue ?? 0 }}</p>
+        </div>
+    </div>
+
+    <div class="widgets-grid">
+        <app-dashboard-widget title="Recently Updated"
+            [tasks]="dashboard()?.recentlyUpdated ?? []"></app-dashboard-widget>
+
+        <app-dashboard-widget title="High Priority" [tasks]="dashboard()?.highPriority ?? []"></app-dashboard-widget>
+
+        <app-dashboard-widget title="Due This Week" [tasks]="dashboard()?.dueThisWeek ?? []"></app-dashboard-widget>
+
+        <app-dashboard-widget title="Overdue" [tasks]="dashboard()?.overdue ?? []"></app-dashboard-widget>
+    </div>
+    }
+</section>
