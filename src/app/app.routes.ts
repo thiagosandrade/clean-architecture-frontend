@@ -24,7 +24,7 @@ export const routes: Routes = [
     title: 'Task App - Users',
     path: 'users',
     canActivate: [authGuard],
-    loadChildren: () => import('./features/user/user.routes').then((m) => m.userRoutes),
+    loadChildren: () => import('./features/users/users.routes').then((m) => m.usersRoutes),
   },
   {
     title: 'Task App - Tasks',

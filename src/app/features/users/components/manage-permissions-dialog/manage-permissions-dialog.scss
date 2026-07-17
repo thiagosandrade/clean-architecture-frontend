@@ -1,0 +1,103 @@
+:host {
+
+  display: block;
+
+}
+
+
+
+mat-dialog-content {
+
+  min-width: 420px;
+
+  max-width: 520px;
+
+}
+
+
+
+.loading {
+
+  display: flex;
+
+  justify-content: center;
+
+  padding: 2rem;
+
+}
+
+
+
+.user-summary {
+
+  display: flex;
+
+  flex-direction: column;
+
+  margin-bottom: 1.5rem;
+
+  padding: 1rem;
+
+  border-radius: 10px;
+
+  background: rgba(0,0,0,.04);
+
+}
+
+
+
+.user-name {
+
+  font-size: 1rem;
+
+  font-weight: 600;
+
+}
+
+
+
+.user-email {
+
+  margin-top: .2rem;
+
+  color: #666;
+
+  font-size: .8rem;
+
+}
+
+
+
+.permissions-list {
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: .65rem;
+
+}
+
+
+
+.permissions-list mat-checkbox {
+
+  padding: .35rem .2rem;
+
+}
+
+
+
+mat-dialog-actions {
+
+  padding-top: 1rem;
+
+}
+
+
+
+mat-spinner {
+
+  margin: 0 auto;
+
+}

@@ -140,28 +140,6 @@ export class GlobalSearchComponent {
 
   }
 
-  showAll(): void {
-
-    const query =
-      this.search.value.trim();
-
-    if (!query) {
-      return;
-    }
-
-    this.router.navigate(
-      ['/search'],
-      {
-        queryParams: {
-          q: query
-        }
-      }
-    );
-
-    this.opened.set(false);
-
-  }
-
   openDetail(
     type: SearchDetailType,
     id: string

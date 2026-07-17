@@ -1,0 +1,94 @@
+<h2 mat-dialog-title>
+
+  Create User
+
+</h2>
+
+<mat-dialog-content>
+
+  <form [formGroup]="form" class="dialog-form">
+
+    <mat-form-field appearance="outline">
+
+      <mat-label>
+
+        First Name
+
+      </mat-label>
+
+      <input matInput formControlName="firstName">
+
+    </mat-form-field>
+
+
+    <mat-form-field appearance="outline">
+
+      <mat-label>
+
+        Last Name
+
+      </mat-label>
+
+      <input matInput formControlName="lastName">
+
+    </mat-form-field>
+
+
+    <mat-form-field appearance="outline">
+
+      <mat-label>
+
+        Email
+
+      </mat-label>
+
+      <input matInput type="email" formControlName="email">
+
+    </mat-form-field>
+
+
+    @if(data.mode === 'create') {
+
+    <mat-form-field>
+
+      <mat-label>Password</mat-label>
+
+      <input matInput type="password" formControlName="password">
+
+    </mat-form-field>
+
+    }
+
+  </form>
+
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+
+  <button mat-button (click)="cancel()">
+
+    Cancel
+
+  </button>
+
+  <button mat-flat-button color="primary" [disabled]="saving()" (click)="save()">
+
+    @if (saving()) {
+
+    <mat-spinner diameter="18"></mat-spinner>
+
+    }
+    @else {
+
+      @if(data.mode === 'create') {
+        Create User
+      } 
+      @else {
+        Update User
+      }
+
+    }
+
+  </button>
+
+</mat-dialog-actions>

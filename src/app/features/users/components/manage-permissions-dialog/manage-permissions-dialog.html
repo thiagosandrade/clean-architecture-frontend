@@ -1,0 +1,88 @@
+<h2 mat-dialog-title>
+
+  Manage Permissions
+
+</h2>
+
+<mat-dialog-content>
+
+  @if (loading()) {
+
+    <div class="loading">
+
+      <mat-spinner diameter="36"></mat-spinner>
+
+    </div>
+
+  }
+  @else {
+
+    <div class="user-summary">
+
+      <div class="user-name">
+
+        {{ data.userName }}
+
+      </div>
+
+      <div class="user-email">
+
+        {{ data.email }}
+
+      </div>
+
+    </div>
+
+    <div class="permissions-list">
+
+      @for (
+        permission of permissions();
+        track permission.id
+      ) {
+
+        <mat-checkbox
+          [checked]="isSelected(permission.id)"
+          (change)="togglePermission(permission.id, $event.checked)">
+
+          {{ permission.description }}
+
+        </mat-checkbox>
+
+      }
+
+    </div>
+
+  }
+
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+
+  <button
+    mat-button
+    (click)="cancel()">
+
+    Cancel
+
+  </button>
+
+  <button
+    mat-flat-button
+    color="primary"
+    [disabled]="saving()"
+    (click)="save()">
+
+    @if (saving()) {
+
+      <mat-spinner diameter="18"></mat-spinner>
+
+    }
+    @else {
+
+      Save Changes
+
+    }
+
+  </button>
+
+</mat-dialog-actions>

@@ -1,0 +1,124 @@
+.users-page {
+  padding: 24px;
+
+  .page-header {
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+.title-section {
+
+  display: flex;
+
+  flex-direction: column;
+  
+  gap: 8px;
+
+}
+
+
+.title-section span {
+
+  color: #777;
+
+  margin-top: .2rem;
+
+}
+
+
+.page-header button {
+
+  margin-left: auto;
+
+}
+
+.users-card {
+
+  border-radius: 12px;
+
+}
+
+
+.users-table {
+
+  width: 100%;
+
+}
+
+
+.users-table th {
+
+  font-weight: 600;
+
+}
+
+
+.users-table td,
+.users-table th {
+
+  padding-top: .8rem;
+
+  padding-bottom: .8rem;
+
+}
+
+.page-header h1 {
+
+  margin:0;
+
+  font-size:1.6rem;
+
+}
+
+
+.page-header span {
+
+  color:#777;
+
+}
+
+
+.loading {
+
+  display:flex;
+
+  justify-content:center;
+
+  padding:4rem;
+
+}
+
+
+.users-table {
+
+  width:100%;
+
+  border-radius:12px;
+
+  overflow:hidden;
+
+}
+
+
+.mat-mdc-row:hover {
+
+  background:rgba(0,0,0,.03);
+
+}
+
+
+mat-chip {
+
+  font-size:.72rem;
+
+}
+
+
+td:last-child {
+
+  width:56px;
+
+}
