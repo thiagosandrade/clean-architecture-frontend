@@ -39,6 +39,12 @@ export const routes: Routes = [
     loadChildren: () => import('./features/dashboard/dashboard.routes').then((m) => m.dashboardRoutes),
   },
   {
+    title: 'Task App - Search Details',
+    path: 'search',
+    canActivate: [authGuard],
+    loadChildren: () => import('./features/search/search.routes').then((m) => m.searchRoutes),
+  },
+  {
     title: 'Task App',
     path: '',
     redirectTo: 'login',

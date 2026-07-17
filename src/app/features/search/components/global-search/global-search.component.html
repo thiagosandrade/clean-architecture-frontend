@@ -1,0 +1,287 @@
+<div class="global-search" (click)="stop($event)">
+
+  <mat-form-field appearance="outline" class="search-field">
+
+    <mat-icon matPrefix>
+      search
+    </mat-icon>
+
+    <input
+      matInput
+      autocomplete="off"
+      placeholder="Search..."
+      [formControl]="search">
+
+
+    @if (loading()) {
+
+      <mat-spinner
+        matSuffix
+        diameter="20">
+      </mat-spinner>
+
+    }
+
+  </mat-form-field>
+
+
+  @if (opened()) {
+
+    <div class="dropdown">
+
+
+      @if (results(); as result) {
+
+
+        <!-- TASKS -->
+
+        @if (result.tasks.length > 0) {
+
+          <div class="section">
+
+            <div class="section-title">
+              Tasks
+            </div>
+
+
+            @for (task of result.tasks; track task.id) {
+
+              <div
+                class="item"
+                (click)="openDetail('task', task.id)">
+
+
+                <mat-icon>
+                  task
+                </mat-icon>
+
+
+                <div class="content">
+
+                  <div class="title">
+                    {{ task.description }}
+                  </div>
+
+
+                  <div class="subtitle">
+                    Task
+                  </div>
+
+                </div>
+
+
+              </div>
+
+            }
+
+
+          </div>
+
+        }
+
+
+
+        <!-- SUBTASKS -->
+
+        @if (result.subtasks.length > 0) {
+
+          <div class="section">
+
+            <div class="section-title">
+              Subtasks
+            </div>
+
+
+            @for (subtask of result.subtasks; track subtask.id) {
+
+
+              <div
+                class="item"
+                (click)="openDetail('subtask', subtask.id)">
+
+
+                <mat-icon>
+                  checklist
+                </mat-icon>
+
+
+                <div class="content">
+
+                  <div class="title">
+                    {{ subtask.description }}
+                  </div>
+
+
+                  <div class="subtitle">
+                    {{ subtask.taskDescription }}
+                  </div>
+
+
+                </div>
+
+
+              </div>
+
+
+            }
+
+
+          </div>
+
+        }
+
+
+
+
+        <!-- ATTACHMENTS -->
+
+
+        @if (result.attachments.length > 0) {
+
+          <div class="section">
+
+            <div class="section-title">
+              Attachments
+            </div>
+
+
+            @for (attachment of result.attachments; track attachment.id) {
+
+
+              <div
+                class="item"
+                (click)="openDetail('attachment', attachment.id)">
+
+
+                <mat-icon>
+                  attach_file
+                </mat-icon>
+
+
+                <div class="content">
+
+                  <div class="title">
+                    {{ attachment.originalFileName }}
+                  </div>
+
+
+                  <div class="subtitle">
+                    {{ attachment.taskDescription }}
+                  </div>
+
+
+                </div>
+
+
+              </div>
+
+
+            }
+
+
+          </div>
+
+        }
+
+
+
+
+        <!-- USERS -->
+
+
+        @if (result.users.length > 0) {
+
+          <div class="section">
+
+
+            <div class="section-title">
+              Users
+            </div>
+
+
+
+            @for (user of result.users; track user.id) {
+
+
+              <div
+                class="item"
+                (click)="openDetail('user', user.id)">
+
+
+                <mat-icon>
+                  person
+                </mat-icon>
+
+
+                <div class="content">
+
+
+                  <div class="title">
+                    {{ user.displayName }}
+                  </div>
+
+
+                  <div class="subtitle">
+                    {{ user.email }}
+                  </div>
+
+
+                </div>
+
+
+              </div>
+
+
+            }
+
+
+          </div>
+
+        }
+
+
+
+
+        <!-- EMPTY -->
+
+
+        @if (
+          result.tasks.length === 0 &&
+          result.subtasks.length === 0 &&
+          result.attachments.length === 0 &&
+          result.users.length === 0
+        ) {
+
+          <div class="empty">
+
+            No results found
+
+          </div>
+
+        }
+
+
+
+
+        <!-- SHOW ALL -->
+
+
+        <div
+          class="show-all"
+          (click)="showAll()">
+
+          Show all results
+
+        </div>
+
+
+      }
+
+
+    </div>
+
+
+  }
+
+
+</div>

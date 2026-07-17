@@ -1,0 +1,85 @@
+<div class="subtasks">
+
+
+  <div class="header">
+
+    <small>
+      {{ completedCount() }}/{{ subtasks.length }} completed
+    </small>
+
+  </div>
+
+
+
+  @for (
+  subtask of subtasks;
+  track subtask.id
+  ) {
+
+
+  <div class="subtask">
+
+
+    <mat-icon [class.completed]="subtask.isCompleted">
+
+      @if (subtask.isCompleted) {
+
+      check_circle
+
+      } @else {
+
+      radio_button_unchecked
+
+      }
+
+    </mat-icon>
+
+
+
+    <div class="content">
+
+
+      <div class="description" [class.completed]="subtask.isCompleted">
+
+        {{ subtask.description }}
+
+      </div>
+
+
+
+      @if (subtask.taskDescription) {
+
+      <div class="parent">
+
+        Parent:
+        {{ subtask.taskDescription }}
+
+      </div>
+
+      }
+
+
+    </div>
+
+
+
+    @if (subtask.taskId) {
+
+    <button mat-icon-button matTooltip="Open task" (click)="openTask(subtask.taskId)">
+
+      <mat-icon>
+        open_in_new
+      </mat-icon>
+
+    </button>
+
+    }
+
+
+  </div>
+
+
+  }
+
+
+</div>

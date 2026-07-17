@@ -1,0 +1,52 @@
+<div class="attachments">
+
+  @for (
+    attachment of attachments;
+    track attachment.id
+  ) {
+
+    <div class="attachment-item">
+
+
+      <div class="icon-column">
+
+        <mat-icon>
+          attach_file
+        </mat-icon>
+
+      </div>
+
+
+
+      <div class="info-column">
+
+
+        <div class="file-name">
+
+          {{ attachment.originalFileName }}
+
+        </div>
+
+
+        <div class="file-detail">
+
+          {{ attachment.contentType }}
+
+        </div>
+
+
+        <div class="file-detail">
+
+          {{ formatSize(attachment.size) }}
+
+        </div>
+
+
+      </div>
+
+
+    </div>
+
+  }
+
+</div>

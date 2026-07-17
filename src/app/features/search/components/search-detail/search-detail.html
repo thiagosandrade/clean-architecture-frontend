@@ -1,0 +1,377 @@
+<nav class="breadcrumbs">
+
+  @for (
+  crumb of breadcrumbs;
+  track crumb;
+  let last = $last
+  ) {
+
+  <span [class.current]="last">
+
+    {{ crumb }}
+
+  </span>
+
+
+  @if (!last) {
+
+  <mat-icon>
+    chevron_right
+  </mat-icon>
+
+  }
+
+  }
+
+</nav>
+@if (loading()) {
+
+<div class="loading">
+
+  <mat-spinner diameter="40"></mat-spinner>
+
+</div>
+
+} @else if (detail(); as item) {
+
+<section class="detail-page">
+
+  <!-- Header -->
+  <div class="header">
+
+    <div class="icon-wrapper">
+
+      @switch (item.type) {
+
+      @case ('task') {
+      <mat-icon>task</mat-icon>
+      }
+
+      @case ('user') {
+      <mat-icon>person</mat-icon>
+      }
+
+      @case ('attachment') {
+      <mat-icon>attach_file</mat-icon>
+      }
+
+      @case ('dependency') {
+      <mat-icon>link</mat-icon>
+      }
+
+      @case ('subtask') {
+      <mat-icon>check_box</mat-icon>
+      }
+
+      @default {
+      <mat-icon>search</mat-icon>
+      }
+
+      }
+
+    </div>
+
+
+    <div class="title">
+
+      <h1>
+        {{ item.title }}
+      </h1>
+
+      <span>
+        {{ item.subtitle }}
+      </span>
+
+    </div>
+
+
+    <div class="type">
+
+      @if (item.type === 'task') {
+
+      <button mat-button class="workspace-button" (click)="openWorkspace(item.id)">
+
+        <mat-icon>
+          open_in_new
+        </mat-icon>
+
+        Open Workspace
+
+      </button>
+
+      }
+      @else
+      {
+      <div class="type">
+        {{ item.type }}
+      </div>
+      }
+
+
+    </div>
+
+  </div>
+
+
+  <mat-divider></mat-divider>
+
+
+  <!-- Summary -->
+  <section class="section">
+
+    <h2>
+      Summary
+    </h2>
+
+
+    <div class="summary-grid">
+
+
+      @if (item.summary.status) {
+
+      <div class="field">
+
+        <label>Status</label>
+
+        <span>
+          {{ item.summary.status }}
+        </span>
+
+      </div>
+
+      }
+
+
+      @if (item.summary.createdOn) {
+
+      <div class="field">
+
+        <label>
+          Created
+        </label>
+
+        <span>
+          {{ formatDateOnly(item.summary.createdOn) }}
+        </span>
+
+      </div>
+
+      }
+
+
+      @if (item.summary.updatedOn) {
+
+      <div class="field">
+
+        <label>
+          Updated
+        </label>
+
+        <span>
+          {{ formatDateOnly(item.summary.updatedOn) }}
+        </span>
+
+      </div>
+
+      }
+
+
+    </div>
+
+  </section>
+
+
+
+  <!-- Entity data -->
+  @if (item.data) {
+
+  <section class="section">
+
+    <h2>
+      Details
+    </h2>
+
+
+    <div class="data-card">
+
+
+      @for (
+      entry of objectEntries(item.data);
+      track entry[0]
+      ) {
+
+
+
+          @if (isPrimitive(entry[1])) {
+            <div class="field">
+              <label>
+                {{ entry[0] }}
+              </label>
+              <span>
+                {{ formatProperty(entry[0], entry[1]) }}
+              </span>
+            </div>
+          }
+          @else {
+
+            @if (isObject(entry[1])) {
+
+              @switch(entry[0]) {
+
+                @case ('attachments') {
+
+                  <div class="full-property">
+
+                    <div class="property-title">
+
+                      {{entry[0]}}
+
+                    </div>
+
+                    <app-search-detail-attachment [attachments]="entry[1]"> </app-search-detail-attachment>
+
+                  </div>
+                }
+
+                @case ('subtasks') {
+
+                  <div class="full-property">
+
+                    <div class="property-title">
+
+                      {{entry[0]}}
+
+                    </div>
+
+                    <app-search-detail-subtask [subtasks]="entry[1]"> </app-search-detail-subtask>
+
+                  </div>
+                }
+
+                @default {
+
+                  <pre>
+                    {{ formatValue(entry[1]) }}
+                  </pre>
+
+                }
+
+              }
+
+            }
+            @else {
+
+              {{ formatProperty(entry[0], entry[1]) }}
+
+            }
+
+          }
+
+
+      }
+
+
+    </div>
+
+
+  </section>
+
+  }
+
+
+
+  <!-- Links -->
+  @if (item.links.length > 0) {
+
+  <section class="section">
+
+
+    <h2>
+      Related
+    </h2>
+
+
+    <div class="links">
+
+
+      @for (
+      link of item.links;
+      track link.id
+      ) {
+
+
+      <button mat-stroked-button class="link-item" (click)="openRelated(link)">
+
+
+        <mat-icon>
+
+          @switch(link.type) {
+
+          @case ('task') {
+          task
+          }
+
+          @case ('user') {
+          person
+          }
+
+          @case ('attachment') {
+          attach_file
+          }
+
+          @case ('dependency') {
+          link
+          }
+
+          @case ('subtask') {
+          checklist
+          }
+
+          }
+
+        </mat-icon>
+
+
+        <span>
+
+          {{ link.description }}
+
+        </span>
+
+
+      </button>
+
+
+      }
+
+
+    </div>
+
+
+  </section>
+
+  }
+
+
+</section>
+
+
+} @else {
+
+
+<div class="empty">
+
+  <mat-icon>
+    search_off
+  </mat-icon>
+
+
+  <p>
+    Information not found.
+  </p>
+
+
+</div>
+
+
+}

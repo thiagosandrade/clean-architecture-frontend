@@ -8,11 +8,12 @@ import { MatDividerModule } from '@angular/material/divider';
 import { ThemeService } from '../../../services/theme.service';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../../features/auth/services/auth.service';
+import { GlobalSearchComponent } from "../../../../features/search/components/global-search/global-search.component";
 
 @Component({
   selector: 'app-toolbar',
   standalone: true,
-  imports: [CommonModule, MatToolbarModule, MatButtonModule, MatMenuModule, MatIconModule, MatDividerModule],
+  imports: [CommonModule, MatToolbarModule, MatButtonModule, MatMenuModule, MatIconModule, MatDividerModule, GlobalSearchComponent],
   templateUrl: './toolbar.component.html',
   styleUrls: ['./toolbar.component.scss'],
 })

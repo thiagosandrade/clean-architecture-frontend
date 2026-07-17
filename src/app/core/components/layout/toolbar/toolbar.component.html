@@ -1,14 +1,31 @@
 <mat-toolbar class="toolbar">
-  <span class="toolbar-title">Task App</span>
+
+  <span class="toolbar-title">
+
+    Task App
+
+  </span>
 
   @if (showHamburger()) {
+
     <span class="toolbar-spacer"></span>
 
-    <button mat-icon-button [matMenuTriggerFor]="menu" class="menu" aria-label="Open navigation menu">
-      <mat-icon>menu</mat-icon>
+    <button
+      mat-icon-button
+      [matMenuTriggerFor]="menu"
+      class="menu"
+      aria-label="Open navigation menu">
+
+      <mat-icon>
+
+        menu
+
+      </mat-icon>
+
     </button>
 
     <mat-menu #menu="matMenu">
+
       <button mat-menu-item (click)="goToDashboard()">
         <mat-icon class="menu-icon dashboard">dashboard</mat-icon>
         <span>Dashboard</span>
@@ -47,20 +64,75 @@
         <mat-icon class="menu-icon logout-icon">logout</mat-icon>
         <span>Logout</span>
       </button>
+
     </mat-menu>
+
   } @else {
-    <nav class="nav-links" aria-label="Primary navigation">
-      <button mat-button (click)="goToDashboard()">Dashboard</button>
-      <button mat-button (click)="goToSearch()">Search</button>
-      <button mat-button (click)="goToTodos()">Tasks</button>
-      <button mat-button (click)="goToUsers()">Users</button>
+
+    <nav
+      class="nav-links"
+      aria-label="Primary navigation">
+
+      <button
+        mat-button
+        (click)="goToDashboard()">
+
+        Dashboard
+
+      </button>
+
+      <button
+        mat-button
+        (click)="goToSearch()">
+
+        Search
+
+      </button>
+
+      <button
+        mat-button
+        (click)="goToTodos()">
+
+        Tasks
+
+      </button>
+
+      <button
+        mat-button
+        (click)="goToUsers()">
+
+        Users
+
+      </button>
+
     </nav>
 
-    <button mat-icon-button [matMenuTriggerFor]="userMenu" class="user-menu-button" aria-label="User actions">
-      <mat-icon>account_circle</mat-icon>
+    <span class="toolbar-spacer"></span>
+
+    <div class="toolbar-search">
+
+      <app-global-search>
+
+      </app-global-search>
+
+    </div>
+
+    <button
+      mat-icon-button
+      [matMenuTriggerFor]="userMenu"
+      class="user-menu-button"
+      aria-label="User actions">
+
+      <mat-icon>
+
+        account_circle
+
+      </mat-icon>
+
     </button>
 
     <mat-menu #userMenu="matMenu">
+
       <button mat-menu-item (click)="goToUser()">
         <mat-icon class="menu-icon user-icon">person</mat-icon>
         <span>User Details</span>
@@ -75,6 +147,9 @@
         <mat-icon class="menu-icon logout-icon">logout</mat-icon>
         <span>Logout</span>
       </button>
+
     </mat-menu>
+
   }
+
 </mat-toolbar>

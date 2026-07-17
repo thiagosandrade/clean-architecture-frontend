@@ -1,0 +1,118 @@
+:host {
+
+  display: block;
+
+  width: 100%;
+
+}
+
+
+
+.attachments {
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: .6rem;
+
+}
+
+
+
+.attachment-item {
+
+  display: flex;
+
+  grid-template-columns: 32px 1fr;
+
+  align-items: start;
+
+  gap: .65rem;
+
+
+  padding: .75rem;
+
+
+  border-radius: 8px;
+
+
+  background: rgba(0,0,0,.04);
+
+
+  transition:
+    background-color .15s ease;
+
+
+  &:hover {
+
+    background: rgba(0,0,0,.08);
+
+  }
+
+}
+
+
+
+.icon-column {
+
+  display: flex;
+
+  justify-content: center;
+
+  padding-top: .15rem;
+
+
+  mat-icon {
+
+    color:#616161;
+
+    font-size:20px;
+
+    width:20px;
+
+    height:20px;
+
+  }
+
+}
+
+
+
+.info-column {
+
+  display:flex;
+
+  flex-direction:column;
+
+  min-width:0;
+
+}
+
+
+
+.file-name {
+
+  font-size:.85rem;
+
+  font-weight:600;
+
+  overflow:hidden;
+
+  text-overflow:ellipsis;
+
+  white-space:nowrap;
+
+}
+
+
+
+.file-detail {
+
+  margin-top:.15rem;
+
+  font-size:.72rem;
+
+  color:#777;
+
+}

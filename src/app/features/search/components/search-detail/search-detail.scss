@@ -1,0 +1,461 @@
+:host {
+    display: block;
+    width: 100%;
+}
+
+
+.detail-page {
+
+    padding: 1.5rem;
+
+    max-width: 900px;
+
+    margin: 0 auto;
+
+}
+
+.full-property {
+
+  grid-column: 1 / -1;
+
+  width:100%;
+
+  margin-top:1rem;
+
+}
+
+
+.property-title {
+
+  font-size:.75rem;
+
+  font-weight:700;
+
+  text-transform:uppercase;
+
+  letter-spacing:.08em;
+
+  color:#777;
+
+  margin-bottom:.75rem;
+
+}
+
+/* Breadcrumbs */
+.breadcrumbs {
+  display: flex;
+  align-items: center;
+  gap: .35rem;
+
+  margin-bottom: 1rem;
+
+  font-size: .85rem;
+  color: #777;
+}
+
+
+.breadcrumbs span {
+  display: flex;
+  align-items: center;
+
+  line-height: 1;
+}
+
+
+.breadcrumbs mat-icon {
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 18px;
+  height: 18px;
+
+  font-size: 18px;
+
+  color: #999;
+
+}
+
+
+.breadcrumbs .current {
+
+  color: #222;
+
+  font-weight: 600;
+
+}
+
+/* Workspace Button */
+
+.workspace-button {
+
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: .4rem;
+
+
+  padding: .45rem 1rem;
+
+
+  border-radius: 999px;
+
+
+  background: #1976d2;
+
+
+  color: white;
+
+
+  border: none;
+
+
+  font-size: .85rem;
+
+  font-weight: 600;
+
+
+  transition:
+    background-color .15s ease,
+    transform .15s ease;
+
+
+  mat-icon {
+
+    font-size: 18px;
+
+    width:18px;
+
+    height:18px;
+
+  }
+
+
+  &:hover {
+
+    background:#1565c0;
+
+    transform: translateY(-1px);
+
+  }
+
+
+}
+
+/* Loading */
+
+.loading {
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    height: 300px;
+
+}
+
+
+
+/* Header */
+
+.header {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 1rem;
+
+    margin-bottom: 1.25rem;
+
+}
+
+
+.icon-wrapper {
+
+    width: 48px;
+
+    height: 48px;
+
+    border-radius: 50%;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background: rgba(0, 0, 0, 0.06);
+
+}
+
+
+.icon-wrapper mat-icon {
+
+    font-size: 28px;
+
+    width: 28px;
+
+    height: 28px;
+
+}
+
+
+.title {
+
+    flex: 1;
+
+    min-width: 0;
+
+}
+
+
+.title h1 {
+
+    margin: 0;
+
+    font-size: 1.35rem;
+
+    font-weight: 600;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
+
+}
+
+
+.title span {
+
+    display: block;
+
+    margin-top: 0.25rem;
+
+    font-size: 0.85rem;
+
+    color: #757575;
+
+}
+
+
+.type {
+
+    font-size: 0.7rem;
+
+    font-weight: 700;
+
+    letter-spacing: 0.08em;
+
+    border-radius: 20px;
+
+    background: rgba(0, 0, 0, 0.08);
+
+    color: #555;
+
+}
+
+
+
+/* Sections */
+
+.section {
+
+    margin-top: 1.5rem;
+
+}
+
+
+.section h2 {
+
+    margin: 0 0 0.75rem;
+
+    font-size: 1rem;
+
+    font-weight: 600;
+
+}
+
+
+
+/* Summary */
+
+.summary-grid {
+
+    display: grid;
+
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+
+    gap: 0.75rem;
+
+}
+
+
+.field {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 0.25rem;
+
+}
+
+
+.field label {
+
+    font-size: 0.7rem;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.05em;
+
+    color: #777;
+
+    font-weight: 600;
+
+}
+
+
+.field span {
+
+    font-size: 0.9rem;
+
+}
+
+
+
+/* Data */
+
+.data-card {
+
+    display: grid;
+
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+
+    gap: 1rem;
+
+    padding: 1rem;
+
+    border-radius: 10px;
+
+    background: rgba(0, 0, 0, 0.03);
+
+}
+
+
+
+/* Related links */
+
+.links {
+
+    display: flex;
+
+    flex-direction: row;
+
+    gap: 0.5rem;
+
+}
+
+
+.link-item {
+
+    justify-content: flex-start;
+
+    width: fit-content;
+
+    max-width: 100%;
+
+}
+
+
+.link-item mat-icon {
+
+    margin-right: 0.5rem;
+
+}
+
+
+.link-item span {
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
+
+}
+
+
+
+/* Empty */
+
+.empty {
+
+    height: 250px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    color: #777;
+
+}
+
+
+.empty mat-icon {
+
+    font-size: 40px;
+
+    width: 40px;
+
+    height: 40px;
+
+    margin-bottom: 0.75rem;
+
+}
+
+
+
+/* Responsive */
+
+@media (max-width: 600px) {
+
+
+    .detail-page {
+
+        padding: 1rem;
+
+    }
+
+
+    .header {
+
+        align-items: flex-start;
+
+        flex-wrap: wrap;
+
+    }
+
+
+    .type {
+
+        text-transform: uppercase;
+
+        font-size: .7rem;
+
+        font-weight: 700;
+
+        letter-spacing: .08em;
+
+    }
+
+
+}
