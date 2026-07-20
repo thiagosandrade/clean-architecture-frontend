@@ -14,7 +14,7 @@ import {
 } from '@angular/common';
 
 import {
-  TaskItem
+  TodoItem
 } from '../../models/todo.model';
 
 import {
@@ -76,7 +76,7 @@ export class TaskWorkspaceComponent implements OnInit, OnChanges {
 
   @Output()
   subtasksChanged =
-    new EventEmitter<TaskItem['subtasks']>();
+    new EventEmitter<TodoItem['subItems']>();
 
 
   readonly workspacestore =

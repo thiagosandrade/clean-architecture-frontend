@@ -1,16 +1,11 @@
-import { AttachmentSearchItem } from "./attachment-search-item";
-import { SubtaskSearchItem } from "./subtask-search-item";
-import { TaskSearchItem } from "./task-search-item";
-import { UserSearchItem } from "./user-search-item";
+import { TodoItemAttachmentSearch as AttachmentItemSearch } from "./attachment-search-item";
+import { SubItemSearch } from "./todo-subitem-search";
+import { TodoItemSearch } from "./todo-item-search";
+import { UserSearchItem as UserItemSearch } from "./user-search-item";
 
 export interface QuickSearchResponse {
-
-  tasks: TaskSearchItem[];
-
-  subtasks: SubtaskSearchItem[];
-
-  attachments: AttachmentSearchItem[];
-
-  users: UserSearchItem[];
-
+  tasks: TodoItemSearch[];
+  subtasks: SubItemSearch[];
+  attachments: AttachmentItemSearch[];
+  users: UserItemSearch[];
 }

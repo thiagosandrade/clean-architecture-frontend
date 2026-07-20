@@ -22,7 +22,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { firstValueFrom } from 'rxjs';
 import { RewriteStyle, rewriteStyleLabels } from '../../../../core/enums/rewrite-style.enum';
-import { TaskItem } from '../../models/todo.model';
+import { TodoItem } from '../../models/todo.model';
 import { TodoService } from '../../services/todo.service';
 
 
@@ -57,7 +57,7 @@ export class TodoRewriteDialogComponent {
     private dialogRef: MatDialogRef<TodoRewriteDialogComponent>,
 
     @Inject(MAT_DIALOG_DATA)
-    public todo: TaskItem
+    public todo: TodoItem
   ) {}
 
   async rewrite(): Promise<void> {

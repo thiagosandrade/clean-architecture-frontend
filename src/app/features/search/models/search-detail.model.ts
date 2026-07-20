@@ -9,11 +9,11 @@ export interface SearchDetailResponse {
 }
 
 export type SearchDetailType =
-  | 'task'
+  | 'todoItem'
   | 'user'
   | 'attachment'
   | 'dependency'
-  | 'subtask';
+  | 'todoSubItem';
 
 export interface SearchDetailSummary {
   status?: string;

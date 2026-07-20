@@ -9,14 +9,15 @@ export class TaskService {
 
   constructor(private http: HttpClient) {}
 
-  getActivities(
-    taskId: string
-  ) {
-    const userId = localStorage.getItem('id');
+  getActivities(taskId: string) {
+      
+    const userId = localStorage.getItem('id') ?? '';
 
-     let params = new HttpParams()
-      .set('userId', userId ?? '')
-
-    return this.http.get<ActivitiesResponse>(`${this.base}/task/${taskId}`,{ params });
+    return this.http.post<ActivitiesResponse>(
+      `${this.base}/todo/${taskId}`,
+      {
+        userId,
+      }
+    );
   }
 }

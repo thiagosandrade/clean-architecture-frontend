@@ -1,6 +1,6 @@
-import { TaskDependency } from "./task-dependency.model";
+import { TodoItemDependency } from "./todoitem-dependency.model";
 
-export interface TaskItem {
+export interface TodoItem {
   id: string;
   userId: number;
   description: string;
@@ -8,15 +8,15 @@ export interface TaskItem {
   labels: string[];
   categories: string[];
   isCompleted: boolean;
-  createdAt: string;
+  createdAt: string | null;
   completedAt: string | null;
   priority: number;
   similarity: number;
-  subtasks: TodoSubtask[];
-  dependencies: TaskDependency[];
+  subItems: TodoSubItem[];
+  dependencies: TodoItemDependency[];
 }
 
-export interface TodoSubtask {
+export interface TodoSubItem {
   id: string;
   todoItemId: string;
   description: string;
@@ -26,8 +26,8 @@ export interface TodoSubtask {
   order: number;
 }
 
-export interface TodoResponse {
-  items: TaskItem[];
+export interface TodoItemResponse {
+  items: TodoItem[];
   total: number;
 }
 

@@ -12,7 +12,9 @@
 
       <app-todo-info
         [taskId]="todo.id"
+        mode="edit"
         (descriptionChanged)="descriptionChanged.emit($event)"
+        (created)="($event)"
         (statusChanged)="onLeftStatusChanged($event)">
       </app-todo-info>
 

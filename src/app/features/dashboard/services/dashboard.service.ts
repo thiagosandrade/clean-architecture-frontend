@@ -15,10 +15,8 @@ export class DashboardService {
   getDashboard(): Observable<DashboardResponse> {
     const userId = localStorage.getItem('id') ?? '';
 
-    return this.http.get<DashboardResponse>(this.base, {
-      params: {
-        userId,
-      },
+    return this.http.post<DashboardResponse>(this.base, {
+        userId
     });
   }
 }

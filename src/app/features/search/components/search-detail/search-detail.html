@@ -43,7 +43,7 @@
 
       @switch (item.type) {
 
-      @case ('task') {
+      @case ('todoItem') {
       <mat-icon>task</mat-icon>
       }
 
@@ -59,7 +59,7 @@
       <mat-icon>link</mat-icon>
       }
 
-      @case ('subtask') {
+      @case ('todoSubItem') {
       <mat-icon>check_box</mat-icon>
       }
 
@@ -87,7 +87,7 @@
 
     <div class="type">
 
-      @if (item.type === 'task') {
+      @if (item.type === 'todoItem') {
 
       <button mat-button class="workspace-button" (click)="openWorkspace(item.id)">
 
@@ -307,7 +307,7 @@
 
           @switch(link.type) {
 
-          @case ('task') {
+          @case ('todoItem') {
           task
           }
 
@@ -323,7 +323,7 @@
           link
           }
 
-          @case ('subtask') {
+          @case ('todoSubItem') {
           checklist
           }
 

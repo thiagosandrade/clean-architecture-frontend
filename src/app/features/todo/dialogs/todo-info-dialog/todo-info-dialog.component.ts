@@ -23,6 +23,15 @@ export class TodoInfoDialogComponent {
     public data: TodoDialogData,
   ) {}
 
+  getMode(): "create" | "edit" | "view" {
+    return this.data.mode;
+  }
+
+  getTodoId(): string | undefined {
+    console.log(this.data.mode ===  'view' || this.data.mode === 'edit'  ? this.data.todo.id : '')
+    return this.data.mode ===  'view' || this.data.mode === 'edit'  ? this.data.todo.id : ''
+  }
+
   close(): void {
     this.dialogRef.close({
       refresh: this.hasChanges,

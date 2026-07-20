@@ -1,4 +1,4 @@
-export interface TaskDependency {
+export interface TodoItemDependency {
   todoItemId: string;
   dependsOnTodoItemId: string;
   description: string;

@@ -49,8 +49,8 @@ import {
 } from '../../../../core/enums/machine-state.enum';
 
 import {
-  TaskDependency
-} from '../../models/task-dependency.model';
+  TodoItemDependency
+} from '../../models/todoitem-dependency.model';
 
 import {
   TaskSearchDialogComponent
@@ -105,12 +105,12 @@ export class TaskDependenciesComponent
 
 
   readonly dependencies =
-    signal<TaskDependency[]>([]);
+    signal<TodoItemDependency[]>([]);
 
 
 
   private originalDependencies:
-    TaskDependency[] = [];
+    TodoItemDependency[] = [];
 
 
 

@@ -1,9 +1,9 @@
 <h2 mat-dialog-title>
-  {{ data.isEdit ? 'Edit Todo' : 'Create Todo' }}
+  {{ data.mode == 'edit' ? 'Edit Todo' : data.mode == 'create' ? 'Create Todo' : 'View Todo' }}
 </h2>
 
 <mat-dialog-content>
-  <app-todo-info [taskId]="data.todo!.id"></app-todo-info>
+  <app-todo-info [mode]="getMode()"  [taskId]="getTodoId()"></app-todo-info>
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">

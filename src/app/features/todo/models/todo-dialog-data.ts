@@ -1,15 +1,15 @@
-import { TaskItem } from './todo.model';
+import { TodoItem } from './todo.model';
 
 export interface TodoDialogData {
   /**
    * Current todo opened in the dialog/workspace
    */
-  todo: TaskItem;
+  todo: TodoItem;
 
   /**
    * Optional flag used by create/edit dialogs
    */
-  isEdit?: boolean;
+  mode: 'edit' | 'view' | 'create'
 
   /**
    * Used by workspace when opened from search
@@ -19,5 +19,5 @@ export interface TodoDialogData {
   /**
    * Navigation list for previous/next inside workspace
    */
-  navigation?: TaskItem[];
+  navigation?: TodoItem[];
 }

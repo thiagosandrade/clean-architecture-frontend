@@ -7,7 +7,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 
-import { TaskItem } from '../../../todo/models/todo.model';
+import { TodoItem } from '../../../todo/models/todo.model';
 import { Priority } from '../../../../core/enums/priority.enum';
 
 @Component({
@@ -26,17 +26,17 @@ import { Priority } from '../../../../core/enums/priority.enum';
 })
 export class TaskSummaryCardComponent {
   @Input()
-  task!: TaskItem;
+  task!: TodoItem;
 
   @Output()
-  view = new EventEmitter<TaskItem>();
+  view = new EventEmitter<TodoItem>();
 
   get completedSubtasks(): number {
-    return this.task.subtasks.filter((x) => x.isCompleted).length;
+    return this.task.subItems.filter((x) => x.isCompleted).length;
   }
 
   get totalSubtasks(): number {
-    return this.task.subtasks.length;
+    return this.task.subItems.length;
   }
 
   get progress(): number {

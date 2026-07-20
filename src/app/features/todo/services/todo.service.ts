@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { UpdateTodoRequest } from '../models/update-todo-request.model';
+import { UpdateTodoItemRequest } from '../models/update-todoitem-request.model';
 import { CreateTodoRequest } from '../models/create-todo-request.model';
-import { TaskItem, TodoResponse } from '../models/todo.model';
+import { TodoItem, TodoItemResponse } from '../models/todo.model';
 import { TaskAttachment, TaskAttachmentsResponse } from "../models/task-attachment-response";
 import { ParsedTodo } from '../models/parsed-todo-response.model';
 import { environment } from '../../../../environments/environment';
@@ -10,7 +10,7 @@ import { RewriteStyle } from '../../../core/enums/rewrite-style.enum';
 import { SubtaskRewriteResponse } from '../models/subtask-rewrite-response.model';
 import { BreakdownComplexity, BreakdownStrategy } from '../../../core/enums/todo-breakdown-options.enum';
 import { BreakdownResponse } from '../models/breakdown-response.model';
-import { TaskDependency } from '../models/task-dependency.model';
+import { TodoItemDependency } from '../models/todoitem-dependency.model';
 import { TaskSearchResult } from '../models/task-search-response.model';
 import { Observable } from 'rxjs';
 import { DownloadAttachmentResponse } from '../models/task-download-attachment-response';
@@ -56,7 +56,7 @@ export class TodoService {
       params = params.set('isCompleted', isCompleted);
     }
 
-    return this.http.get<TodoResponse>(this.base, { params });
+    return this.http.get<TodoItemResponse>(this.base, { params });
   }
 
   searchTodos(
@@ -83,12 +83,12 @@ export class TodoService {
       params.descending = descending;
     }
 
-    return this.http.get<TodoResponse>(`${this.base}/search`, { params });
+    return this.http.get<TodoItemResponse>(`${this.base}/search`, { params });
   }
 
   create(request: CreateTodoRequest) {
     request.userId = localStorage.getItem('id') ?? '';
-    return this.http.post(this.base, request);
+    return this.http.post<string>(this.base, request);
   }
 
   complete(id: string) {
@@ -103,7 +103,7 @@ export class TodoService {
     return this.http.delete<void>(`${this.base}/${id}`);
   }
 
-  update(id: string, request: UpdateTodoRequest) {
+  update(id: string, request: UpdateTodoItemRequest) {
     request.userId = localStorage.getItem('id') ?? '';
     return this.http.put(`${this.base}/${id}`, request);
   }
@@ -128,23 +128,24 @@ export class TodoService {
   }
 
   rewrite(id: string, request: { userId: string; description: string; style: RewriteStyle; }) {
-    return this.http.put<SubtaskRewriteResponse>(
+    return this.http.post<SubtaskRewriteResponse>(
       `${environment.apiUrl}/todos/ai/${id}/rewrite`,
       request
     );
   }
+  
   getById(id: string) {
-    return this.http.get<TaskItem>(`${this.base}/${id}`);
+    return this.http.get<TodoItem>(`${this.base}/${id}`);
   }
 
-  saveSubItems(id: string, subItems: TaskItem['subtasks']) {
+  saveSubItems(id: string, subItems: TodoItem['subItems']) {
     return this.http.put(`${this.base}/${id}/subitems`, {
       userId: localStorage.getItem('id') ?? '',
       todoSubItems: subItems,
     });
   }
 
-  updateDependencies(taskId: string, dependencies: TaskDependency[]) {
+  updateDependencies(taskId: string, dependencies: TodoItemDependency[]) {
 
     return this.http.put(
         `${this.base}/${taskId}/dependencies`,
@@ -164,13 +165,11 @@ export class TodoService {
 
     const userId = localStorage.getItem('id') ?? '';
 
-    return this.http.get<TaskSearchResult[]>(
+    return this.http.post<TaskSearchResult[]>(
       `${this.base}/searchby`,
       {
-        params: {
-          userId,
-          description
-        }
+        userId,
+        description
       }
     );
 

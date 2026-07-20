@@ -1,9 +1,9 @@
 import { TableConfig } from '../../../../../core/components/ui/data-table/table-config.model';
 import { formatDateOnly, formatDateTime } from '../../../../../core/utils/date-format.utils';
 import { formatPriority } from '../../../../../core/utils/priority-format.utils';
-import { TaskItem } from '../../../models/todo.model';
+import { TodoItem } from '../../../models/todo.model';
 
-export const TODO_TABLE_CONFIG: TableConfig<TaskItem> = {
+export const TODO_TABLE_CONFIG: TableConfig<TodoItem> = {
   columns: [
     // { key: 'id', label: 'ID' },
     { key: 'description', label: 'Description' },

@@ -37,7 +37,7 @@ import {
 } from '../../../../core/enums/workspace-status.enum';
 
 import {
-  TaskItem
+  TodoItem
 } from '../../models/todo.model';
 
 import {
@@ -83,7 +83,7 @@ export class TodoWorkspaceDialogComponent
   private router = inject(Router);
 
   readonly currentTodo =
-    signal<TaskItem | null>(null);
+    signal<TodoItem | null>(null);
 
 
   readonly taskSwitching =
@@ -433,7 +433,7 @@ export class TodoWorkspaceDialogComponent
 
 
   onSubtasksChanged(
-    subtasks: TaskItem['subtasks']
+    subItems: TodoItem['subItems']
   ): void {
 
 
@@ -452,7 +452,7 @@ export class TodoWorkspaceDialogComponent
 
       ...todo,
 
-      subtasks
+      subItems
 
     });
 

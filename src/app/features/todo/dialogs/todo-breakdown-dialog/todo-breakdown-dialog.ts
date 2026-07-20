@@ -55,10 +55,10 @@ import {
 } from '../../services/todo.service';
 
 import {
-  TaskItem
+  TodoItem
 } from '../../models/todo.model';
 import { MatIconModule } from "@angular/material/icon";
-import { mapGeneratedSubtasks as mapBreakdownGeneratedSubtasks } from '../../../../core/utils/map-generated-subtasks';
+import { mapGeneratedSubtasks as mapBreakdownGeneratedSubtasks } from '../../../../core/utils/map-generated-subitems';
 
 
 @Component({
@@ -90,7 +90,7 @@ export class TodoBreakdownDialogComponent {
 
   generating = signal(false);
   previewMode = signal(false);
-  generatedSubtasks = signal<TaskItem['subtasks']>([]);
+  generatedSubtasks = signal<TodoItem['subItems']>([]);
   readonly subtaskCount = signal(0);
 
   form = this.fb.group({
@@ -262,7 +262,7 @@ export class TodoBreakdownDialogComponent {
   }
 
   private recalculateOrder(
-    items: TaskItem['subtasks']
+    items: TodoItem['subItems']
   ): void {
 
     items.forEach((item, index) => {
@@ -274,7 +274,7 @@ export class TodoBreakdownDialogComponent {
   }
 
   private updateItems(
-    items: TaskItem['subtasks']
+    items: TodoItem['subItems']
   ): void {
 
     this.recalculateOrder(items);

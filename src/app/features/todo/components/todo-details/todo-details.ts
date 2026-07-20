@@ -19,7 +19,7 @@ import { MatIcon } from '@angular/material/icon';
 import { firstValueFrom } from 'rxjs';
 
 import { DATE_FORMATS } from '../../../../core/constants/date.constants';
-import { TaskItem } from '../../models/todo.model';
+import { TodoItem } from '../../models/todo.model';
 import { TodoService } from '../../services/todo.service';
 import { SnackbarService } from '../../../../core/services/snackbar.service';
 import { WorkspaceStatus } from '../../../../core/enums/workspace-status.enum';
@@ -59,15 +59,15 @@ export class TodoDetailsComponent implements OnChanges {
   statusChanged = new EventEmitter<WorkspaceStatus>();
 
   @Output()
-  subtasksChanged = new EventEmitter<TaskItem['subtasks']>();
+  subtasksChanged = new EventEmitter<TodoItem['subItems']>();
 
-  readonly todo = signal<TaskItem | null>(null);
+  readonly todo = signal<TodoItem | null>(null);
 
   state = signal(MachineState.Loading);
 
   canSave = false;
 
-  originalSubItems: TaskItem['subtasks'] = [];
+  originalSubItems: TodoItem['subItems'] = [];
 
   readonly DATE_FORMATS = DATE_FORMATS;
 
@@ -103,7 +103,7 @@ export class TodoDetailsComponent implements OnChanges {
       this.todo.set(task);
 
       this.originalSubItems =
-        structuredClone(task.subtasks ?? []);
+        structuredClone(task.subItems ?? []);
 
       this.canSave = false;
 
@@ -147,7 +147,7 @@ export class TodoDetailsComponent implements OnChanges {
   hasChanges(): boolean {
     const todo = this.todo();
 
-    return JSON.stringify(todo?.subtasks) !== JSON.stringify(this.originalSubItems);
+    return JSON.stringify(todo?.subItems) !== JSON.stringify(this.originalSubItems);
   }
 
   moveUp(index: number): void {
@@ -161,7 +161,7 @@ export class TodoDetailsComponent implements OnChanges {
       return;
     }
 
-    [todo.subtasks[index], todo.subtasks[index - 1]] = [todo.subtasks[index - 1], todo.subtasks[index]];
+    [todo.subItems[index], todo.subItems[index - 1]] = [todo.subItems[index - 1], todo.subItems[index]];
 
     this.recalculateOrder();
 
@@ -179,24 +179,24 @@ export class TodoDetailsComponent implements OnChanges {
       return;
     }
 
-    if (index >= todo.subtasks.length - 1) {
+    if (index >= todo.subItems.length - 1) {
       return;
     }
 
-    [todo.subtasks[index], todo.subtasks[index + 1]] = [todo.subtasks[index + 1], todo.subtasks[index]];
+    [todo.subItems[index], todo.subItems[index + 1]] = [todo.subItems[index + 1], todo.subItems[index]];
 
     this.recalculateOrder();
 
     this.updateState();
   }
 
-  toggleCompleted(subtask: TaskItem['subtasks'][number]): void {
+  toggleCompleted(subtask: TodoItem['subItems'][number]): void {
     subtask.isCompleted = !subtask.isCompleted;
 
     this.updateState();
   }
 
-  updateDescription(subtask: TaskItem['subtasks'][number], value: string): void {
+  updateDescription(subtask: TodoItem['subItems'][number], value: string): void {
     subtask.description = value;
 
     this.updateState();
@@ -217,9 +217,9 @@ export class TodoDetailsComponent implements OnChanges {
         return;
       }
 
-      await firstValueFrom(this.service.saveSubItems(todo.id, todo.subtasks));
+      await firstValueFrom(this.service.saveSubItems(todo.id, todo.subItems));
 
-      this.originalSubItems = structuredClone(todo.subtasks);
+      this.originalSubItems = structuredClone(todo.subItems);
 
       this.canSave = false;
 
@@ -246,8 +246,8 @@ export class TodoDetailsComponent implements OnChanges {
 
     this.todo.set({
       ...todo,
-      subtasks: [
-        ...todo.subtasks,
+      subItems: [
+        ...todo.subItems,
         newSubtask
       ]
     });
@@ -266,7 +266,7 @@ export class TodoDetailsComponent implements OnChanges {
       return;
     }
 
-    todo.subtasks.splice(index, 1);
+    todo.subItems.splice(index, 1);
 
     this.recalculateOrder();
 
@@ -276,7 +276,7 @@ export class TodoDetailsComponent implements OnChanges {
   hasInvalidSubtasks(): boolean {
     const todo = this.todo();
     
-    return !!todo?.subtasks.some((x) => !x.description.trim());
+    return !!todo?.subItems.some((x) => !x.description.trim());
   }
 
   openBreakdown(): void {
@@ -313,7 +313,7 @@ export class TodoDetailsComponent implements OnChanges {
         
         this.todo.set({
           ...todo,
-          subtasks: result.subtasks
+          subItems: result.subtasks
         });
 
         this.recalculateOrder();
@@ -333,12 +333,12 @@ export class TodoDetailsComponent implements OnChanges {
       return;
     }
     
-    todo.subtasks.forEach((x, i) => {
+    todo.subItems.forEach((x, i) => {
       x.order = i + 1;
     });
   }
 
-  private createEmptySubtask(): TaskItem['subtasks'][number] {
+  private createEmptySubtask(): TodoItem['subItems'][number] {
     const todo = this.todo();
 
     return {
@@ -346,7 +346,7 @@ export class TodoDetailsComponent implements OnChanges {
 
       todoItemId: todo!.id,
 
-      order: todo!.subtasks.length + 1,
+      order: todo!.subItems.length + 1,
 
       description: '',
 

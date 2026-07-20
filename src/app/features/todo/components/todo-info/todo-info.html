@@ -41,7 +41,7 @@
     </div>
 
     <div class="actions">
-      <button mat-stroked-button type="button" (click)="rewrite()" [disabled]="isSaving()">
+      <button mat-stroked-button type="button" (click)="rewrite()" [disabled]="isSaving() || isRewriteDisabled()">
         <mat-icon>auto_awesome</mat-icon>
         Rewrite Description
       </button>

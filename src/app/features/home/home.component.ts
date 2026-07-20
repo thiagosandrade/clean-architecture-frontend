@@ -5,7 +5,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { FormsModule } from '@angular/forms';
-import { TaskItem, TodoResponse } from '../todo/models/todo.model';
+import { TodoItem, TodoItemResponse } from '../todo/models/todo.model';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Observable } from 'rxjs';
 
@@ -65,11 +65,11 @@ export class HomeComponent implements OnInit {
   ];
 
   // raw backend results
-  tasks: TaskItem[] = [];
+  tasks: TodoItem[] = [];
 
   // UI projections
-  relatedTasks: TaskItem[] = [];
-  otherTasks: TaskItem[] = [];
+  relatedTasks: TodoItem[] = [];
+  otherTasks: TodoItem[] = [];
 
   loading: boolean = false;
 
@@ -261,7 +261,7 @@ export class HomeComponent implements OnInit {
   // SHARED EXECUTION
   // =========================
   executeQuery(
-    request: Observable<TodoResponse>,
+    request: Observable<TodoItemResponse>,
     queryType: HomeQuery['type'],
     successMessage: (count: number) => string,
   ): void {
@@ -335,9 +335,9 @@ export class HomeComponent implements OnInit {
   }
 
   openTodo(
-    todo: TaskItem,
+    todo: TodoItem,
     matchType: TodoWorkspaceMatchType = 'normal',
-    navigation: TaskItem[] = [],
+    navigation: TodoItem[] = [],
   ): void {
     const dialogRef = this.dialog.open(TodoWorkspaceDialogComponent, {
       width: '90vw',

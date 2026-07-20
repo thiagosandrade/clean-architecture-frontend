@@ -6,7 +6,7 @@ import {
 
 import { firstValueFrom } from 'rxjs';
 
-import { TaskItem } from '../models/todo.model';
+import { TodoItem } from '../models/todo.model';
 import { TodoService } from '../services/todo.service';
 
 @Injectable({ providedIn: 'root' })
@@ -20,7 +20,7 @@ export class TaskWorkspaceStore {
     signal(false);
 
   private readonly _task =
-    signal<TaskItem | null>(null);
+    signal<TodoItem | null>(null);
 
   readonly loading =
     computed(() => this._loading());
@@ -31,7 +31,7 @@ export class TaskWorkspaceStore {
   readonly taskId =
     computed(() => this._task()?.id ?? '');
 
-  async load(id: string): Promise<void> {
+  async load(id: string): Promise<TodoItem | null> {
 
     this._loading.set(true);
 
@@ -44,6 +44,7 @@ export class TaskWorkspaceStore {
 
       this._task.set(task);
 
+      return task;
     }
     finally {
 
@@ -66,14 +67,14 @@ export class TaskWorkspaceStore {
 
   }
 
-  setTask(task: TaskItem): void {
+  setTask(task: TodoItem): void {
 
     this._task.set(task);
 
   }
 
   patchTask(
-    patch: Partial<TaskItem>
+    patch: Partial<TodoItem>
   ): void {
 
     const current =

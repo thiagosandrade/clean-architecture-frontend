@@ -124,7 +124,7 @@
 
     </div>
 
-    @if (todo.subtasks.length > 0) {
+    @if (todo.subItems.length > 0) {
 
       <table class="subtasks">
 
@@ -146,7 +146,7 @@
 
         <tbody>
 
-          @for (subtask of todo.subtasks; track subtask.id; let i = $index) {
+          @for (subtask of todo.subItems; track subtask.id; let i = $index) {
 
             <tr>
 
@@ -164,7 +164,7 @@
                 <button
                   mat-icon-button
                   (click)="moveDown(i)"
-                  [disabled]="i === todo.subtasks.length - 1">
+                  [disabled]="i === todo.subItems.length - 1">
 
                   <mat-icon>keyboard_arrow_down</mat-icon>
 

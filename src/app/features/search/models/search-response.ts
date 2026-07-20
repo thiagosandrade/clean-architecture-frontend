@@ -1,16 +1,16 @@
-import { AttachmentSearchItem } from "./attachment-search-item";
-import { SubtaskSearchItem } from "./subtask-search-item";
-import { TaskSearchItem } from "./task-search-item";
+import { TodoItemAttachmentSearch } from "./attachment-search-item";
+import { SubItemSearch } from "./todo-subitem-search";
+import { TodoItemSearch } from "./todo-item-search";
 import { UserSearchItem } from "./user-search-item";
 
 
 export interface SearchResponse {
 
-  tasks: TaskSearchItem[];
+  tasks: TodoItemSearch[];
 
-  subtasks: SubtaskSearchItem[];
+  subtasks: SubItemSearch[];
 
-  attachments: AttachmentSearchItem[];
+  attachments: TodoItemAttachmentSearch[];
 
   users: UserSearchItem[];
 

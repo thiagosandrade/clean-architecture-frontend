@@ -28,14 +28,12 @@ export class SearchService {
 
     const userId = localStorage.getItem('id') ?? '';
 
-    return this.http.get<QuickSearchResponse>(
+    return this.http.post<QuickSearchResponse>(
       `${this.api}/search/quick`,
       {
-        params: {
-          userId: userId,
-          text,
-          limit
-        }
+        userId: userId,
+        text,
+        limit
       }
     );
 
@@ -47,15 +45,13 @@ export class SearchService {
     pageSize = 25
   ): Observable<SearchResponse> {
 
-    return this.http.get<SearchResponse>(
+    return this.http.post<SearchResponse>(
       `${this.api}/search`,
       {
-        params: {
-          userId: localStorage.getItem('id') ?? '',
-          text,
-          page,
-          pageSize
-        }
+        userId: localStorage.getItem('id') ?? '',
+        text,
+        page,
+        pageSize
       }
     );
 
@@ -65,12 +61,10 @@ export class SearchService {
     type: string,
     id: string
   ): Observable<SearchDetailResponse> {
-    return this.http.get<SearchDetailResponse>(
+    return this.http.post<SearchDetailResponse>(
       `${this.api}/search/details/${type}/${id}`,
       {
-        params: {
-          userId: localStorage.getItem('id') ?? '',
-        }
+        userId: localStorage.getItem('id') ?? '',
       }
     );
   }

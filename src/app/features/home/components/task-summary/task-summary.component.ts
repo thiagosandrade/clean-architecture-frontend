@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { TaskItem } from '../../../todo/models/todo.model';
+import { TodoItem } from '../../../todo/models/todo.model';
 import { TaskSummaryCardComponent } from '../task-summary-card/task-summary-card.component';
 import { TodoWorkspaceMatchType } from '../../../todo/models/todo-workspace-data';
 
@@ -14,11 +14,11 @@ import { TodoWorkspaceMatchType } from '../../../todo/models/todo-workspace-data
 })
 export class TaskSummaryComponent {
   @Input()
-  tasks: TaskItem[] = [];
+  tasks: TodoItem[] = [];
 
   @Input()
   matchType: TodoWorkspaceMatchType = 'normal';
 
   @Output()
-  view = new EventEmitter<TaskItem>();
+  view = new EventEmitter<TodoItem>();
 }

@@ -16,7 +16,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { DataTableComponent } from '../../../../core/components/ui/data-table/data-table.component';
 import { LoadingService } from '../../../../core/services/loading.service';
 import { SnackbarService } from '../../../../core/services/snackbar.service';
-import { TaskItem } from '../../models/todo.model';
+import { TodoItem } from '../../models/todo.model';
 import { TodoService } from '../../services/todo.service';
 import { ParseTodoDialogComponent } from '../../dialogs/parse-todo-dialog/parse-todo-dialog';
 import { TodoDetailsDialogComponent } from '../../dialogs/todo-details-dialog/todo-details-dialog';
@@ -42,7 +42,7 @@ import { TodoInfoDialogComponent } from '../../dialogs/todo-info-dialog/todo-inf
   styleUrls: ['./todos.component.scss'],
 })
 export class TodosComponent implements OnInit {
-  todos: TaskItem[] = [];
+  todos: TodoItem[] = [];
   tableConfig = TODO_TABLE_CONFIG;
   page = 1;
   size = 10;
@@ -153,7 +153,7 @@ export class TodosComponent implements OnInit {
     const dialogRef = this.dialog.open(TodoInfoDialogComponent, {
       width: '700px',
       data: {
-        isEdit: false,
+        mode: 'create',
       },
     });
 
@@ -164,7 +164,7 @@ export class TodosComponent implements OnInit {
     });
   }
 
-  handleAction(event: { action: string; row: TaskItem }) {
+  handleAction(event: { action: string; row: TodoItem }) {
     switch (event.action) {
       case 'delete':
         this.service.delete(event.row.id).subscribe(() => {
@@ -180,6 +180,7 @@ export class TodosComponent implements OnInit {
           height: 'auto',
           maxHeight: '90vh',
           data: {
+            mode: 'view',
             todo: event.row,
           },
         });
@@ -189,10 +190,12 @@ export class TodosComponent implements OnInit {
 
       case 'edit': {
         const dialogRef = this.dialog.open(TodoInfoDialogComponent, {
-          width: '550px',
-          maxWidth: '90vw',
+          width: '900px',
+          maxWidth: '95vw',
+          height: 'auto',
+          maxHeight: '90vh',
           data: {
-            isEdit: true,
+            mode: 'edit',
             todo: event.row,
           },
         });

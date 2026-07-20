@@ -1,6 +1,6 @@
-import { TaskItem } from "../../features/todo/models/todo.model";
+import { TodoItem } from "../../features/todo/models/todo.model";
 
-export function mapGeneratedSubtasks(descriptions: string[], taskId: string): TaskItem['subtasks'] {
+export function mapGeneratedSubtasks(descriptions: string[], taskId: string): TodoItem['subItems'] {
 
   return descriptions.map((description, index) => ({
 

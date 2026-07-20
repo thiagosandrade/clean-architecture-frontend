@@ -1,4 +1,4 @@
-export interface UpdateTodoRequest {
+export interface UpdateTodoItemRequest {
   userId: string;
   description: string;
   dueDate: string | null;
