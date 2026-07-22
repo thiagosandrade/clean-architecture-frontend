@@ -1,59 +1,103 @@
-import { Injectable, computed, signal } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import {
+  Injectable,
+  computed,
+  inject,
+  signal
+} from '@angular/core';
 
-import { environment } from '../../../../environments/environment';
+import {
+  HttpClient
+} from '@angular/common/http';
+
+import {
+  environment
+} from '../../../../environments/environment';
 
 import {
   AuthResponse,
   LoginRequest
 } from '../models/auth.models';
 
+import {
+  StorageService
+} from './storage.service';
+
+
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
+  private readonly http =
+    inject(HttpClient);
+
+  private readonly storage =
+    inject(StorageService);
+
+
   private readonly base =
     `${environment.apiUrl}/users`;
 
+
   private readonly _token =
-    signal(localStorage.getItem('token'));
+    signal<string | null>(
+      this.storage.getItem<string>('token')
+    );
+
 
   private readonly _userId =
-    signal(localStorage.getItem('id'));
+    signal<string | null>(
+      this.storage.getItem<string>('id')
+    );
+
 
   private readonly _email =
-    signal(localStorage.getItem('email'));
+    signal<string | null>(
+      this.storage.getItem<string>('email')
+    );
 
-  readonly isAuthenticated =
-    computed(() => !!this._token());
 
   readonly token =
     this._token.asReadonly();
 
+
   readonly userId =
     this._userId.asReadonly();
+
 
   readonly email =
     this._email.asReadonly();
 
-  constructor(
-    private readonly http: HttpClient
-  ) { }
 
-  login(request: LoginRequest) {
+  readonly isAuthenticated =
+    computed(
+      () => !!this._token()
+    );
+
+
+  login(
+    request: LoginRequest
+  ) {
+
     return this.http.post<AuthResponse>(
       `${this.base}/login`,
       request
     );
+
   }
 
-  register(request: LoginRequest) {
+
+  register(
+    request: LoginRequest
+  ) {
+
     return this.http.post(
       `${this.base}/register`,
       request
     );
+
   }
+
 
   saveUserInfo(
     token: string,
@@ -61,26 +105,59 @@ export class AuthService {
     email: string
   ): void {
 
-    localStorage.setItem('token', token);
-    localStorage.setItem('id', id);
-    localStorage.setItem('email', email);
+
+    this.storage.setItem(
+      'token',
+      token
+    );
+
+
+    this.storage.setItem(
+      'id',
+      id
+    );
+
+
+    this.storage.setItem(
+      'email',
+      email
+    );
+
 
     this._token.set(token);
+
     this._userId.set(id);
+
     this._email.set(email);
 
   }
 
+
   logout(): void {
 
-    localStorage.removeItem('token');
-    localStorage.removeItem('id');
-    localStorage.removeItem('email');
+
+    this.storage.removeItem(
+      'token'
+    );
+
+
+    this.storage.removeItem(
+      'id'
+    );
+
+
+    this.storage.removeItem(
+      'email'
+    );
+
 
     this._token.set(null);
+
     this._userId.set(null);
+
     this._email.set(null);
 
   }
+
 
 }
