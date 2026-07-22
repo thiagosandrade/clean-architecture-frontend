@@ -57,12 +57,6 @@ export class SubtaskSummaryComponent {
     if (!taskId) {
       return;
     }
-
-    // Later we can emit this to SearchDetailComponent
-    // to navigate to /search/detail/task/:id
-
-    console.log('Open task', taskId);
-
   }
 
 }

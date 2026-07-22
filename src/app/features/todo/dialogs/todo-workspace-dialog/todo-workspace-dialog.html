@@ -128,12 +128,15 @@
     [class.switching]="taskSwitching()"
     [class.disabled]="taskSwitching()">
 
-    <app-task-workspace
-        [taskId]="currentTodo()!.id"
-        (descriptionChanged)="onDescriptionChanged($event)"
-        (workspaceStatusChanged)="onWorkspaceStatusChanged($event)"
-        (subtasksChanged)="onSubtasksChanged($event)">
-    </app-task-workspace>
+    @if(currentTodo(); as todo) {
+      <app-task-workspace
+          [taskId]="todo.id"
+          (descriptionChanged)="onDescriptionChanged($event)"
+          (workspaceStatusChanged)="onWorkspaceStatusChanged($event)"
+          (subtasksChanged)="onSubtasksChanged($event)">
+      </app-task-workspace>
+    }
+    
 
   </div>
 

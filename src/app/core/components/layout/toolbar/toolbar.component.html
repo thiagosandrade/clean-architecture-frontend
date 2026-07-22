@@ -6,15 +6,12 @@
 
   </span>
 
-  @if (showHamburger()) {
+  @if (isAuthenticated()) {
+    @if (showHamburger()) {
 
     <span class="toolbar-spacer"></span>
 
-    <button
-      mat-icon-button
-      [matMenuTriggerFor]="menu"
-      class="menu"
-      aria-label="Open navigation menu">
+    <button mat-icon-button [matMenuTriggerFor]="menu" class="menu" aria-label="Open navigation menu">
 
       <mat-icon>
 
@@ -67,39 +64,29 @@
 
     </mat-menu>
 
-  } @else {
+    } @else {
 
-    <nav
-      class="nav-links"
-      aria-label="Primary navigation">
+    <nav class="nav-links" aria-label="Primary navigation">
 
-      <button
-        mat-button
-        (click)="goToDashboard()">
+      <button mat-button (click)="goToDashboard()">
 
         Dashboard
 
       </button>
 
-      <button
-        mat-button
-        (click)="goToSearch()">
+      <button mat-button (click)="goToSearch()">
 
         Search
 
       </button>
 
-      <button
-        mat-button
-        (click)="goToTodos()">
+      <button mat-button (click)="goToTodos()">
 
         Tasks
 
       </button>
 
-      <button
-        mat-button
-        (click)="goToUsers()">
+      <button mat-button (click)="goToUsers()">
 
         Users
 
@@ -117,11 +104,7 @@
 
     </div>
 
-    <button
-      mat-icon-button
-      [matMenuTriggerFor]="userMenu"
-      class="user-menu-button"
-      aria-label="User actions">
+    <button mat-icon-button [matMenuTriggerFor]="userMenu" class="user-menu-button" aria-label="User actions">
 
       <mat-icon>
 
@@ -150,6 +133,8 @@
 
     </mat-menu>
 
+    }
   }
+
 
 </mat-toolbar>

@@ -1,35 +1,86 @@
-import { Injectable } from '@angular/core';
+import { Injectable, computed, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+
 import { environment } from '../../../../environments/environment';
-import { LoginRequest, AuthResponse } from '../models/auth.models';
 
-@Injectable({ providedIn: 'root' })
+import {
+  AuthResponse,
+  LoginRequest
+} from '../models/auth.models';
+
+@Injectable({
+  providedIn: 'root'
+})
 export class AuthService {
-  private base = `${environment.apiUrl}/users`;
 
-  constructor(private http: HttpClient) {}
+  private readonly base =
+    `${environment.apiUrl}/users`;
 
-  login(data: LoginRequest) {
-    return this.http.post<AuthResponse>(`${this.base}/login`, data);
+  private readonly _token =
+    signal(localStorage.getItem('token'));
+
+  private readonly _userId =
+    signal(localStorage.getItem('id'));
+
+  private readonly _email =
+    signal(localStorage.getItem('email'));
+
+  readonly isAuthenticated =
+    computed(() => !!this._token());
+
+  readonly token =
+    this._token.asReadonly();
+
+  readonly userId =
+    this._userId.asReadonly();
+
+  readonly email =
+    this._email.asReadonly();
+
+  constructor(
+    private readonly http: HttpClient
+  ) { }
+
+  login(request: LoginRequest) {
+    return this.http.post<AuthResponse>(
+      `${this.base}/login`,
+      request
+    );
   }
 
-  register(data: LoginRequest) {
-    return this.http.post(`${this.base}/register`, data);
+  register(request: LoginRequest) {
+    return this.http.post(
+      `${this.base}/register`,
+      request
+    );
   }
 
-  saveUserInfo(token: string, id: string, email: string) {
+  saveUserInfo(
+    token: string,
+    id: string,
+    email: string
+  ): void {
+
     localStorage.setItem('token', token);
     localStorage.setItem('id', id);
     localStorage.setItem('email', email);
+
+    this._token.set(token);
+    this._userId.set(id);
+    this._email.set(email);
+
   }
 
-  logout() {
+  logout(): void {
+
     localStorage.removeItem('token');
     localStorage.removeItem('id');
     localStorage.removeItem('email');
+
+    this._token.set(null);
+    this._userId.set(null);
+    this._email.set(null);
+
   }
 
-  isAuthenticated() {
-    return !!localStorage.getItem('token');
-  }
 }

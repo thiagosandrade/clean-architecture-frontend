@@ -352,41 +352,37 @@ export class TodoWorkspaceDialogComponent
 
 
 
-  private async switchTask(): Promise<void> {
+ private async switchTask(): Promise<void> {
 
+  this.taskSwitching.set(true);
 
-    this.taskSwitching.set(true);
+  try {
 
+    const item =
+      this.data.navigation![this.currentIndex];
 
-    try {
+    const todo =
+      await this.workspacestore.load(item.id);
 
-      const item =
-        this.data.navigation![this.currentIndex];
-
-      this.workspacestore.load(item.id).then(() => {
-        const todo = this.workspacestore.task();
-
-        if(todo == null)
-          return;
-
-
-        this.currentTodo.set(todo);
-
-
-        this.currentTitle =
-          todo.description;
-
-
-        this.resetWorkspace();
-      });
+    if (!todo) {
+      return;
     }
-    finally {
 
-      this.taskSwitching.set(false);
+    this.currentTodo.set(todo);
 
-    }
+    this.currentTitle =
+      todo.description;
+
+    this.resetWorkspace();
 
   }
+  finally {
+
+    this.taskSwitching.set(false);
+
+  }
+
+}
 
 
 

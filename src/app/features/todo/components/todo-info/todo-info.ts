@@ -177,8 +177,6 @@ export class TodoInfoComponent implements OnInit, OnChanges {
     changes: SimpleChanges
   ): Promise<void> {
 
-    console.log(this.mode)
-    console.log(this.taskId)
     if (this.mode === 'create') {
 
       this.initializeCreate();
@@ -188,22 +186,17 @@ export class TodoInfoComponent implements OnInit, OnChanges {
     }
 
     if (!changes['taskId']) {
-      console.log('!changes[]')
       return;
 
     }
 
     if (!this.taskId) {
-      console.log('!this.taskId')
       return;
 
     }
 
     if (this.currentTodoId === this.taskId) {
-      console.log('this.currentTodoId === this.taskId')
-
       return;
-
     }
 
     this.currentTodoId = this.taskId;
@@ -256,7 +249,7 @@ export class TodoInfoComponent implements OnInit, OnChanges {
 
     try {
 
-      const task = await this.workspaceStore.load(this.taskId!);
+      const task = this.workspaceStore.task();
 
       if (!task) {
         return;

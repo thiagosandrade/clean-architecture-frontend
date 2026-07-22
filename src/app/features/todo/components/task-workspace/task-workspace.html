@@ -1,65 +1,54 @@
 @if (loading()) {
 
-  <div class="loading">
-    <mat-spinner diameter="40"></mat-spinner>
-  </div>
+<div class="loading">
+  <mat-spinner diameter="40"></mat-spinner>
+</div>
 
 } @else if (task(); as todo) {
 
-  <div class="workspace-content">
+<div class="workspace-content">
 
-    <section class="left">
+  <section class="left">
 
-      <app-todo-info
-        [taskId]="todo.id"
-        mode="edit"
-        (descriptionChanged)="descriptionChanged.emit($event)"
-        (created)="($event)"
-        (statusChanged)="onLeftStatusChanged($event)">
-      </app-todo-info>
+    <app-todo-info [taskId]="todo.id" mode="edit" (descriptionChanged)="descriptionChanged.emit($event)"
+      (created)="($event)" (statusChanged)="onLeftStatusChanged($event)">
+    </app-todo-info>
 
-    </section>
+  </section>
 
-    <section class="right">
+  <section class="right">
 
-        <mat-tab-group [(selectedIndex)]="selectedTab">
+    <mat-tab-group [(selectedIndex)]="selectedTab">
 
-            <mat-tab label="Subtasks">
+      <mat-tab label="Subtasks">
 
-            <app-todo-details
-                [taskId]="todo.id"
-                (statusChanged)="onRightStatusChanged($event)">
-            </app-todo-details>
+        <app-todo-details [taskId]="todo.id" (statusChanged)="onRightStatusChanged($event)">
+        </app-todo-details>
 
-            </mat-tab>
-            <mat-tab label="Dependencies">
+      </mat-tab>
+      <mat-tab label="Dependencies">
 
-              <app-task-dependencies
-                  [taskId]="todo.id"
-                  (statusChanged)="onDependencyStatusChanged($event)">
-              </app-task-dependencies>
+        <app-task-dependencies [taskId]="todo.id" (statusChanged)="onDependencyStatusChanged($event)">
+        </app-task-dependencies>
 
-            </mat-tab>
-            <mat-tab label="Attachments">
+      </mat-tab>
+      <mat-tab label="Attachments">
 
-              <app-task-attachments
-                  [taskId]="todo.id"
-                  (statusChanged)="onAttachmentStatusChanged($event)">
-              </app-task-attachments>
+        <app-task-attachments [taskId]="todo.id" (statusChanged)="onAttachmentStatusChanged($event)">
+        </app-task-attachments>
 
-            </mat-tab>
-            <mat-tab label="Activity">
+      </mat-tab>
+      <mat-tab label="Activity">
 
-              <app-task-activity
-                  [taskId]="todo.id">
-              </app-task-activity>
+        <app-task-activity [taskId]="todo.id">
+        </app-task-activity>
 
-            </mat-tab>
+      </mat-tab>
 
-        </mat-tab-group>
+    </mat-tab-group>
 
-        </section>
+  </section>
 
-  </div>
+</div>
 
 }

@@ -102,8 +102,19 @@
       }
       @else
       {
-      <div class="type">
-        {{ item.type }}
+      <div class="type-inner">
+        @if (item.type === 'todoSubItem'){
+          Subtask
+        }
+        @else if (item.type === 'user'){
+          User
+        }
+        @else if (item.type === 'attachment'){
+          Attachment
+        }
+        @else if (item.type === 'dependency'){
+          Dependency
+        }
       </div>
       }
 

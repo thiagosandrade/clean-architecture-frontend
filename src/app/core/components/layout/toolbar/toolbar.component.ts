@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit, signal } from '@angular/core';
+import { Component, HostListener, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
@@ -19,11 +19,13 @@ import { GlobalSearchComponent } from "../../../../features/search/components/gl
 })
 export class ToolbarComponent implements OnInit {
   readonly showHamburger = signal(false);
+  private readonly authService = inject(AuthService);
 
+  readonly isAuthenticated = this.authService.isAuthenticated;
+  
   constructor(
     private theme: ThemeService,
     private router: Router,
-    private authService: AuthService,
   ) {}
 
   ngOnInit(): void {

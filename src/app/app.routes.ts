@@ -1,6 +1,5 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './core/guards/auth.guard';
-import { guestGuard } from './core/guards/guest.guard';
 
 export const routes: Routes = [
   {
@@ -43,12 +42,6 @@ export const routes: Routes = [
     path: 'search',
     canActivate: [authGuard],
     loadChildren: () => import('./features/search/search.routes').then((m) => m.searchRoutes),
-  },
-  {
-    title: 'Task App',
-    path: '',
-    redirectTo: 'login',
-    pathMatch: 'full',
   },
   {
     title: 'Task App',

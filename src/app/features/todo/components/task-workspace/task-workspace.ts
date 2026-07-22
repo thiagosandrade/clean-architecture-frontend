@@ -58,13 +58,8 @@ import { TaskAttachmentsComponent } from '../task-attachments/task-attachments';
 })
 export class TaskWorkspaceComponent implements OnInit, OnChanges {
 
-  private route = inject(ActivatedRoute);
-
-  private service = inject(TodoService);
-
   @Input({ required: true })
   taskId?: string;
-
 
   @Output()
   workspaceStatusChanged =
@@ -102,39 +97,34 @@ export class TaskWorkspaceComponent implements OnInit, OnChanges {
 
   async ngOnInit(): Promise<void> {
 
-    const id =
-      this.taskId ??
-      this.route.snapshot.paramMap.get('id');
-
-    if (!id) {
-      return;
+    if (this.taskId) {
+      await this.loadTask(this.taskId);
     }
-
-    this.currentTaskId = id;
-
-    await this.workspacestore.load(id);
 
   }
 
   async ngOnChanges(): Promise<void> {
 
-    const id =
-      this.taskId ??
-      this.route.snapshot.paramMap.get('id');
-
-    if (!id) {
+    if (!this.taskId) {
       return;
     }
 
-    if (this.currentTaskId === id) {
+    if (this.currentTaskId === this.taskId) {
       return;
     }
+
+    await this.loadTask(this.taskId);
+
+  }
+
+  private async loadTask(id: string): Promise<void> {
 
     this.currentTaskId = id;
 
     await this.workspacestore.load(id);
 
     this.resetWorkspaceStatus();
+
   }
 
   private resetWorkspaceStatus(): void {
@@ -146,7 +136,7 @@ export class TaskWorkspaceComponent implements OnInit, OnChanges {
     this.workspaceStatusChanged.emit('none');
 
   }
-  
+
   onWorkspaceStatusChanged(status: WorkspaceStatus): void {
     this.workspaceStatusChanged.emit(status);
   }
@@ -187,7 +177,7 @@ export class TaskWorkspaceComponent implements OnInit, OnChanges {
     } else if (
       this.leftStatus === 'dirty' ||
       this.rightStatus === 'dirty' ||
-      this.dependencyStatus === 'dirty'||
+      this.dependencyStatus === 'dirty' ||
       this.attachmentStatus === 'dirty'
 
     ) {
@@ -197,7 +187,7 @@ export class TaskWorkspaceComponent implements OnInit, OnChanges {
     } else if (
       this.leftStatus === 'saved' ||
       this.rightStatus === 'saved' ||
-      this.dependencyStatus === 'saved'||
+      this.dependencyStatus === 'saved' ||
       this.attachmentStatus === 'saved'
     ) {
 

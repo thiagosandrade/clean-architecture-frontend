@@ -15,21 +15,19 @@ import { TodoDialogData } from '../../models/todo-dialog-data';
 })
 export class TodoInfoDialogComponent {
   hasChanges = false;
+  readonly mode: "edit" | "view" | "create";
+  readonly taskId: string | undefined;
 
   constructor(
     private dialogRef: MatDialogRef<TodoInfoDialogComponent>,
 
     @Inject(MAT_DIALOG_DATA)
     public data: TodoDialogData,
-  ) {}
-
-  getMode(): "create" | "edit" | "view" {
-    return this.data.mode;
-  }
-
-  getTodoId(): string | undefined {
-    console.log(this.data.mode ===  'view' || this.data.mode === 'edit'  ? this.data.todo.id : '')
-    return this.data.mode ===  'view' || this.data.mode === 'edit'  ? this.data.todo.id : ''
+  ) {
+    this.mode = this.data.mode;
+    this.taskId = this.data.mode === 'view' || this.data.mode === 'edit'
+      ? this.data.todo.id
+      : undefined;
   }
 
   close(): void {

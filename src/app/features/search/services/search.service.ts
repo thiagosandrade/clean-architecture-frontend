@@ -6,7 +6,6 @@ import { Observable } from 'rxjs';
 
 import { environment } from '../../../../environments/environment';
 import { QuickSearchResponse } from '../models/quick-search-response';
-import { SearchResponse } from '../models/search-response';
 import { SearchDetailResponse } from '../models/search-detail.model';
 
 
@@ -34,24 +33,6 @@ export class SearchService {
         userId: userId,
         text,
         limit
-      }
-    );
-
-  }
-
-  search(
-    text: string,
-    page = 1,
-    pageSize = 25
-  ): Observable<SearchResponse> {
-
-    return this.http.post<SearchResponse>(
-      `${this.api}/search`,
-      {
-        userId: localStorage.getItem('id') ?? '',
-        text,
-        page,
-        pageSize
       }
     );
 
