@@ -10,7 +10,7 @@ server {
 
     # Backend API
     location /api/ {
-        proxy_pass http://host.docker.internal:5000/;
+        proxy_pass http://host.docker.internal:${API_PORT}/;
 
         proxy_http_version 1.1;
 
