@@ -14,9 +14,9 @@ export function mapGeneratedSubtasks(descriptions: string[], taskId: string): To
 
     isCompleted: false,
 
-    completedAt: null,
+    createdOn: null,
 
-    createdAt: null
+    completedOn: null
 
   }));
 

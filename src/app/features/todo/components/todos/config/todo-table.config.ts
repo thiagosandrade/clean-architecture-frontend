@@ -34,15 +34,15 @@ export const TODO_TABLE_CONFIG: TableConfig<TodoItem> = {
     },
 
     {
-      key: 'createdAt',
-      label: 'Created At',
+      key: 'createdOn',
+      label: 'Created On',
       type: 'date',
       formatter: formatDateTime,
     },
 
     {
-      key: 'completedAt',
-      label: 'Completed At',
+      key: 'completedOn',
+      label: 'Completed On',
       type: 'date',
       formatter: formatDateTime,
     },

@@ -352,9 +352,9 @@ export class TodoDetailsComponent implements OnChanges {
 
       isCompleted: false,
 
-      completedAt: null,
+      completedOn: null,
 
-      createdAt: null,
+      createdOn: null,
     };
   }
 

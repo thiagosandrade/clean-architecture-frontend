@@ -49,7 +49,7 @@ export class TodosComponent implements OnInit {
   total = 0;
   descending = true;
   searchText = '';
-  sortProperty = 'CreatedAt';
+  sortProperty = 'CreatedOn';
   searchControl = new FormControl('');
   hasUserSorted = false;
   resetTableSort = false;
@@ -108,7 +108,7 @@ export class TodosComponent implements OnInit {
 
     this.searchText = '';
 
-    this.sortProperty = 'createdAt';
+    this.sortProperty = 'createdOn';
 
     this.descending = true;
 

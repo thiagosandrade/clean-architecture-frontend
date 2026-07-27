@@ -203,9 +203,9 @@ export class TodoBreakdownDialogComponent {
 
       isCompleted: false,
 
-      completedAt: null,
+      createdOn: null,
 
-      createdAt: null
+      completedOn: null
 
     });
 

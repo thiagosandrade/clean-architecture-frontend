@@ -24,7 +24,7 @@ export class TodoService {
   getAll(
     page: number = 1,
     size: number = 10,
-    propertyName: string = 'createdAt',
+    propertyName: string = 'createdOn',
     descending: boolean = true,
     priority?: number,
     dueDateFrom?: string,

@@ -8,8 +8,8 @@ export interface TodoItem {
   labels: string[];
   categories: string[];
   isCompleted: boolean;
-  createdAt: string | null;
-  completedAt: string | null;
+  createdOn: string | null;
+  completedOn: string | null;
   priority: number;
   similarity: number;
   subItems: TodoSubItem[];
@@ -21,8 +21,8 @@ export interface TodoSubItem {
   todoItemId: string;
   description: string;
   isCompleted: boolean;
-  createdAt: string | null;
-  completedAt: string | null;
+  createdOn: string | null;
+  completedOn: string | null;
   order: number;
 }
 
