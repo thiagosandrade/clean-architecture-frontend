@@ -1,59 +1,75 @@
-# CleanArchitectureFrontendA
+# Todo Management Frontend
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.9.
+A modern Angular application built using **Angular 18**, **Angular Material**, and clean frontend architecture principles.
 
-## Development server
+This project provides a responsive user interface for managing todos, including authentication, CRUD operations, filtering, searching, pagination, sorting, and integration with a backend API.
 
-To start a local development server, run:
+---
 
-```bash
-ng serve
-```
+## 🚀 Features
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+### Authentication
 
-## Code scaffolding
+- JWT-based authentication
+- Automatic token injection using HTTP interceptors
+- Protected routes using Angular route guards
+- User session handling
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+---
 
-```bash
-ng generate component component-name
-```
+### Todo Management
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+- Create, update, delete, and complete todos
+- Todo listing with reusable data table component
+- Pagination support
+- Dynamic sorting
+- Search functionality
+- Status visualization
+- Priority display
 
-```bash
-ng generate --help
-```
+---
 
-## Building
+### Search
 
-To build the project run:
+The application supports:
 
-```bash
-ng build
-```
+- Standard text search
+- Backend-powered search integration
+- Dynamic filtering from the toolbar
+- Search combined with pagination and sorting
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+The search implementation is designed to support future enhancements such as:
 
-## Running unit tests
+- Full-text search
+- Semantic search
+- AI-powered recommendations
 
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+---
 
-```bash
-ng test
-```
+### UI / UX
 
-## Running end-to-end tests
+Built with Angular Material:
 
-For end-to-end (e2e) testing, run:
+- Responsive layout
+- Material toolbar
+- Dialog-based forms
+- Data tables
+- Icons
+- Chips
+- Form controls
+- Dark/light theme support
 
-```bash
-ng e2e
-```
+---
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+# 🏗️ Architecture
 
-## Additional Resources
+The project follows a feature-based architecture.
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+
+| Technology       | Version |
+| ---------------- | ------- |
+| Angular          | 18      |
+| TypeScript       | Latest  |
+| Angular Material | 18      |
+| RxJS             | Latest  |
+| SCSS             | Latest  |
